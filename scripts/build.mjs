@@ -11,6 +11,9 @@ const candidates = Object.keys(process.env).filter((k) => /(^|_)(DATABASE_URL|PO
 const source = ["DATABASE_URL", "POSTGRES_URL", ...candidates].find((k) => /^postgres(ql)?:\/\//.test(process.env[k] ?? ""));
 
 if (!source) {
+  // Names only, never values, so the log shows what the integration provided.
+  const related = Object.keys(process.env).filter((k) => /DATABASE|POSTGRES|PRISMA|NEON|PG/i.test(k));
+  console.error(`\nDatabase-related variables visible to this build: ${related.length ? related.join(", ") : "none"}`);
   console.error(
     "\n✖ No Postgres connection string found (looked for DATABASE_URL, POSTGRES_URL and *_DATABASE_URL / *_POSTGRES_URL).\n" +
       "  On Vercel: Storage → connect a Postgres database to this project (all environments), then redeploy.\n" +
