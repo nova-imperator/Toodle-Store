@@ -1,0 +1,55 @@
+.layout {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 900px) {
+  .layout { grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: start; }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.actions > :first-child { flex: 1; }
+
+.heart {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+/* Phones: price + add button stay at the bottom of the screen. */
+.sticky {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  border-top: 2px solid var(--line);
+  background: var(--paper);
+}
+
+.stickyPrice {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+.stickyBtn { flex: 1; }
+
+@media (min-width: 900px) {
+  .sticky { display: none; }
+}

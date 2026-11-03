@@ -1,0 +1,55 @@
+/* Brick buttons: solid fill with a darker "ledge" that compresses on press. Design.md §4. */
+.btn {
+  --bg: var(--brick-red);
+  --ledge: var(--brick-red-deep);
+  --fg: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: 0 4px 0 var(--ledge);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transform: translateY(0);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover { filter: brightness(1.05); }
+
+.btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--ledge);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.red { --bg: var(--brick-red); --ledge: var(--brick-red-deep); --fg: #fff; }
+.blue { --bg: var(--brick-blue); --ledge: var(--brick-blue-deep); --fg: #fff; }
+.yellow { --bg: var(--brick-yellow); --ledge: var(--brick-yellow-deep); --fg: var(--ink); }
+.green { --bg: var(--brick-green); --ledge: var(--brick-green-deep); --fg: #fff; }
+.ink { --bg: var(--ink); --ledge: #0e1733; --fg: #fff; }
+.ghost {
+  --bg: var(--card);
+  --ledge: var(--line-strong);
+  --fg: var(--ink);
+  border: 2px solid var(--line-strong);
+}
+
+.sm { min-height: 38px; padding: 8px 14px; font-size: 0.95rem; box-shadow: 0 3px 0 var(--ledge); }
+.lg { min-height: 56px; padding: 14px 28px; font-size: 1.2rem; }
+.block { width: 100%; }

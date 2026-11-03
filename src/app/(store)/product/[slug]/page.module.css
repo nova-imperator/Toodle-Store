@@ -1,0 +1,156 @@
+.top { margin-top: 14px; }
+
+.brand {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.title { font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.4rem); }
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.age {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.tax {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.stock,
+.low,
+.out { font-weight: 800; }
+
+.stock { color: var(--brick-green-deep); }
+.low { color: var(--brick-orange-deep); }
+.out { color: var(--brick-red-deep); }
+
+.highlights {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.highlights li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+/* Small brick stud as the bullet. */
+.highlights li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+.details {
+  display: grid;
+  gap: 40px;
+  margin-top: 48px;
+}
+
+@media (min-width: 900px) {
+  .details { grid-template-columns: 1.2fr 1fr; gap: 48px; }
+}
+
+.desc {
+  font-size: 1.05rem;
+  max-width: 65ch;
+}
+
+.specs {
+  display: grid;
+  margin: 18px 0 0;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.specs > div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  padding: 10px 14px;
+}
+
+.specs > div:nth-child(odd) { background: var(--card); }
+
+.specs dt { font-weight: 800; }
+.specs dd { margin: 0; }
+
+.faqs {
+  display: grid;
+  gap: 10px;
+}
+
+.faq {
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.faq summary {
+  padding: 12px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.faq p {
+  padding: 0 14px 14px;
+  color: var(--ink-soft);
+}
+
+.section { margin-top: 48px; }
+
+.noReviews { color: var(--ink-soft); }
+
+.reviews {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reviews li {
+  padding: 14px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.reviews small { color: var(--ink-soft); }
+
+@media (max-width: 899px) {
+  .section:last-child { padding-bottom: 80px; }
+}

@@ -1,0 +1,86 @@
+.footer {
+  margin-top: 64px;
+  background: var(--ink);
+  color: #e6e9f2;
+}
+
+/* A row of brick studs along the top edge, like the top of a toy brick. */
+.studs {
+  height: 18px;
+  background:
+    radial-gradient(circle at 18px 18px, var(--brick-red) 10px, transparent 11px) 0 0 / 144px 18px repeat-x,
+    radial-gradient(circle at 54px 18px, var(--brick-yellow) 10px, transparent 11px) 0 0 / 144px 18px repeat-x,
+    radial-gradient(circle at 90px 18px, var(--brick-blue) 10px, transparent 11px) 0 0 / 144px 18px repeat-x,
+    radial-gradient(circle at 126px 18px, var(--brick-green) 10px, transparent 11px) 0 0 / 144px 18px repeat-x;
+  background-color: var(--paper);
+  margin-bottom: -1px;
+}
+
+.grid {
+  display: grid;
+  gap: 32px;
+  padding-block: 40px 24px;
+}
+
+@media (min-width: 700px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1000px) {
+  .grid { grid-template-columns: 1.3fr 1fr 1fr 1fr; }
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+}
+
+.tagline {
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--brick-yellow);
+}
+
+.contact,
+.links {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.contact a,
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #e6e9f2;
+  text-decoration: none;
+}
+
+.contact a:hover,
+.links a:hover { color: var(--brick-yellow); text-decoration: underline; }
+
+.head {
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.spaced { margin-top: 24px; }
+
+.legal {
+  padding-block: 18px 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.85rem;
+  color: #aab2c8;
+}
+
+@media (max-width: 899px) {
+  .legal { padding-bottom: 96px; }
+}

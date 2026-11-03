@@ -1,0 +1,77 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 700px) {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1000px) {
+  .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px 16px; }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.tile:hover { transform: translateY(-3px); }
+
+/* The owner's tiles have a transparent top; the gradient card starts ~28% down and continues into the label. */
+.art {
+  position: relative;
+  display: block;
+  aspect-ratio: 480 / 508;
+}
+
+.art img { width: 100%; height: 100%; object-fit: contain; }
+
+.label {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 4px 6px 12px;
+  margin-top: -1px;
+  border-radius: 0 0 18px 18px;
+  background: linear-gradient(90deg, var(--tile-mint), var(--tile-sky));
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(0.88rem, 0.8rem + 0.35vw, 1.05rem);
+  line-height: 1.15;
+  text-align: center;
+  box-shadow: inset 0 -4px 0 var(--accent, var(--brick-blue));
+}
+
+.tile:hover .label,
+.tile:focus-visible .label { box-shadow: inset 0 -8px 0 var(--accent, var(--brick-blue)); }
+
+.all .label { box-shadow: inset 0 -4px 0 var(--ink); }
+
+.allArt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  aspect-ratio: 480 / 508;
+  padding: 26% 18% 12%;
+  border-radius: 18px 18px 0 0;
+  background: linear-gradient(90deg, var(--tile-mint), var(--tile-sky)) bottom / 100% 72% no-repeat;
+}
+
+.allArt span {
+  border-radius: 10px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18);
+}
+
+.allArt span:nth-child(1) { background: var(--brick-red); }
+.allArt span:nth-child(2) { background: var(--brick-yellow); }
+.allArt span:nth-child(3) { background: var(--brick-blue); }
+.allArt span:nth-child(4) { background: var(--brick-green); }

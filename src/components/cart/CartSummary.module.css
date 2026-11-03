@@ -1,0 +1,38 @@
+.summary {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.summary > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.summary dd { margin: 0; font-weight: 700; }
+
+.good dd { color: var(--brick-green-deep); }
+
+.muted { color: var(--ink-soft); font-size: 0.9rem; }
+.muted dd { font-weight: 600; }
+
+.total {
+  padding-top: 10px;
+  border-top: 2px solid var(--line);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.total dd { font-weight: 800; }
+
+.save {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--green-tint);
+  color: var(--brick-green-deep);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+}

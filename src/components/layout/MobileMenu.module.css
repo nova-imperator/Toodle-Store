@@ -1,0 +1,122 @@
+.burger {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+}
+
+@media (min-width: 900px) {
+  .burger { display: none; }
+}
+
+.section {
+  padding: 16px;
+  border-bottom: 2px dashed var(--line);
+}
+
+.label {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.ages {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.age {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 6px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 3px 0 var(--accent-deep);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.age small { font-size: 0.7rem; font-weight: 700; margin-top: 2px; }
+
+.cats {
+  display: grid;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px;
+  border-radius: var(--radius);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cat:hover { background: var(--yellow-tint); }
+
+.thumb {
+  width: 44px;
+  height: 47px;
+  flex-shrink: 0;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(90deg, var(--tile-mint), var(--tile-sky)) bottom / 100% 72% no-repeat;
+}
+
+.links {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.links a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.links .b2b {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  background: var(--brick-yellow);
+  box-shadow: 0 3px 0 var(--brick-yellow-deep);
+}
+
+.contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brick-green-deep);
+  font-weight: 700;
+  text-decoration: none;
+}

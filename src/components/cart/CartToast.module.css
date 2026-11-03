@@ -1,0 +1,32 @@
+.region {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  z-index: 120;
+  transform: translateX(-50%);
+  width: min(440px, calc(100vw - 32px));
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  animation: rise 0.25s var(--ease-pop);
+}
+
+.toast span { flex: 1; }
+
+.toast button {
+  border: 0;
+  background: none;
+  color: inherit;
+  display: grid;
+  place-items: center;
+}
+
+@keyframes rise { from { transform: translateY(20px); opacity: 0; } }

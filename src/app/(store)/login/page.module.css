@@ -1,0 +1,26 @@
+.wrap {
+  display: grid;
+  gap: 24px;
+  max-width: 920px;
+  padding-top: 28px;
+}
+
+@media (min-width: 800px) {
+  .wrap { grid-template-columns: 1fr 1fr; align-items: center; gap: 40px; padding-top: 48px; }
+}
+
+.intro {
+  display: grid;
+  gap: 10px;
+}
+
+.intro p { color: var(--ink-soft); }
+
+.mascot {
+  width: 110px;
+  height: auto;
+}
+
+@media (min-width: 800px) {
+  .mascot { width: 170px; }
+}

@@ -1,0 +1,37 @@
+.layout {
+  display: grid;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+@media (min-width: 900px) {
+  .layout { grid-template-columns: 1fr 380px; align-items: start; }
+}
+
+.lines {
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.side {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+@media (min-width: 900px) {
+  .side { position: sticky; top: calc(var(--header-h) + 70px); }
+}
+
+.warn { color: var(--brick-red-deep); font-weight: 700; }
+
+.note {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  text-align: center;
+}

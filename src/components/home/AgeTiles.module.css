@@ -1,0 +1,74 @@
+.row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(150px, 1fr);
+  gap: 12px;
+  list-style: none;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 4px var(--gutter) 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.row::-webkit-scrollbar { display: none; }
+
+.row li { scroll-snap-align: start; }
+
+@media (min-width: 900px) {
+  .row { margin: 0; padding: 4px 0 12px; overflow: visible; gap: 18px; }
+}
+
+/* Each age is a brick: solid colour block, big number, ledge underneath. */
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 190px;
+  padding: 14px 16px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 6px 0 var(--accent-deep);
+  text-decoration: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.tile::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 30px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: -40px 0 0 rgba(255, 255, 255, 0.35);
+}
+
+.tile:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--accent-deep); }
+
+.num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.unit {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.art {
+  position: absolute;
+  right: -10px;
+  bottom: -14px;
+  width: 128px;
+  height: 128px;
+  transition: transform 0.25s var(--ease-pop);
+}
+
+.tile:hover .art { transform: rotate(-6deg) translateY(-6px); }

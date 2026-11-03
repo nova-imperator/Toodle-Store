@@ -1,0 +1,59 @@
+/* Design tokens. See Design.md §2–4. */
+:root {
+  --brick-red: #e8382d;
+  --brick-red-deep: #b9261d;
+  --brick-blue: #1f7fe0;
+  --brick-blue-deep: #1660ad;
+  --brick-yellow: #ffc72c;
+  --brick-yellow-deep: #d9a20a;
+  --brick-green: #3fa34d;
+  --brick-green-deep: #2d7d39;
+  --brick-orange: #ff8a1e;
+  --brick-orange-deep: #d26a08;
+
+  --red-tint: #fde4e1;
+  --blue-tint: #ddecfd;
+  --yellow-tint: #fff3cf;
+  --green-tint: #e0f2e2;
+  --orange-tint: #ffead6;
+
+  --ink: #1d2b53;
+  --ink-soft: #4f5b7a;
+  --ink-faint: #8a93ab;
+  --paper: #fff8ea;
+  --card: #fffdf8;
+  --line: #eadfc8;
+  --line-strong: #d9caa9;
+
+  --tile-mint: #ccfed9;
+  --tile-sky: #95baff;
+
+  --font-display: var(--font-baloo), "Trebuchet MS", sans-serif;
+  --font-body: var(--font-nunito), "Segoe UI", sans-serif;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --gutter: 16px;
+  --max: 1240px;
+  --header-h: 64px;
+
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --focus: 0 0 0 3px var(--paper), 0 0 0 6px var(--brick-blue);
+}
+
+@media (min-width: 900px) {
+  :root {
+    --gutter: 24px;
+    --header-h: 76px;
+  }
+}
+
+/* Category / age colour coding. A component sets data-color and reads --accent. */
+[data-color="red"] { --accent: var(--brick-red); --accent-deep: var(--brick-red-deep); --accent-tint: var(--red-tint); --on-accent: #fff; }
+[data-color="blue"] { --accent: var(--brick-blue); --accent-deep: var(--brick-blue-deep); --accent-tint: var(--blue-tint); --on-accent: #fff; }
+[data-color="yellow"] { --accent: var(--brick-yellow); --accent-deep: var(--brick-yellow-deep); --accent-tint: var(--yellow-tint); --on-accent: var(--ink); }
+[data-color="green"] { --accent: var(--brick-green); --accent-deep: var(--brick-green-deep); --accent-tint: var(--green-tint); --on-accent: #fff; }
+[data-color="orange"] { --accent: var(--brick-orange); --accent-deep: var(--brick-orange-deep); --accent-tint: var(--orange-tint); --on-accent: var(--ink); }

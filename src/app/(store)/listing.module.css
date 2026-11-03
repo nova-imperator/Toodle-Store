@@ -1,0 +1,13 @@
+.aside {
+  display: none;
+  width: 150px;
+  height: auto;
+  flex-shrink: 0;
+  margin-bottom: -22px;
+}
+
+@media (min-width: 700px) {
+  .aside { display: block; }
+}
+
+.pageHead { margin-top: 16px; }

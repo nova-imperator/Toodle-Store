@@ -1,0 +1,21 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.empty p { color: var(--ink-soft); max-width: 34ch; }
+
+.img {
+  width: 140px;
+  height: auto;
+  animation: walk 2.4s ease-in-out infinite;
+}
+
+@keyframes walk {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}

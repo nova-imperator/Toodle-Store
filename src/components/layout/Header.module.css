@@ -1,0 +1,123 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 2px solid var(--line);
+}
+
+.strip {
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.82rem;
+}
+
+.stripInner {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding-block: 6px;
+}
+
+.stripInner a { color: var(--brick-yellow); text-decoration: none; font-weight: 700; }
+.stripInner .desk { display: none; }
+
+@media (min-width: 900px) {
+  .stripInner { justify-content: space-between; }
+  .stripInner .desk { display: inline; }
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px 12px;
+  min-height: var(--header-h);
+  padding-block: 8px;
+}
+
+.logo {
+  display: block;
+  width: 108px;
+  flex-shrink: 0;
+}
+
+.logo img { width: 100%; height: auto; }
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.bar > :last-child {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+
+@media (min-width: 900px) {
+  .bar { grid-template-columns: auto minmax(280px, 1fr) auto; gap: 24px; }
+  .logo { width: 140px; }
+  .search { grid-column: 2; grid-row: 1; }
+}
+
+.cats {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .cats {
+    display: block;
+    border-top: 2px solid var(--line);
+  }
+}
+
+.catsInner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 48px;
+}
+
+.catsInner > a {
+  padding: 10px 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.catsInner > a:hover { background: var(--yellow-tint); }
+
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 var(--gutter) 10px;
+  scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar { display: none; }
+
+.chips a {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  .chips { display: none; }
+}

@@ -1,0 +1,25 @@
+.heart {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink-soft);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.heart:hover { color: var(--brick-red); border-color: var(--brick-red); }
+
+.saved {
+  color: var(--brick-red);
+  border-color: var(--brick-red);
+  animation: beat 0.35s var(--ease-pop);
+}
+
+@keyframes beat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}

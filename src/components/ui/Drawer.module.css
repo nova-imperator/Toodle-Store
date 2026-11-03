@@ -1,0 +1,59 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(29, 43, 83, 0.45);
+  animation: fade 0.2s ease;
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 91;
+  width: min(420px, 92vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  animation: slideRight 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.right { right: 0; border-left: 3px solid var(--line); }
+.left { left: 0; border-right: 3px solid var(--line); animation-name: slideLeft; }
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--line);
+}
+
+.head h2 { font-size: 1.4rem; }
+
+.close {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--card);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.foot {
+  border-top: 2px solid var(--line);
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+  background: var(--card);
+}
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes slideRight { from { transform: translateX(100%); } }
+@keyframes slideLeft { from { transform: translateX(-100%); } }

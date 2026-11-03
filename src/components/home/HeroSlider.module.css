@@ -1,0 +1,147 @@
+.hero {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+}
+
+.slide {
+  grid-area: 1 / 1;
+  --hero-bg: var(--red-tint);
+  --hero-accent: var(--brick-red);
+  --hero-text: var(--ink);
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+
+.slide[data-theme="blue"] { --hero-bg: var(--blue-tint); --hero-accent: var(--brick-blue); }
+.slide[data-theme="orange"] { --hero-bg: var(--orange-tint); --hero-accent: var(--brick-orange-deep); }
+.slide[data-theme="ink"] { --hero-bg: var(--ink); --hero-accent: var(--brick-yellow); --hero-text: #fff; }
+
+.active { opacity: 1; visibility: visible; }
+
+.inner {
+  display: grid;
+  gap: 8px;
+  align-items: center;
+  padding-block: 24px 64px;
+}
+
+@media (min-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr 1.1fr;
+    min-height: 460px;
+    padding-block: 32px 72px;
+  }
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  order: 2;
+}
+
+@media (min-width: 900px) {
+  .copy { order: 0; }
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 4px 16px 4px 12px;
+  background: var(--hero-accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 50%, 100% 100%, 0 100%);
+}
+
+.slide[data-theme="ink"] .eyebrow { color: var(--ink); }
+
+.title {
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.4rem);
+  max-width: 14ch;
+}
+
+.sub {
+  max-width: 42ch;
+  font-size: 1.05rem;
+  opacity: 0.9;
+}
+
+.art img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+@media (min-width: 900px) {
+  .art img { max-height: 420px; }
+}
+
+.active .art img { animation: bob 4s ease-in-out infinite; }
+.active .copy > * { animation: rise 0.6s var(--ease-pop) both; }
+.active .copy > *:nth-child(2) { animation-delay: 0.06s; }
+.active .copy > *:nth-child(3) { animation-delay: 0.12s; }
+.active .copy > *:nth-child(4) { animation-delay: 0.18s; }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+.controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.controls > * { pointer-events: auto; }
+
+.arrow {
+  display: none;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 2px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+}
+
+@media (min-width: 900px) {
+  .controls { justify-content: flex-start; }
+  .arrow { display: grid; }
+}
+
+.dots { display: flex; gap: 8px; }
+
+/* Dots are brick studs. */
+.dot {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  transition: transform 0.2s var(--ease-pop), background 0.2s ease;
+}
+
+.dot[aria-current="true"] {
+  background: var(--brick-yellow);
+  transform: scale(1.25);
+}

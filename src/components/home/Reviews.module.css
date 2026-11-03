@@ -1,0 +1,36 @@
+.invite {
+  padding: 20px;
+  border-radius: var(--radius-xl);
+  background: var(--yellow-tint);
+  border: 2px solid var(--brick-yellow);
+}
+
+.inviteTitle {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.list {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 900px) {
+  .list { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card {
+  padding: 16px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.comment { margin: 8px 0; }
+
+.by { font-size: 0.9rem; color: var(--ink-soft); }

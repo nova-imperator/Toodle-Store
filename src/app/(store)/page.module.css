@@ -1,0 +1,18 @@
+.section {
+  margin-top: 44px;
+}
+
+@media (min-width: 900px) {
+  .section { margin-top: 64px; }
+}
+
+.trust {
+  margin-top: 20px;
+}
+
+/* Full-width tinted band for the deals carousel. */
+.band {
+  padding-block: 32px;
+  background: var(--orange-tint);
+  border-block: 3px solid var(--brick-orange);
+}

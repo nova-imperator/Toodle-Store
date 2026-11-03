@@ -1,0 +1,27 @@
+.price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.sale {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+
+.lg .sale { font-size: 2rem; }
+
+.mrp {
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+  text-decoration: line-through;
+}
+
+.off {
+  color: var(--brick-green-deep);
+  font-weight: 800;
+  font-size: 0.9rem;
+}

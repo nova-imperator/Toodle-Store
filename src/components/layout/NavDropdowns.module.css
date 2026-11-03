@@ -1,0 +1,116 @@
+.wrap {
+  display: contents;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.trigger:hover,
+.trigger[aria-expanded="true"] { background: var(--yellow-tint); }
+
+.flip { transform: rotate(180deg); }
+
+.panel {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  width: min(var(--max), calc(100vw - 32px));
+  padding: 20px;
+  border: 2px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  background: var(--paper);
+  animation: drop 0.18s ease-out;
+}
+
+.catGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.cat:hover { border-color: var(--accent); background: var(--accent-tint); }
+
+.catImg {
+  width: 80px;
+  height: 85px;
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(90deg, var(--tile-mint), var(--tile-sky));
+  background-size: 100% 72%;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+.all {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.agePanel { width: auto; min-width: 640px; }
+
+.ageRow {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.age {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 96px;
+  border-radius: var(--radius-lg);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 4px 0 var(--accent-deep);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.age:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--accent-deep); }
+
+.ageNum {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+@keyframes drop {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+}

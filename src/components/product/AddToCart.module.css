@@ -1,0 +1,38 @@
+.stepper {
+  display: grid;
+  grid-template-columns: 38px 1fr 38px;
+  align-items: center;
+  min-height: 38px;
+  border-radius: var(--radius);
+  background: var(--brick-green);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--brick-green-deep);
+  animation: grow 0.25s var(--ease-pop);
+}
+
+.stepper button {
+  height: 38px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  display: grid;
+  place-items: center;
+}
+
+.stepper button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.qty {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.lg { min-height: 56px; grid-template-columns: 56px 1fr 56px; }
+.lg button { height: 56px; }
+.lg .qty { font-size: 1.3rem; }
+
+@keyframes grow {
+  from { transform: scale(0.9); }
+  to { transform: scale(1); }
+}

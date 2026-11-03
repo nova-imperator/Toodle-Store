@@ -1,0 +1,106 @@
+# AI Development Rules
+
+### 1. PRD.md — Requirements
+Defines **what** is being built, target users, goals, requirements, and features.
+
+### 2. Architecture.md — Architecture
+Defines application flow, technical stack, system architecture, and folder/file structure.
+
+### 3. Rules.md — Development Rules
+Defines AI boundaries, coding standards, libraries, dependencies, security, error handling, and things the AI must/ must not do.
+
+### 4. Phases.md — Development Phases
+Breaks development into manageable phases and defines what should be completed in each phase.
+
+### 5. Design.md — UI/UX Design
+Defines the visual direction: colors, theme, typography, layout, components, spacing, and interaction principles.
+
+### 6. Memory.md — Project Memory
+**Do not create initially.** Create it once development begins. Keep important decisions, progress, completed work, known issues, and current project state so future AI sessions can continue without relying on chat history.
+
+---
+
+### 7. Code Quality, Modularity & Maintainability
+
+- Write clean, readable, modular, maintainable, production-quality code.
+- Follow a clear and consistent project structure.
+- Keep files reasonably small and give each file a clear responsibility.
+- Separate concerns:
+  - Components → reusable UI
+  - Pages → page-level UI
+  - Routes → API/application routes
+  - Controllers → request/response handling
+  - Services → business logic
+  - Models/Database → schemas and queries
+  - Middleware → auth, validation, errors
+  - Utils/Helpers → reusable utilities
+  - Hooks → reusable frontend logic
+  - Types/Interfaces → shared types
+  - Config → application configuration
+  - Styles/CSS → styling
+- Do not mix UI, business logic, database queries, API calls, and configuration unnecessarily.
+- Reuse components/functions instead of duplicating code.
+- Avoid unnecessary abstractions, files, folders, classes, patterns, and dependencies.
+- Keep frontend and backend concerns separated.
+- Centralize common functionality such as authentication, validation, errors, logging, and database access where appropriate.
+- Never hard-code secrets, API keys, passwords, tokens, or environment-specific values.
+- Remove dead code, unused imports, duplicate code, and debugging code.
+- Do not modify unrelated functionality.
+- Preserve existing behavior unless explicitly required otherwise.
+- Follow existing project conventions.
+- Before adding dependencies, check whether existing functionality can solve the problem.
+- After significant features, review and refactor affected code.
+- The final codebase must feel **professionally engineered, not AI-generated**.
+
+---
+
+### 8. Local Development & Source of Truth
+
+- All Claude Code development must happen **locally**.
+- The **local repository is the single source of truth**.
+- Do not create project files or artifacts inside the AI chat/account.
+- Do not rely on chat history for project state.
+- All code, configuration, documentation, and project state must exist in the local repository.
+- Claude Code must use the project's local `PRD.md`, `Architecture.md`, `Rules.md`, `Phases.md`, `Design.md`, and `Memory.md` when applicable.
+- Persist important decisions and progress in the repository.
+- Never expose or commit secrets, credentials, API keys, tokens, or `.env` values.
+- Verify actual local files after completing work.
+
+---
+
+### 9. Frontend Design — Anti-Vibe-Coding
+
+When building or modifying a frontend, **do not automatically use generic AI/vibe-coded design patterns**.
+
+Avoid these by default:
+
+**Harsh gradients, generic Lucide icon decoration, pure white backgrounds, rainbow colors, excessive shadows, three-card feature rows, unnecessary emojis, liquid glass, excessive em dashes, default Inter/Geist/Space Grotesk, colored left stripes, fake testimonials, generic Bento grids, terminal-style UI, “It's not X, it's Y” copy, checkmark bullet lists, generic three-tier pricing, fake product demos, excessive rounded corners, purple/black themes, unnecessary skeleton loaders, radial orbs, dot grids, sparkle icons, animated arrows, missing TOS/privacy policy, excessive hover animations, neon colors, and generic pastel palettes.**
+
+Frontend must:
+
+- Have a **product-specific visual identity**.
+- Use intentional colors, typography, spacing, hierarchy, and layout.
+- Use icons only when they improve usability.
+- Prefer real product UI/data over decorative filler.
+- Avoid unnecessary cards, pills, badges, glass effects, shadows, gradients, and animations.
+- Make animations purposeful.
+- Design responsive behavior intentionally.
+- Include meaningful loading, empty, error, and success states.
+- Never invent testimonials, statistics, reviews, logos, or credibility signals.
+- Avoid generic SaaS/AI templates unless explicitly requested.
+- Read `PRD.md` and `Design.md` before implementing frontend work.
+- If no visual direction exists, establish one based on the product and users.
+- Every major visual element must have a purpose.
+
+**Principle:**  
+> **Build a real product, not something that looks AI-generated.**
+
+These patterns are **not completely forbidden**. They may be used when they genuinely fit the product and are explicitly justified by the design.
+
+---
+
+### 10. Final Development Principle
+
+**PRD → Architecture → Rules → Phases → Design → Code → Memory**
+
+The AI should follow the project's documented requirements and design rather than improvising based on generic AI conventions.

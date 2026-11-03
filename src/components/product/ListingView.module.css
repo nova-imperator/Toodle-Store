@@ -1,0 +1,70 @@
+/* Header band coloured by the category / age colour. */
+.band {
+  background: var(--accent-tint);
+  border-bottom: 4px solid var(--accent);
+  padding-bottom: 22px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.intro {
+  margin-top: 8px;
+  max-width: 70ch;
+  color: var(--ink-soft);
+}
+
+.layout {
+  display: grid;
+  gap: 18px;
+  padding-top: 20px;
+}
+
+@media (min-width: 900px) {
+  .layout { grid-template-columns: 250px 1fr; gap: 28px; align-items: start; }
+  .side { position: sticky; top: calc(var(--header-h) + 70px); }
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.count {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.pages {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.pages a {
+  min-width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.pages a[aria-current="page"] {
+  background: var(--brick-blue);
+  border-color: var(--brick-blue);
+  color: #fff;
+}

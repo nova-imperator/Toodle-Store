@@ -1,0 +1,47 @@
+.wrap { position: relative; }
+
+.track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 46%;
+  gap: 12px;
+  list-style: none;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 4px var(--gutter) 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar { display: none; }
+
+.track li { scroll-snap-align: start; }
+
+@media (min-width: 600px) { .track { grid-auto-columns: 31%; } }
+@media (min-width: 900px) { .track { grid-auto-columns: calc((100% - 54px) / 4); gap: 18px; margin: 0; padding: 4px 0 8px; scroll-padding-inline: 0; } }
+@media (min-width: 1200px) { .track { grid-auto-columns: calc((100% - 72px) / 5); } }
+
+.arrow {
+  display: none;
+  position: absolute;
+  top: 38%;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 2px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--line-strong);
+}
+
+.arrow:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--line-strong); }
+
+.prev { left: -20px; }
+.next { right: -20px; }
+
+@media (min-width: 900px) {
+  .arrow { display: grid; }
+}

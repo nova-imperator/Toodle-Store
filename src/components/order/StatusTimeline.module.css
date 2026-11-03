@@ -1,0 +1,60 @@
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+}
+
+.timeline li {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+/* Connector line between studs. */
+.timeline li:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 50%;
+  width: 100%;
+  height: 4px;
+  background: var(--line);
+  z-index: 0;
+}
+
+.timeline li.done:not(:first-child)::before { background: var(--brick-green); }
+
+.stud {
+  position: relative;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--line-strong);
+  background: var(--card);
+}
+
+.done .stud {
+  border-color: var(--brick-green-deep);
+  background: var(--brick-green);
+  box-shadow: inset 0 -4px 0 var(--brick-green-deep);
+}
+
+[aria-current="step"] .stud { animation: pulse 1.6s ease-in-out infinite; }
+
+.label {
+  display: grid;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.label a { font-size: 0.8rem; }
+
+@keyframes pulse {
+  50% { transform: scale(1.15); }
+}

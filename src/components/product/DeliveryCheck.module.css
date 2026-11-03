@@ -1,0 +1,52 @@
+.box {
+  padding: 14px;
+  border: 2px dashed var(--brick-green);
+  border-radius: var(--radius-lg);
+  background: var(--green-tint);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+  border: 2px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.row input:focus { outline: none; border-color: var(--brick-blue); }
+
+.row button {
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--brick-green);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.ok,
+.error {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.ok { color: var(--brick-green-deep); }
+.error { color: var(--brick-red-deep); font-weight: 700; }
