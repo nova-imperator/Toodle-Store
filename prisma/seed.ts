@@ -46,7 +46,34 @@ const BANNERS = [
   },
 ];
 
+/** Admin login and starter coupon. Safe to run on every deploy: existing rows are left unchanged. */
+async function seedAccounts() {
+  const adminEmail = process.env.SEED_ADMIN_EMAIL;
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
+  if (adminEmail && adminPassword) {
+    await prisma.adminUser.upsert({
+      where: { email: adminEmail },
+      update: {},
+      create: { name: "Store Admin", email: adminEmail, role: "admin", passwordHash: await hashPassword(adminPassword) },
+    });
+  }
+
+  await prisma.coupon.upsert({
+    where: { code: "TOODLE10" },
+    update: {},
+    create: { code: "TOODLE10", type: "percent", value: 10, minOrder: paise(499) },
+  });
+}
+
 async function main() {
+  await seedAccounts();
+
+  // Deploy builds pass --if-empty so an existing catalogue is never replaced.
+  if (process.argv.includes("--if-empty") && (await prisma.category.count()) > 0) {
+    console.log("Catalogue already loaded, skipping catalogue seed.");
+    return;
+  }
+
   await prisma.$transaction([
     prisma.productCategory.deleteMany(),
     prisma.productAgeGroup.deleteMany(),
@@ -122,22 +149,6 @@ async function main() {
   }
 
   await prisma.banner.createMany({ data: BANNERS.map((b, i) => ({ ...b, sortOrder: i })) });
-
-  const adminEmail = process.env.SEED_ADMIN_EMAIL;
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
-  if (adminEmail && adminPassword) {
-    await prisma.adminUser.upsert({
-      where: { email: adminEmail },
-      update: {},
-      create: { name: "Store Admin", email: adminEmail, role: "admin", passwordHash: await hashPassword(adminPassword) },
-    });
-  }
-
-  await prisma.coupon.upsert({
-    where: { code: "TOODLE10" },
-    update: {},
-    create: { code: "TOODLE10", type: "percent", value: 10, minOrder: paise(499) },
-  });
 
   console.log(`Seeded ${CATEGORIES.length} categories, ${AGE_GROUPS.length} age groups, ${PRODUCTS.length} products.`);
 }
