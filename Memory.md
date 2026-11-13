@@ -43,7 +43,6 @@ Dev conveniences:
 
 ## Dependencies added beyond Rules.md list
 - `eslint`, `eslint-config-next`, `@eslint/eslintrc` (linting)
-- `motion` (v12) — needed by the React Bits `BlurText` component (owner asked for React Bits motion, 13 Nov 2026)
 
 ## Progress
 - [x] 1.1 Foundation
@@ -94,8 +93,8 @@ Dev conveniences:
 - Email images load from the live site (`/images/brand/logo-wide.png`, `mascot-delivery.png`); locally they fall back to toodle-store.vercel.app (`EMAIL_ASSET_URL` overrides).
 
 ## Login welcome & motion (13 Nov 2026)
-- OTP verify and Google login APIs return `{ name, isNew }` (`src/types/auth.ts`). `LoginForm` shows `WelcomeSplash` ("Welcome back, <first name>!" / "Welcome to Toodle Store!", mascot hop, confetti, progress bar) for ~2.4 s, then a full page load to `next`. Reduced motion: no confetti, 0.9 s.
-- React Bits components are vendored into `src/components/motion/` with their licence header (MIT + Commons Clause: fine to use in the site, don't redistribute as a component library). A user-level Claude skill `react-bits` explains how to add more.
+- OTP verify and Google login APIs return `{ name, isNew }` (`src/types/auth.ts`). After login the card shows a calm `WelcomeSplash` (green tick, "Welcome back, <first name>!" / "Welcome to Toodle Store!") for 1.2 s, then a full page load to `next`.
+- **Owner strongly disliked big login motion** (full-screen overlay, confetti, word-by-word blur, bouncing mascot) — removed same day, along with BlurText and the `motion` package. Keep login/auth UI calm: a short fade at most.
 - Fixed: the login code box overflowed phone screens (input's default width at big letter-spaced font) — inputs now `width: 100%`.
 
 ## Deployment

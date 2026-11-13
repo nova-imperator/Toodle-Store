@@ -16,27 +16,9 @@
 
 .intro p { color: var(--ink-soft); }
 
-.intro h1 { animation: rise 0.5s var(--ease-pop) 0.1s both; }
-.intro p { animation: rise 0.5s ease-out 0.25s both; }
-
 .mascot {
   width: 110px;
   height: auto;
-  animation: bob 3.2s ease-in-out 0.6s infinite;
-  transform-origin: bottom center;
-}
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-}
-
-@keyframes bob {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(-8px) rotate(-2deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mascot, .intro h1, .intro p { animation: none; }
 }
 
 @media (min-width: 800px) {

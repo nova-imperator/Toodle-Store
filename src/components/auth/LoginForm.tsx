@@ -63,8 +63,9 @@ export function LoginForm({ next }: { next: string }) {
 
   return (
     <div className={styles.card}>
-      {welcome && <WelcomeSplash result={welcome} onDone={done} />}
-      {step === "email" ? (
+      {welcome ? (
+        <WelcomeSplash result={welcome} onDone={done} />
+      ) : step === "email" ? (
         <form
           key="email"
           className={styles.form}
@@ -157,7 +158,7 @@ export function LoginForm({ next }: { next: string }) {
         </p>
       )}
 
-      {step === "email" && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
+      {!welcome && step === "email" && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
         <div className={styles.google}>
           <span className={styles.or}>or</span>
           <GoogleButton onSuccess={setWelcome} onError={setError} />

@@ -9,15 +9,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
-  animation: stepIn 0.35s var(--ease-pop);
-}
-
-@keyframes stepIn {
-  from { opacity: 0; transform: translateY(10px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .form { animation: none; }
 }
 
 .label { font-weight: 800; }
