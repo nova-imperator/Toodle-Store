@@ -81,7 +81,7 @@ export default async function OrderPage({ params }: Props) {
             <div><dt>Items</dt><dd>{formatPaise(order.subtotal)}</dd></div>
             {order.discount > 0 && <div><dt>Coupon {order.couponCode}</dt><dd>−{formatPaise(order.discount)}</dd></div>}
             <div><dt>Delivery</dt><dd>{order.shipping ? formatPaise(order.shipping) : "Free"}</dd></div>
-            <div><dt>GST included</dt><dd>{formatPaise(order.gst)}</dd></div>
+            <div><dt>GST</dt><dd>–</dd></div>
             <div className={styles.total}><dt>{isCod ? "To pay on delivery" : "Total"}</dt><dd>{formatPaise(order.total)}</dd></div>
           </dl>
         </section>

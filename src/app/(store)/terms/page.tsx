@@ -13,7 +13,7 @@ export default function TermsPage() {
       <p>These terms apply when you use toodlestore.in or place an order with {SITE.legalName}. By placing an order you agree to them.</p>
       <h2>Orders and prices</h2>
       <ul>
-        <li>All prices are in Indian rupees and include GST.</li>
+        <li>All prices are in Indian rupees.</li>
         <li>Orders are paid in full online and confirmed once payment is received. Cash on delivery is not available.</li>
         <li>The minimum order value is {formatPaise(MIN_ORDER)}.</li>
         <li>We may cancel an order if an item is unavailable or a price was shown in error. Any payment is then refunded in full.</li>

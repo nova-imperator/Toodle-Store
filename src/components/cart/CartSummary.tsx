@@ -21,9 +21,10 @@ export function CartSummary({ totals, couponCode }: { totals: CartTotals; coupon
         <dt>Delivery</dt>
         <dd>{totals.shipping ? formatPaise(totals.shipping) : "Free"}</dd>
       </div>
+      {/* Owner: prices don't include GST, so no GST amount is shown. */}
       <div className={styles.muted}>
-        <dt>GST included</dt>
-        <dd>{formatPaise(totals.gstIncluded)}</dd>
+        <dt>GST</dt>
+        <dd>–</dd>
       </div>
       <div className={styles.total}>
         <dt>Total</dt>

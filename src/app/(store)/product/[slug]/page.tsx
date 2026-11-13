@@ -93,7 +93,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
           <div>
             <Price mrp={product.mrp} sale={product.salePrice} size="lg" />
-            <p className={styles.tax}>Inclusive of all taxes · {FREE_SHIPPING_LABEL}</p>
+            <p className={styles.tax}>{FREE_SHIPPING_LABEL}</p>
           </div>
           <p className={inStock ? (product.stockQty <= 5 ? styles.low : styles.stock) : styles.out}>
             {inStock ? (product.stockQty <= 5 ? `Hurry, only ${product.stockQty} left` : "In stock, ready to ship") : "Sold out for now"}

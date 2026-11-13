@@ -29,6 +29,7 @@ Dev conveniences:
 | Guest wishlist in cookie `ts_wish`; guest cart in DB keyed by cookie `ts_cart` | Wishlist table needs a user; both merge on login |
 | Prices GST-inclusive; GST shown as "included" | Indian MRP convention |
 | No cash on delivery; all orders paid online (13 Nov 2026) | Owner decision. `cod_enquiry` status and admin "Confirm COD order" remain only for orders placed before the change |
+| GST shown as "–" in cart, checkout, order page, admin and emails; no "prices include GST / inclusive of all taxes" claims | Owner (13 Nov 2026): prices don't include GST. `gst` is still computed and stored per order for future invoicing; confirm GST treatment with the owner/accountant before live launch |
 | Delivery ₹100, free when item total after coupon ≥ ₹2,000; minimum order ₹50 | Owner decision 13 Nov 2026. Rules live in `src/config/shipping.ts`; cart service computes them, checkout re-checks |
 | Online orders: stock decremented only when payment captured (verify callback or webhook, idempotent) | No stock held for abandoned payments |
 | Admin auth: separate `admin_users` + `ts_admin` cookie (1 day, SameSite strict); roles checked in every page and server action | Plan: role-based admin |

@@ -52,7 +52,7 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
             <dl className={`${styles.dl} ${styles.spaced}`}>
               <dt>Subtotal</dt><dd>{formatPaise(order.subtotal)}</dd>
               {order.discount > 0 && (<><dt>Coupon {order.couponCode}</dt><dd>−{formatPaise(order.discount)}</dd></>)}
-              <dt>GST included</dt><dd>{formatPaise(order.gst)}</dd>
+              <dt>GST</dt><dd>–</dd>
               <dt>Total</dt><dd><strong>{formatPaise(order.total)}</strong></dd>
             </dl>
           </section>

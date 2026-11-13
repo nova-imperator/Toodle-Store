@@ -19,7 +19,7 @@ export async function sendOrderConfirmation(o: OrderMailData) {
   await sendMail({
     to: o.email,
     subject: `Order ${o.orderNumber} confirmed – thank you!`,
-    text: `Hi ${o.address.name},\n\nThank you for shopping at Toodle Store. Your order ${o.orderNumber} is confirmed and paid.\n\n${itemsText(o)}\n\nDelivery: ${o.shipping ? formatPaise(o.shipping) : "Free"}\nTotal paid: ${formatPaise(o.total)} (GST included)\n\nDelivering to: ${o.address.line1}, ${o.address.city}, ${o.address.state} ${o.address.pincode}\n\nTrack your order: ${orderUrl(o.orderNumber)}\n\nQuestions? WhatsApp us on ${SITE.phone}.`,
+    text: `Hi ${o.address.name},\n\nThank you for shopping at Toodle Store. Your order ${o.orderNumber} is confirmed and paid.\n\n${itemsText(o)}\n\nDelivery: ${o.shipping ? formatPaise(o.shipping) : "Free"}\nTotal paid: ${formatPaise(o.total)}\n\nDelivering to: ${o.address.line1}, ${o.address.city}, ${o.address.state} ${o.address.pincode}\n\nTrack your order: ${orderUrl(o.orderNumber)}\n\nQuestions? WhatsApp us on ${SITE.phone}.`,
   });
 }
 

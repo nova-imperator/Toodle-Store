@@ -85,7 +85,7 @@ export function Footer() {
       </div>
       <div className={`container ${styles.legal}`}>
         <p>
-          © {new Date().getFullYear()} {SITE.name}, operated by {SITE.legalName}. Prices include GST. Payments secured by Razorpay.
+          © {new Date().getFullYear()} {SITE.name}, operated by {SITE.legalName}. Payments secured by Razorpay.
         </p>
       </div>
     </footer>
