@@ -1,17 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import styles from "@/app/admin/admin.module.css";
 
 export function AdminNav({ links }: { links: { href: string; label: string; count: number }[] }) {
   const pathname = usePathname();
-  const status = useSearchParams().get("status");
-  const current = (href: string) => {
-    const [path, query] = href.split("?");
-    if (query) return pathname === path && `?${query}` === `?status=${status}`;
-    return path === "/admin" ? pathname === "/admin" : pathname.startsWith(path) && !(path === "/admin/orders" && status === "cod_enquiry");
-  };
+  const current = (href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));
 
   return (
     <nav className={styles.sideNav} aria-label="Admin">

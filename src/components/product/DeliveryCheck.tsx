@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { api } from "@/lib/api";
+import { FREE_SHIPPING_LABEL } from "@/config/shipping";
 import styles from "./DeliveryCheck.module.css";
 
 interface Result {
@@ -62,10 +63,10 @@ export function DeliveryCheck() {
         {error ??
           (result ? (
             <>
-              Free delivery to {result.city}, {result.state} by <strong>{result.estimate.from} – {result.estimate.to}</strong>
+              Delivery to {result.city}, {result.state} by <strong>{result.estimate.from} – {result.estimate.to}</strong>
             </>
           ) : (
-            "Free delivery on every order across India."
+            `We deliver across India. ${FREE_SHIPPING_LABEL}.`
           ))}
       </p>
     </div>

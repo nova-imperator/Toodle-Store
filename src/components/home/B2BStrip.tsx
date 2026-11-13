@@ -11,7 +11,7 @@ export function B2BStrip() {
         <div className={styles.copy}>
           <h2 id="b2b-strip">Own a toy shop or starting one?</h2>
           <p>
-            Stock up at wholesale prices across all 11 categories. No minimum order, GST invoice, free delivery across India.{" "}
+            Stock up at wholesale prices across all 11 categories. No minimum order, GST invoice, delivery across India.{" "}
             <Link href="/b2b">Learn more</Link>
           </p>
         </div>

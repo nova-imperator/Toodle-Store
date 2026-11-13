@@ -6,6 +6,7 @@ import { AppError } from "@/server/errors";
 import { cookieOptions, getCurrentUser } from "@/server/auth/session";
 import { evaluateCoupon } from "@/server/services/coupon";
 import { includedGst } from "@/lib/money";
+import { FREE_SHIPPING_FROM, MIN_ORDER, shippingFor } from "@/config/shipping";
 import type { BrickColor } from "@/config/catalogue";
 import type { CartLine, CartView } from "@/types/cart";
 
@@ -81,15 +82,27 @@ async function toView(cart: CartRow | null): Promise<CartView> {
     else couponMessage = check.reason;
   }
 
-  const total = subtotal - discount;
-  const scale = subtotal ? total / subtotal : 0;
+  const itemsTotal = subtotal - discount;
+  const shipping = lines.length ? shippingFor(itemsTotal) : 0;
+  // GST is reported on the toys; the delivery charge is shown separately.
+  const scale = subtotal ? itemsTotal / subtotal : 0;
   const gstIncluded = rows.reduce((s, r) => s + includedGst(Math.round(r.line.lineTotal * scale), r.gstRate), 0);
 
   return {
     lines,
     couponCode: cart?.couponCode ?? null,
     couponMessage,
-    totals: { count: lines.reduce((s, l) => s + l.qty, 0), mrpTotal, subtotal, discount, shipping: 0, gstIncluded, total },
+    totals: {
+      count: lines.reduce((s, l) => s + l.qty, 0),
+      mrpTotal,
+      subtotal,
+      discount,
+      shipping,
+      gstIncluded,
+      total: itemsTotal + shipping,
+      toFreeShipping: shipping ? FREE_SHIPPING_FROM - itemsTotal : 0,
+      belowMinimumBy: lines.length && itemsTotal < MIN_ORDER ? MIN_ORDER - itemsTotal : 0,
+    },
   };
 }
 
@@ -169,10 +182,4 @@ export async function mergeGuestCart(userId: string) {
     ...(guest.couponCode && !userCart.couponCode ? [db.cart.update({ where: { id: userCart.id }, data: { couponCode: guest.couponCode } })] : []),
     db.cart.delete({ where: { id: guest.id } }),
   ]);
-}
-
-/** Empties the signed-in user's cart after an order is placed. */
-export async function clearCart(userId: string) {
-  await db.cart.updateMany({ where: { userId }, data: { couponCode: null } });
-  await db.cartItem.deleteMany({ where: { cart: { userId } } });
 }

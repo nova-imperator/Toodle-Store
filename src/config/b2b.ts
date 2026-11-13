@@ -48,7 +48,7 @@ export const BENEFITS = [
   { title: "Wholesale pricing", text: "Trade prices on every category, shared in a price list after you enquire." },
   { title: "No minimum order", text: "Start small, mix categories, scale up when you see what sells." },
   { title: "11 categories, one supplier", text: "Action figures to birthday gifts, all in one order." },
-  { title: "Free delivery across India", text: "Your stock reaches you with no shipping charge." },
+  { title: "Delivery across India", text: "We ship to shops, schools and offices in every state." },
   { title: "GST invoice", text: "Proper tax invoices so registered businesses can claim input credit." },
   { title: "Real people on WhatsApp", text: "Talk to our team for quotes, samples and stock questions." },
 ];
@@ -63,7 +63,7 @@ export const STEPS = [
 export const FAQS = [
   { q: "How do I see wholesale prices?", a: "Send an enquiry and our team shares the current wholesale price list and a quote for the products you're interested in, usually within 24 hours." },
   { q: "Is there a minimum order quantity?", a: "No. There is no minimum order quantity or value, and you can mix categories in one order." },
-  { q: "How long does delivery take?", a: "Most bulk orders are dispatched within 2–4 working days of payment and delivered across India, with delivery free of charge." },
+  { q: "How long does delivery take?", a: "Most bulk orders are dispatched within 2–4 working days of payment and delivered across India. Delivery charges, if any, are included in your quote." },
   { q: "Do you provide a GST invoice?", a: "Yes. Every business order comes with a GST invoice. Share your GST number in the enquiry form so we can bill your business." },
   { q: "Can I get samples first?", a: "Yes, ask for samples in your enquiry and we'll suggest the best way to try a few products before a larger order." },
   { q: "Can I return unsold stock?", a: "No. Like our retail store, we don't accept returns, so we're happy to help you choose a mix that sells before you order." },

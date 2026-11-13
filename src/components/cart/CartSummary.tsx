@@ -1,4 +1,5 @@
 import { formatPaise } from "@/lib/money";
+import { MIN_ORDER } from "@/config/shipping";
 import type { CartTotals } from "@/types/cart";
 import styles from "./CartSummary.module.css";
 
@@ -16,9 +17,9 @@ export function CartSummary({ totals, couponCode }: { totals: CartTotals; coupon
           <dd>−{formatPaise(totals.discount)}</dd>
         </div>
       )}
-      <div className={styles.good}>
+      <div className={totals.shipping ? undefined : styles.good}>
         <dt>Delivery</dt>
-        <dd>Free</dd>
+        <dd>{totals.shipping ? formatPaise(totals.shipping) : "Free"}</dd>
       </div>
       <div className={styles.muted}>
         <dt>GST included</dt>
@@ -28,6 +29,13 @@ export function CartSummary({ totals, couponCode }: { totals: CartTotals; coupon
         <dt>Total</dt>
         <dd>{formatPaise(totals.total)}</dd>
       </div>
+      {totals.belowMinimumBy > 0 ? (
+        <p className={styles.warn}>
+          Minimum order is {formatPaise(MIN_ORDER)}. Add {formatPaise(totals.belowMinimumBy)} more to check out.
+        </p>
+      ) : (
+        totals.toFreeShipping > 0 && <p className={styles.nudge}>Add {formatPaise(totals.toFreeShipping)} more for free delivery</p>
+      )}
       {savings > 0 && <p className={styles.save}>You save {formatPaise(savings)} on this order</p>}
     </dl>
   );

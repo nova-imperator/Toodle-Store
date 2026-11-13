@@ -24,7 +24,7 @@ export function B2BHero({ title, text, source, image = "/images/hero/b2b.webp" }
           <ul className={styles.facts}>
             <li>No minimum order</li>
             <li>GST invoice</li>
-            <li>Free delivery across India</li>
+            <li>Delivery across India</li>
           </ul>
         </div>
         <Image src={image} alt="" width={1000} height={760} className={styles.heroArt} priority />

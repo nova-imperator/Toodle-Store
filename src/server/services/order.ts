@@ -3,10 +3,11 @@ import { randomInt } from "node:crypto";
 import type { Prisma } from "@prisma/client";
 import { db } from "@/server/db";
 import { AppError } from "@/server/errors";
-import { getCart, clearCart } from "./cart";
-import { sendCodEnquiryReceived, sendOrderConfirmation } from "./notifications";
+import { getCart } from "./cart";
+import { sendOrderConfirmation } from "./notifications";
 import { createRazorpayOrder, isMockPayments, publicKeyId } from "@/server/integrations/razorpay";
-import { includedGst } from "@/lib/money";
+import { formatPaise, includedGst } from "@/lib/money";
+import { MIN_ORDER } from "@/config/shipping";
 import type { AddressInput, CheckoutInput } from "@/lib/validation/checkout";
 
 function newOrderNumber() {
@@ -26,13 +27,21 @@ async function saveAddress(userId: string, a: AddressInput) {
   ]);
 }
 
-export type PlaceOrderResult =
-  | { kind: "cod"; orderNumber: string }
-  | { kind: "razorpay"; orderNumber: string; keyId: string; razorpayOrderId: string; amount: number; mock: boolean };
+export interface PlaceOrderResult {
+  orderNumber: string;
+  keyId: string;
+  razorpayOrderId: string;
+  amount: number;
+  mock: boolean;
+}
 
+/** Creates the order and its Razorpay order. Every order is paid online in full (no cash on delivery). */
 export async function placeOrder(user: { id: string; email: string; name: string | null }, input: CheckoutInput): Promise<PlaceOrderResult> {
   const cart = await getCart();
   if (cart.lines.length === 0) throw new AppError("cart_empty", "Your cart is empty.", 400);
+  if (cart.totals.belowMinimumBy > 0) {
+    throw new AppError("below_minimum", `The minimum order is ${formatPaise(MIN_ORDER)}. Add ${formatPaise(cart.totals.belowMinimumBy)} more to check out.`, 400);
+  }
 
   const products = await db.product.findMany({
     where: { id: { in: cart.lines.map((l) => l.productId) } },
@@ -45,10 +54,9 @@ export async function placeOrder(user: { id: string; email: string; name: string
   }
 
   const { totals } = cart;
-  const scale = totals.subtotal ? totals.total / totals.subtotal : 0;
+  const scale = totals.subtotal ? (totals.subtotal - totals.discount) / totals.subtotal : 0;
   const address = { ...input.address, line2: input.address.line2 || null, landmark: input.address.landmark || null };
   const orderNumber = newOrderNumber();
-  const isCod = input.paymentMethod === "cod";
 
   const order = await db.order.create({
     data: {
@@ -59,11 +67,11 @@ export async function placeOrder(user: { id: string; email: string; name: string
       address: address as Prisma.InputJsonValue,
       subtotal: totals.subtotal,
       discount: totals.discount,
-      shipping: 0,
+      shipping: totals.shipping,
       gst: totals.gstIncluded,
       total: totals.total,
-      paymentMethod: input.paymentMethod,
-      status: isCod ? "cod_enquiry" : "pending_payment",
+      paymentMethod: "razorpay",
+      status: "pending_payment",
       couponCode: totals.discount > 0 ? cart.couponCode : null,
       items: {
         create: cart.lines.map((l) => ({
@@ -82,15 +90,9 @@ export async function placeOrder(user: { id: string; email: string; name: string
   if (input.saveAddress) await saveAddress(user.id, input.address);
   if (!user.name) await db.user.update({ where: { id: user.id }, data: { name: input.address.name, phone: input.phone } });
 
-  if (isCod) {
-    await clearCart(user.id);
-    await sendCodEnquiryReceived({ orderNumber, email: user.email, total: order.total, items: order.items, address });
-    return { kind: "cod", orderNumber };
-  }
-
   const rp = await createRazorpayOrder(order.total, orderNumber, { order_number: orderNumber });
   await db.payment.create({ data: { orderId: order.id, razorpayOrderId: rp.id, amount: order.total } });
-  return { kind: "razorpay", orderNumber, keyId: publicKeyId(), razorpayOrderId: rp.id, amount: order.total, mock: isMockPayments() };
+  return { orderNumber, keyId: publicKeyId(), razorpayOrderId: rp.id, amount: order.total, mock: isMockPayments() };
 }
 
 /**
@@ -128,6 +130,7 @@ export async function markPaymentCaptured(razorpayOrderId: string, details: { pa
     orderNumber: order.orderNumber,
     email: order.email,
     total: order.total,
+    shipping: order.shipping,
     items: order.items,
     address: order.address as unknown as OrderAddress,
   });

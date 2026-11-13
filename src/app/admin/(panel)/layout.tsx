@@ -14,7 +14,6 @@ export const metadata: Metadata = { title: { default: "Admin", template: "%s · 
 const MODULES: { module: AdminModule; href: string; label: string }[] = [
   { module: "dashboard", href: "/admin", label: "Dashboard" },
   { module: "orders", href: "/admin/orders", label: "Orders" },
-  { module: "orders", href: "/admin/orders?status=cod_enquiry", label: "COD enquiries" },
   { module: "enquiries", href: "/admin/enquiries", label: "B2B enquiries" },
   { module: "products", href: "/admin/products", label: "Products" },
   { module: "customers", href: "/admin/customers", label: "Customers" },
@@ -29,8 +28,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const admin = await getCurrentAdmin();
   if (!admin) redirect("/admin/login");
 
-  const [cod, enquiries] = await Promise.all([db.order.count({ where: { status: "cod_enquiry" } }), db.b2bEnquiry.count({ where: { status: "new" } })]);
-  const counts: Record<string, number> = { "COD enquiries": cod, "B2B enquiries": enquiries };
+  const enquiries = await db.b2bEnquiry.count({ where: { status: "new" } });
+  const counts: Record<string, number> = { "B2B enquiries": enquiries };
   const links = MODULES.filter((m) => canAccess(admin.role, m.module)).map((m) => ({ href: m.href, label: m.label, count: counts[m.label] ?? 0 }));
 
   return (

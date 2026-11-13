@@ -12,13 +12,13 @@ One website on **toodlestore.in** replacing the current WordPress store. It serv
 | **B2C** — parents, relatives, gift buyers | `/` | Fast, simple toy purchase in as few steps as possible, paid through the existing Razorpay account. |
 | **B2B** — toy shops, new store owners, resellers, schools, corporates, return-gift buyers | `/b2b` | Turn visitors into saved bulk-purchase enquiries the sales team follows up. |
 
-Brand line: **"Every Child Deserves One!"** Toys start at **₹49**. Delivery across India, free on every order.
+Brand line: **"Every Child Deserves One!"** Delivery across India: ₹100 per order, free on orders of ₹2,000+. All orders paid online.
 
 ## 2. Users
 
 - **Parent / gift buyer (primary, mobile-first).** Shops by category, age or budget, wants quick checkout with UPI.
 - **Business buyer.** Researching suppliers, wants wholesale pricing, no minimum order, GST invoice. Will not buy online in phase 1.
-- **Store team.** Admin, Order manager, Sales / B2B roles managing catalogue, orders, COD enquiries and B2B leads.
+- **Store team.** Admin, Order manager, Sales / B2B roles managing catalogue, orders and B2B leads.
 
 ## 3. Catalogue
 
@@ -44,9 +44,10 @@ Products belong to many categories and many age groups, and one brand.
 
 ### 4.3 Cart and checkout
 - Cart: change quantity, remove, coupon, price summary. Delivery always free. Stock re-checked on entering checkout.
-- Single-page checkout: contact (email + mobile), address (pincode auto-fills city/state, saved for next time), delivery estimate by pincode, order summary (items, coupon, free delivery, GST, total), payment.
+- Single-page checkout: contact (email + mobile), address (pincode auto-fills city/state, saved for next time), delivery estimate by pincode, order summary (items, coupon, delivery charge, GST, total), payment.
 - **Razorpay**: server creates the Razorpay order, browser opens Checkout, server verifies the signature. Webhooks (captured, failed, refund processed) update the order. Secret key never leaves the server.
-- **COD**: shown as an option but saved as a *COD enquiry* (not a confirmed order). Shopper sees "Thank you, we'll get back to you shortly".
+- **No cash on delivery** (owner decision, 13 Nov 2026): every order is paid in full online through Razorpay.
+- **Delivery charge**: ₹100 per order; free when the item total (after coupon) is ₹2,000 or more. **Minimum order**: ₹50.
 - Failed payment returns to the payment step with cart and address intact.
 - After order: thank-you page, confirmation email, My Orders with status Placed → Packed → Shipped (tracking link) → Delivered.
 - **No returns or refunds.** Admin may issue manual Razorpay refunds for exceptions.
@@ -58,7 +59,7 @@ Products belong to many categories and many age groups, and one brand.
 - No retail prices on B2B pages. No minimum order quantity or value.
 
 ### 4.5 Admin panel (`/admin`)
-Role-based (Admin, Order manager, Sales). Modules: dashboard, products, categories / age groups / brands, orders and COD enquiries, customers, coupons, B2B enquiries (status pipeline New → Contacted → Quote sent → Won / Lost, assign, notes, export), content (banners, FAQ, policies), reviews, settings.
+Role-based (Admin, Order manager, Sales). Modules: dashboard, products, categories / age groups / brands, orders, customers, coupons, B2B enquiries (status pipeline New → Contacted → Quote sent → Won / Lost, assign, notes, export), content (banners, FAQ, policies), reviews, settings.
 
 ### 4.6 Common pages
 About, Contact, Shipping policy, Return policy, Privacy policy, Terms.
@@ -74,8 +75,9 @@ About, Contact, Shipping policy, Return policy, Privacy policy, Terms.
 ## 6. Owner decisions (fixed)
 | Topic | Decision |
 |-------|----------|
-| Cash on delivery | Saved as a COD enquiry, team confirms by phone |
-| Shipping | Free on every order |
+| Cash on delivery | Not offered; all orders paid online in full (changed 13 Nov 2026) |
+| Shipping | ₹100 per order, free on orders of ₹2,000+ (changed 13 Nov 2026) |
+| Minimum order | ₹50 |
 | Returns / refunds | None |
 | B2B minimum order | None |
 | B2B alerts | Email + WhatsApp; recipients provided by owner |

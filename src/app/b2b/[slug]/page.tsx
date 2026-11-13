@@ -15,7 +15,7 @@ function resolve(slug: string) {
       name: category.name,
       title: `Wholesale ${category.name} Supplier in India`,
       h1: `Wholesale ${category.name.toLowerCase()} for your business`,
-      text: `${category.intro} Order in bulk at trade prices, mix with any other category, and get a GST invoice with free delivery across India.`,
+      text: `${category.intro} Order in bulk at trade prices, mix with any other category, and get a GST invoice with delivery across India.`,
       image: `/images/categories/${category.slug}.webp`,
     };
   }

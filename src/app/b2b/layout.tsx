@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: { default: "Wholesale Toys Supplier in India – Bulk Orders", template: "%s | Toodle Store Wholesale" },
-  description: "Wholesale toys for shops, resellers, schools and corporates. No minimum order, GST invoice, free delivery across India. Get the price list today.",
+  description: "Wholesale toys for shops, resellers, schools and corporates. No minimum order, GST invoice, delivery across India. Get the price list today.",
 };
 
 export default function B2BLayout({ children }: { children: React.ReactNode }) {

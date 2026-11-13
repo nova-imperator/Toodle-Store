@@ -16,7 +16,7 @@ export default async function CheckoutPage() {
 
   return (
     <div className={`container ${styles.pageHead}`}>
-      <SectionHeading as="h1" title="Checkout" subtitle="One page, three quick steps. Delivery is free." />
+      <SectionHeading as="h1" title="Checkout" subtitle="One page, three quick steps. Free delivery on orders of ₹2,000+." />
       <CheckoutForm
         email={user.email}
         phone={user.phone}

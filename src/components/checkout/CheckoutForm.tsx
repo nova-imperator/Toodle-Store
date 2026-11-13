@@ -19,9 +19,13 @@ import { openRazorpay } from "./razorpay";
 import { MockPaymentDialog } from "./MockPaymentDialog";
 import styles from "./CheckoutForm.module.css";
 
-type PlaceResult =
-  | { kind: "cod"; orderNumber: string }
-  | { kind: "razorpay"; orderNumber: string; keyId: string; razorpayOrderId: string; amount: number; mock: boolean };
+interface PlaceResult {
+  orderNumber: string;
+  keyId: string;
+  razorpayOrderId: string;
+  amount: number;
+  mock: boolean;
+}
 
 interface Props {
   email: string;
@@ -37,7 +41,6 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
   const [phone, setPhone] = useState(savedPhone ?? saved?.phone ?? "");
   const [address, setAddress] = useState<AddressInput>(saved ?? EMPTY);
   const [saveAddress, setSaveAddress] = useState(true);
-  const [method, setMethod] = useState<"razorpay" | "cod">("razorpay");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -51,7 +54,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
     try {
       const r = await api<{ city: string; state: string; estimate: { from: string; to: string } }>(`/api/pincode/${pin}`);
       setAddress((a) => ({ ...a, city: a.city || r.city, state: INDIAN_STATES.includes(r.state) ? r.state : a.state }));
-      setEstimate(`Free delivery by ${r.estimate.from} – ${r.estimate.to}`);
+      setEstimate(`Delivery by ${r.estimate.from} – ${r.estimate.to}`);
       setErrors((e) => ({ ...e, "address.pincode": "" }));
     } catch (e) {
       setEstimate(null);
@@ -64,7 +67,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
     router.push(`/order/${orderNumber}`);
   };
 
-  const pay = async (result: Extract<PlaceResult, { kind: "razorpay" }>) => {
+  const pay = async (result: PlaceResult) => {
     if (result.mock) {
       setMock({ razorpayOrderId: result.razorpayOrderId, amount: result.amount });
       return;
@@ -105,7 +108,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
-    const parsed = checkoutSchema.safeParse({ phone, address, saveAddress, paymentMethod: method });
+    const parsed = checkoutSchema.safeParse({ phone, address, saveAddress });
     if (!parsed.success) {
       const map: Record<string, string> = {};
       for (const issue of parsed.error.issues) map[issue.path.join(".")] ??= issue.message;
@@ -116,9 +119,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
     setErrors({});
     setBusy(true);
     try {
-      const result = await api<PlaceResult>("/api/checkout", { body: parsed.data });
-      if (result.kind === "cod") await goToOrder(result.orderNumber);
-      else await pay(result);
+      await pay(await api<PlaceResult>("/api/checkout", { body: parsed.data }));
     } catch (err) {
       setFormError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
       setBusy(false);
@@ -184,23 +185,12 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
           <h2 id="s3">
             <span className={styles.num}>3</span> Payment
           </h2>
-          <div className={styles.methods} role="radiogroup" aria-label="Payment method">
-            <label className={styles.method} data-checked={method === "razorpay"}>
-              <input type="radio" name="method" value="razorpay" checked={method === "razorpay"} onChange={() => setMethod("razorpay")} />
-              <Icon name="shield" />
-              <span>
-                <strong>Pay online</strong>
-                <small>UPI, cards, netbanking and wallets via Razorpay</small>
-              </span>
-            </label>
-            <label className={styles.method} data-checked={method === "cod"}>
-              <input type="radio" name="method" value="cod" checked={method === "cod"} onChange={() => setMethod("cod")} />
-              <Icon name="cash" />
-              <span>
-                <strong>Cash on delivery</strong>
-                <small>We&apos;ll call you to confirm before shipping</small>
-              </span>
-            </label>
+          <div className={styles.method}>
+            <Icon name="shield" />
+            <span>
+              <strong>Pay securely online</strong>
+              <small>UPI, cards, netbanking and wallets via Razorpay. You choose in the next step.</small>
+            </span>
           </div>
         </section>
       </div>
@@ -225,8 +215,8 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
             {formError}
           </p>
         )}
-        <Button type="submit" size="lg" block disabled={busy}>
-          {busy ? "Please wait…" : method === "cod" ? "Request cash on delivery" : `Pay ${formatPaise(cart.totals.total)}`}
+        <Button type="submit" size="lg" block disabled={busy || cart.totals.belowMinimumBy > 0}>
+          {busy ? "Please wait…" : `Pay ${formatPaise(cart.totals.total)}`}
         </Button>
         <p className={styles.policy}>
           By placing this order you agree to our <Link href="/terms">terms</Link>. Toys can&apos;t be returned, so please check ages and sizes.

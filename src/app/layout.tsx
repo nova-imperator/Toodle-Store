@@ -11,7 +11,7 @@ const nunito = localFont({ src: "../assets/fonts/nunito-latin-wght.woff2", weigh
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: { default: "Toodle Store – Buy Toys Online in India", template: "%s | Toodle Store" },
-  description: "Toys for every age from ₹49: RC cars, soft toys, dolls, puzzles, educational and musical toys. Free delivery across India.",
+  description: "Toys for every age: educational, musical and remote control toys, dollhouses and more. Secure online payment, free delivery on orders of ₹2,000+.",
   openGraph: { siteName: SITE.name, type: "website", locale: "en_IN", images: ["/images/brand/logo.png"] },
 };
 

@@ -12,6 +12,8 @@ import { Stars } from "@/components/ui/Stars";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { productLd } from "@/lib/structuredData";
 import { SITE } from "@/config/site";
+import { FREE_SHIPPING_FROM, FREE_SHIPPING_LABEL, SHIPPING_FEE } from "@/config/shipping";
+import { formatPaise } from "@/lib/money";
 import styles from "./page.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -40,8 +42,9 @@ export default async function ProductPage({ params }: Props) {
   const avg = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
 
   const faqs = [
-    { q: "How long will delivery take?", a: `Most orders reach you in ${SITE.deliveryDays.min}–${SITE.deliveryDays.max} working days, anywhere in India. Delivery is always free.` },
-    { q: "Can I pay cash on delivery?", a: "Yes. Choose cash on delivery at checkout and our team will call you to confirm the order before it ships." },
+    { q: "How long will delivery take?", a: `Most orders reach you in ${SITE.deliveryDays.min}–${SITE.deliveryDays.max} working days, anywhere in India.` },
+    { q: "How much is delivery?", a: `Delivery is ${formatPaise(SHIPPING_FEE)} per order, and free when your order is ${formatPaise(FREE_SHIPPING_FROM)} or more.` },
+    { q: "How can I pay?", a: "Online by UPI, debit or credit card, netbanking or wallet, through Razorpay's secure checkout. We don't offer cash on delivery." },
     { q: "Can I return this toy?", a: "We don't offer returns or refunds, so please check the age range and size before ordering. If anything is wrong with your order, WhatsApp us and we'll help." },
     { q: "Is it safe for my child?", a: product.safetyInfo ?? "Please follow the age guidance on this page." },
   ];
@@ -90,7 +93,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
           <div>
             <Price mrp={product.mrp} sale={product.salePrice} size="lg" />
-            <p className={styles.tax}>Inclusive of all taxes · Free delivery</p>
+            <p className={styles.tax}>Inclusive of all taxes · {FREE_SHIPPING_LABEL}</p>
           </div>
           <p className={inStock ? (product.stockQty <= 5 ? styles.low : styles.stock) : styles.out}>
             {inStock ? (product.stockQty <= 5 ? `Hurry, only ${product.stockQty} left` : "In stock, ready to ship") : "Sold out for now"}

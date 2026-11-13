@@ -28,7 +28,8 @@ Dev conveniences:
 | Fonts self-hosted in `src/assets/fonts` (Baloo 2, Nunito, OFL) | Google Fonts download failed during dev; local is faster and offline-safe |
 | Guest wishlist in cookie `ts_wish`; guest cart in DB keyed by cookie `ts_cart` | Wishlist table needs a user; both merge on login |
 | Prices GST-inclusive; GST shown as "included" | Indian MRP convention |
-| COD → order status `cod_enquiry`, stock untouched until admin "Confirm COD order" | Owner decision: COD is an enquiry until the team calls |
+| No cash on delivery; all orders paid online (13 Nov 2026) | Owner decision. `cod_enquiry` status and admin "Confirm COD order" remain only for orders placed before the change |
+| Delivery ₹100, free when item total after coupon ≥ ₹2,000; minimum order ₹50 | Owner decision 13 Nov 2026. Rules live in `src/config/shipping.ts`; cart service computes them, checkout re-checks |
 | Online orders: stock decremented only when payment captured (verify callback or webhook, idempotent) | No stock held for abandoned payments |
 | Admin auth: separate `admin_users` + `ts_admin` cookie (1 day, SameSite strict); roles checked in every page and server action | Plan: role-based admin |
 | Admin uses server actions; storefront uses `/api/*` route handlers | Admin forms are simple; storefront needs JSON for client interactions |
@@ -76,6 +77,8 @@ Dev conveniences:
 - Verified locally: real test-mode order created, bad signature → 400 and order stays unpaid, valid signature → order placed, cart cleared.
 - Vercel needs `RAZORPAY_KEY_ID` + `RAZORPAY_KEY_SECRET` (owner adds in dashboard). Webhook secret not set yet (optional in test).
 - Test card 4100 2800 0000 1007, CVV 123, expiry 12/26 · test UPI `test@razorpay`.
+- Razorpay test checkout works on https://toodle-store.vercel.app (owner tested). Old deployment URLs (`toodle-store-<hash>-…vercel.app`) keep their old settings; always test on the main URL.
+- Shipping/minimum/COD-removal verified locally (15 checks): ₹395 → ₹495 charged; ₹1,975 pays ₹100; ₹2,370 free; ₹30 cart refused; COD request refused.
 
 ## Deployment
 - GitHub: nova-imperator/Toodle-Store (public; plan PDF and `My Sample Images/` are git-ignored). Push with `gh auth switch --user nova-imperator`, then switch back to RRS-repositories.

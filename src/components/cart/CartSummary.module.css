@@ -27,6 +27,25 @@
 
 .total dd { font-weight: 800; }
 
+.nudge,
+.warn {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.nudge {
+  background: var(--yellow-tint);
+  color: var(--ink);
+}
+
+.warn {
+  background: var(--red-tint);
+  color: var(--brick-red-deep);
+}
+
 .save {
   padding: 6px 10px;
   border-radius: var(--radius-sm);

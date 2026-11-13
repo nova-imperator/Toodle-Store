@@ -3,8 +3,8 @@ import styles from "./TrustBar.module.css";
 
 const ITEMS: { icon: IconName; title: string; text: string; color: string }[] = [
   { icon: "shield", title: "Secure payments", text: "UPI, cards and netbanking through Razorpay", color: "blue" },
-  { icon: "truck", title: "Free delivery", text: "On every order, anywhere in India", color: "green" },
-  { icon: "cash", title: "Cash on delivery", text: "Confirmed with a quick call from our team", color: "orange" },
+  { icon: "truck", title: "Free delivery over ₹2,000", text: "₹100 on smaller orders, anywhere in India", color: "green" },
+  { icon: "box", title: "Order tracking", text: "Follow your order from packed to delivered", color: "orange" },
   { icon: "whatsapp", title: "WhatsApp support", text: "Real people to help you choose", color: "red" },
 ];
 

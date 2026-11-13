@@ -9,7 +9,7 @@ import styles from "../../admin.module.css";
 
 export const metadata = { title: "Orders" };
 
-const TABS: (OrderStatus | undefined)[] = [undefined, "cod_enquiry", "placed", "packed", "shipped", "delivered", "cancelled"];
+const TABS: (OrderStatus | undefined)[] = [undefined, "placed", "packed", "shipped", "delivered", "cancelled"];
 
 type SP = { status?: string; q?: string; page?: string };
 
@@ -24,10 +24,9 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     <>
       <div className={styles.pageHead}>
         <div>
-          <h1>{status === "cod_enquiry" ? "COD enquiries" : "Orders"}</h1>
+          <h1>Orders</h1>
           <p className={styles.sub}>
             {total} {total === 1 ? "order" : "orders"}
-            {status === "cod_enquiry" && " waiting for a confirmation call"}
           </p>
         </div>
       </div>

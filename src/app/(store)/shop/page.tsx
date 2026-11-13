@@ -20,7 +20,7 @@ export default async function ShopPage({ searchParams }: Props) {
     <ListingView
       basePath="/shop"
       title={title}
-      intro="Every toy in the Toodle Store, from ₹49 pocket-money picks to big birthday surprises. Free delivery across India."
+      intro="Every toy in the Toodle Store, from first learning toys to big birthday surprises. Free delivery on orders of ₹2,000+."
       color={flag === "deal" ? "orange" : "blue"}
       crumbs={[{ name: title, path: "/shop" }]}
       fixed={{}}

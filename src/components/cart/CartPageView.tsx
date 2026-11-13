@@ -25,6 +25,7 @@ export function CartPageView() {
   }
 
   const blocked = cart.lines.some((l) => l.qty > l.stockQty);
+  const belowMinimum = cart.totals.belowMinimumBy > 0;
 
   return (
     <div className={styles.layout}>
@@ -37,11 +38,13 @@ export function CartPageView() {
         {blocked ? (
           <p className={styles.warn}>Some items have less stock than you asked for. Please update them to continue.</p>
         ) : (
-          <ButtonLink href="/checkout" size="lg" block>
-            Checkout securely
-          </ButtonLink>
+          !belowMinimum && (
+            <ButtonLink href="/checkout" size="lg" block>
+              Checkout securely
+            </ButtonLink>
+          )
         )}
-        <p className={styles.note}>Pay by UPI, card or netbanking. Cash on delivery available.</p>
+        <p className={styles.note}>Pay securely online by UPI, card, netbanking or wallet.</p>
       </aside>
     </div>
   );

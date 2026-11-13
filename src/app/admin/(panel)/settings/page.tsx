@@ -13,7 +13,7 @@ export default async function SettingsPage() {
     { name: "Razorpay payments", ok: !isMockPayments(), detail: isMockPayments() ? "Not configured: checkout runs in test (mock) mode" : "Live keys configured" },
     { name: "Razorpay webhook", ok: !!process.env.RAZORPAY_WEBHOOK_SECRET, detail: `Webhook URL: ${SITE.url}/api/payments/razorpay/webhook (events: payment.captured, payment.failed, refund.processed)` },
     { name: "Email (SMTP)", ok: !!process.env.SMTP_HOST, detail: process.env.SMTP_HOST ? `Sending via ${process.env.SMTP_HOST}` : "Not configured: emails are printed to the server log" },
-    { name: "Team alert emails", ok: teamRecipients().length > 0, detail: teamRecipients().join(", ") || "Add TEAM_ALERT_EMAILS for COD and B2B alerts" },
+    { name: "Team alert emails", ok: teamRecipients().length > 0, detail: teamRecipients().join(", ") || "Add TEAM_ALERT_EMAILS for B2B enquiry alerts" },
     { name: "Google sign-in", ok: !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, detail: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? "Enabled" : "Hidden until NEXT_PUBLIC_GOOGLE_CLIENT_ID is set" },
   ];
 

@@ -22,9 +22,11 @@ export function CartDrawer() {
         !empty && (
           <div className={styles.foot}>
             <CartSummary totals={cart.totals} couponCode={cart.couponCode} />
-            <ButtonLink href="/checkout" size="lg" block onClick={closeDrawer}>
-              Checkout
-            </ButtonLink>
+            {cart.totals.belowMinimumBy === 0 && (
+              <ButtonLink href="/checkout" size="lg" block onClick={closeDrawer}>
+                Checkout
+              </ButtonLink>
+            )}
             <ButtonLink href="/cart" variant="ghost" block onClick={closeDrawer}>
               View cart and apply coupon
             </ButtonLink>

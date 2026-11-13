@@ -21,6 +21,10 @@ export interface CartTotals {
   shipping: number;
   gstIncluded: number;
   total: number;
+  /** How much more (paise) the shopper needs to add for free delivery; 0 when already free. */
+  toFreeShipping: number;
+  /** How much more (paise) is needed to reach the minimum order; 0 when checkout is allowed. */
+  belowMinimumBy: number;
 }
 
 export interface CartView {

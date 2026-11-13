@@ -14,7 +14,6 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     { label: "Orders today", value: d.todayOrders, href: "/admin/orders", color: "blue" },
     { label: "Paid revenue today", value: formatPaise(d.todayRevenue), href: "/admin/orders", color: "green" },
     { label: "To pack and ship", value: d.pendingShipments, href: "/admin/orders?status=placed", color: "orange" },
-    { label: "COD enquiries", value: d.codEnquiries, href: "/admin/orders?status=cod_enquiry", color: "yellow" },
     { label: "New B2B enquiries", value: d.newEnquiries, href: "/admin/enquiries?status=new", color: "red" },
   ];
 

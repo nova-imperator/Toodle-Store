@@ -21,6 +21,7 @@ export default async function OrderPage({ params }: Props) {
   if (!order) notFound();
 
   const address = order.address as unknown as OrderAddress;
+  // Cash on delivery is no longer offered; this only shows orders placed before 13 Nov 2026.
   const isCod = order.status === "cod_enquiry";
   const pending = order.status === "pending_payment";
 
@@ -79,7 +80,7 @@ export default async function OrderPage({ params }: Props) {
           <dl className={styles.totals}>
             <div><dt>Items</dt><dd>{formatPaise(order.subtotal)}</dd></div>
             {order.discount > 0 && <div><dt>Coupon {order.couponCode}</dt><dd>−{formatPaise(order.discount)}</dd></div>}
-            <div><dt>Delivery</dt><dd>Free</dd></div>
+            <div><dt>Delivery</dt><dd>{order.shipping ? formatPaise(order.shipping) : "Free"}</dd></div>
             <div><dt>GST included</dt><dd>{formatPaise(order.gst)}</dd></div>
             <div className={styles.total}><dt>{isCod ? "To pay on delivery" : "Total"}</dt><dd>{formatPaise(order.total)}</dd></div>
           </dl>

@@ -22,7 +22,8 @@ export const checkoutSchema = z.object({
   phone: mobileSchema,
   address: addressSchema,
   saveAddress: z.boolean().default(true),
-  paymentMethod: z.enum(["razorpay", "cod"]),
+  // All orders are paid online in full; cash on delivery is not offered.
+  paymentMethod: z.literal("razorpay").default("razorpay"),
 });
 
 export type AddressInput = z.infer<typeof addressSchema>;

@@ -2,22 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE } from "@/config/site";
+import { FREE_SHIPPING_FROM, MIN_ORDER, SHIPPING_FEE } from "@/config/shipping";
+import { formatPaise } from "@/lib/money";
 
 export const metadata: Metadata = { title: "Terms and Conditions", alternates: { canonical: "/terms" } };
 
 export default function TermsPage() {
   return (
-    <ContentPage title="Terms and conditions" path="/terms" updated="2 November 2026">
+    <ContentPage title="Terms and conditions" path="/terms" updated="13 November 2026">
       <p>These terms apply when you use toodlestore.in or place an order with {SITE.legalName}. By placing an order you agree to them.</p>
       <h2>Orders and prices</h2>
       <ul>
         <li>All prices are in Indian rupees and include GST.</li>
-        <li>An online order is confirmed once payment is received. A cash on delivery request is confirmed only after our team calls you.</li>
+        <li>Orders are paid in full online and confirmed once payment is received. Cash on delivery is not available.</li>
+        <li>The minimum order value is {formatPaise(MIN_ORDER)}.</li>
         <li>We may cancel an order if an item is unavailable or a price was shown in error. Any payment is then refunded in full.</li>
       </ul>
       <h2>Delivery</h2>
       <p>
-        Delivery is free across India. See our <Link href="/shipping-policy">shipping policy</Link> for timelines.
+        We deliver across India for {formatPaise(SHIPPING_FEE)} per order, free on orders of {formatPaise(FREE_SHIPPING_FROM)} or more. See our <Link href="/shipping-policy">shipping policy</Link> for
+        details and timelines.
       </p>
       <h2>Returns</h2>
       <p>

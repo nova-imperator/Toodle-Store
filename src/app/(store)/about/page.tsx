@@ -7,7 +7,7 @@ import styles from "@/components/content/Prose.module.css";
 
 export const metadata: Metadata = {
   title: "About Toodle Store",
-  description: "Toodle Store brings toys for every age to families across India, starting at ₹49, with free delivery on every order.",
+  description: "Toodle Store brings toys for every age to families across India, with secure online payment and free delivery on orders of ₹2,000+.",
   alternates: { canonical: "/about" },
 };
 
@@ -16,7 +16,7 @@ export default function AboutPage() {
     <ContentPage title="About Toodle Store" path="/about">
       <p>
         <strong>{SITE.tagline}</strong> That&apos;s the idea behind Toodle Store. We believe a good toy shouldn&apos;t depend on how big the budget is,
-        so our range starts at ₹49 and goes all the way up to big birthday surprises.
+        so our range goes from small everyday toys all the way up to big birthday surprises.
       </p>
       <p>
         We stock eleven kinds of toys, from action figures and RC cars to soft toys, puzzles and musical instruments, and we sort them by age so
@@ -27,8 +27,8 @@ export default function AboutPage() {
       </figure>
       <h2>How we work</h2>
       <ul>
-        <li>Free delivery on every order, anywhere in India.</li>
-        <li>Pay online with UPI, cards or netbanking through Razorpay, or choose cash on delivery and we&apos;ll call to confirm.</li>
+        <li>Delivery anywhere in India: ₹100 per order, free on orders of ₹2,000 or more.</li>
+        <li>Pay securely online with UPI, cards, netbanking or wallets through Razorpay.</li>
         <li>Real people answer on WhatsApp at {SITE.phone}.</li>
       </ul>
       <h2>For businesses</h2>

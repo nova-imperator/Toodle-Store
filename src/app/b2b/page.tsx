@@ -23,7 +23,7 @@ export default function B2BLanding() {
       />
       <B2BHero
         title="Start or stock your toy business with wholesale prices"
-        text="Toys across 11 categories for shops, online sellers, schools and corporate buyers. Mix products freely, order any quantity, and get a GST invoice with free delivery anywhere in India."
+        text="Toys across 11 categories for shops, online sellers, schools and corporate buyers. Mix products freely, order any quantity, and get a GST invoice with delivery anywhere in India."
         source="b2b-hero"
       />
       <Segments />

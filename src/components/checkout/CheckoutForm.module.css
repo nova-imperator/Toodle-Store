@@ -61,28 +61,15 @@
 
 .check input { width: 20px; height: 20px; accent-color: var(--brick-blue); }
 
-.methods {
-  display: grid;
-  gap: 10px;
-}
-
 .method {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px;
-  border: 2px solid var(--line-strong);
+  border: 2px solid var(--brick-blue);
   border-radius: var(--radius);
-  background: #fff;
-  cursor: pointer;
-}
-
-.method[data-checked="true"] {
-  border-color: var(--brick-blue);
   background: var(--blue-tint);
 }
-
-.method input { width: 20px; height: 20px; accent-color: var(--brick-blue); }
 
 .method strong { display: block; }
 .method small { color: var(--ink-soft); }
