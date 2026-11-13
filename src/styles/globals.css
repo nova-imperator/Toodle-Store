@@ -77,16 +77,6 @@ button { cursor: pointer; }
   white-space: nowrap;
 }
 
-.demo-banner {
-  margin: 0;
-  padding: 6px var(--gutter);
-  background: var(--brick-yellow);
-  color: var(--ink);
-  font-weight: 800;
-  font-size: 0.85rem;
-  text-align: center;
-}
-
 .skip-link {
   position: absolute;
   left: 8px;

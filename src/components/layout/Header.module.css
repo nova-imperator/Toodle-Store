@@ -7,19 +7,20 @@
 }
 
 .strip {
-  background: var(--ink);
-  color: #fff;
-  font-size: 0.82rem;
+  background: var(--brick-yellow);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .stripInner {
   display: flex;
   justify-content: center;
   gap: 24px;
-  padding-block: 6px;
+  padding-block: 7px;
 }
 
-.stripInner a { color: var(--brick-yellow); text-decoration: none; font-weight: 700; }
+.stripInner a { color: var(--brick-red-deep); text-decoration: none; font-weight: 800; }
 .stripInner .desk { display: none; }
 
 @media (min-width: 900px) {

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { SITE } from "@/config/site";
-import { isDemoMode } from "@/config/demo";
 import "@/styles/globals.css";
 
 // Self-hosted variable fonts (SIL OFL, see src/assets/fonts).
@@ -24,10 +23,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" className={`${baloo.variable} ${nunito.variable}`}>
-      <body>
-        {isDemoMode() && <p className="demo-banner">Demo site for review: payments are simulated and no real orders are placed.</p>}
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
