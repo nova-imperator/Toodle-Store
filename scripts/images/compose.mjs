@@ -1,54 +1,10 @@
-// Builds full SVG documents (product shots, hero art, age art, the Fun Games tile) from the toy library.
-import { TOYS, BRICK, CREAM, INK, star, tint, shade, carton } from "./toys.mjs";
+// Builds full SVG documents (hero art, age art, the Fun Games tile) from the toy library.
+import { TOYS, BRICK, star, carton } from "./toys.mjs";
 
 const svg = (w, h, body, defs = "") =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${defs ? `<defs>${defs}</defs>` : ""}${body}</svg>`;
 
 const place = (inner, x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})">${inner}</g>`;
-
-const studs = (x, y, r = 12) =>
-  [BRICK.red, BRICK.yellow, BRICK.blue].map((c, i) => `<circle cx="${x + i * r * 3}" cy="${y}" r="${r}" fill="${c}"/>`).join("");
-
-const ACCENT = { red: BRICK.red, blue: BRICK.blue, yellow: BRICK.yellow, green: BRICK.green, orange: BRICK.orange };
-const ALT = { red: "blue", blue: "yellow", yellow: "green", green: "orange", orange: "blue" };
-
-/** Main product shot: the toy on a tinted stage in the category colour. */
-export function productMain(art, colorName) {
-  const ground = tint(ACCENT[colorName], 0.82);
-  return svg(800, 800, `<rect width="800" height="800" fill="#FFF8EA"/>
-    <rect x="40" y="40" width="720" height="720" rx="56" fill="${ground}"/>
-    <ellipse cx="400" cy="616" rx="250" ry="30" fill="${shade(ground, 0.1)}"/>
-    ${place(TOYS[art.kind](art.colors), 60, 50, 1.7)}`);
-}
-
-/** Second shot: the toy inside a brick-topped Toodle box. */
-export function productBox(art, colorName) {
-  const box = ACCENT[ALT[colorName]];
-  const bg = tint(ACCENT[colorName], 0.88);
-  const brickStuds = [0, 1, 2, 3].map((i) => {
-    const cx = 236 + i * 110, cy = 150;
-    return `<ellipse cx="${cx}" cy="${cy + 10}" rx="30" ry="12" fill="${shade(box, 0.25)}" stroke="${INK}" stroke-width="5"/>
-      <rect x="${cx - 30}" y="${cy - 8}" width="60" height="18" fill="${tint(box, 0.2)}"/>
-      <ellipse cx="${cx}" cy="${cy - 8}" rx="30" ry="12" fill="${tint(box, 0.35)}" stroke="${INK}" stroke-width="5"/>
-      <path d="M${cx - 30} ${cy - 8} L${cx - 30} ${cy + 10} M${cx + 30} ${cy - 8} L${cx + 30} ${cy + 10}" stroke="${INK}" stroke-width="5"/>`;
-  }).join("");
-  return svg(800, 800, `<rect width="800" height="800" fill="${bg}"/>
-    <ellipse cx="420" cy="738" rx="300" ry="26" fill="${shade(bg, 0.1)}"/>
-    <path d="M150 190 L190 150 L690 150 L650 190Z" fill="${tint(box, 0.25)}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
-    <path d="M650 190 L690 150 L690 690 L650 730Z" fill="${shade(box, 0.2)}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
-    <rect x="150" y="190" width="500" height="540" rx="10" fill="${box}" stroke="${INK}" stroke-width="6"/>
-    ${brickStuds}
-    <rect x="196" y="250" width="408" height="400" rx="34" fill="${CREAM}" stroke="${INK}" stroke-width="6"/>
-    ${place(TOYS[art.kind](art.colors), 212, 262, 0.94)}
-    <path d="M226 280 L300 280" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".7"/>
-    ${studs(214, 690, 11)}`);
-}
-
-/** Third shot: close-up of the toy. */
-export function productDetail(art, colorName) {
-  return svg(800, 800, `<rect width="800" height="800" fill="${tint(ACCENT[colorName], 0.9)}"/>
-    ${place(TOYS[art.kind](art.colors), -180, -150, 2.9)}`);
-}
 
 // ─── Hero slides (transparent, 1000 × 760) ──────────────────
 

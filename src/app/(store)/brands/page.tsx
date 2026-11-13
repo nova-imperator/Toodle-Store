@@ -13,8 +13,12 @@ export default async function BrandsPage() {
     <div className="container">
       <Breadcrumbs items={[{ name: "Brands", path: "/brands" }]} />
       <div className={styles.pageHead}>
-        <SectionHeading as="h1" title="Brands we stock" subtitle={`${brands.length} brands, all delivered free across India.`} />
-        <BrandStrip brands={brands} />
+        <SectionHeading
+          as="h1"
+          title="Brands we stock"
+          subtitle={brands.length ? `${brands.length} brands, all delivered free across India.` : "Our brand list is coming soon. Browse toys by category or age meanwhile."}
+        />
+        {brands.length > 0 && <BrandStrip brands={brands} />}
       </div>
     </div>
   );

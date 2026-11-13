@@ -66,10 +66,12 @@ export default async function HomePage() {
         </section>
       )}
 
-      <section className={`container ${styles.section}`} aria-labelledby="brand-h">
-        <SectionHeading id="brand-h" title="Brands we stock" action={{ label: "All brands", href: "/brands" }} />
-        <BrandStrip brands={home.brands} />
-      </section>
+      {home.brands.length > 0 && (
+        <section className={`container ${styles.section}`} aria-labelledby="brand-h">
+          <SectionHeading id="brand-h" title="Brands we stock" action={{ label: "All brands", href: "/brands" }} />
+          <BrandStrip brands={home.brands} />
+        </section>
+      )}
 
       <div className={styles.section}>
         <B2BStrip />

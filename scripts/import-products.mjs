@@ -75,7 +75,14 @@ function cleanHtml(html) {
   );
   const lines = text
     .split("\n")
-    .map((l) => l.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, "").replace(/\s+/g, " ").trim())
+    .map((l) =>
+      l
+        .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, "")
+        .replace(/(\s*\|\s*)+/g, " | ")
+        .replace(/^\s*\|\s*|\s*\|\s*$/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
     .filter((l) => l && l !== "•");
 
   // Section titles ("Key Features", "Safe & Reliable") are dropped; short lines under a

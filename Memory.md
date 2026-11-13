@@ -64,12 +64,15 @@ Dev conveniences:
 - Every deploy runs `prisma/sync-imported.ts`: creates missing imported products only, never overwrites admin edits.
 - Mapping: Woo categories → our 11 categories; age tags ("3+ years" → 3–5 and 5–7, etc.) → our age groups; "Best Seller"/"New Arrival" tags → badges; on sale → deal. Stock starts at 25 (Woo doesn't expose counts). SKU `TS-WP-<id>` when empty.
 - Imported products get **no safety text** (don't invent safety claims for real products).
-- Imported so far: LCD Writing Tablet.
-- Dummy (generated) products are still live alongside real ones. Ask owner when to remove them.
+- Imported so far (8): LCD Writing Tablet, Educational Laptop Toy, Radish Rabbit Toy Phone, Dancing & Talking Cactus, Strike Gun With 6 Bullet, Fighter Jet Toys, Nail Polish Organic Makeup Set, Princess House Set.
+- Sample (generated) products and placeholder brands were removed on owner's request (13 Nov). `prisma/remove-sample-products.ts` runs on every deploy (SKU pattern `TS-XX-000`); the seed no longer creates products or brands.
+- "Brands" nav link removed and brand sections hidden until real brands exist.
+- Hero banners are synced from `prisma/seed.ts` on every deploy (no banner editor yet). Copy avoids claims not backed by real products (no "from ₹49", no "message card").
+- Source data quirks to raise with owner: dollhouse sets are in "Fun Games" on the old site; "Strike Gun With 6 Bullet" description says 10 bullets.
 
 ## Deployment
 - GitHub: nova-imperator/Toodle-Store (public; plan PDF and `My Sample Images/` are git-ignored). Push with `gh auth switch --user nova-imperator`, then switch back to RRS-repositories.
-- Vercel: https://toodle-store.vercel.app (Prisma Postgres). `scripts/build.mjs` finds the DB URL, waits for the DB, migrates, seeds an empty DB, syncs imported products, builds.
+- Vercel: https://toodle-store.vercel.app (Prisma Postgres). `scripts/build.mjs` finds the DB URL, waits for the DB, migrates, seeds an empty DB (structure only) + syncs banners/admin/coupon, removes sample products, syncs imported products, builds.
 
 ## Not done yet / next steps
 - Admin modules from the plan still missing: categories/age groups/brands editing, home banner editor, FAQ/policy editor, review moderation, bulk CSV product import, image **upload** (currently image paths).

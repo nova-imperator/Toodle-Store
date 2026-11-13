@@ -16,7 +16,6 @@ export const AGE_LINKS = AGE_GROUPS.map((a) => ({
 }));
 
 export const QUICK_LINKS = [
-  { label: "Brands", href: "/brands" },
   { label: "Offers", href: "/shop?flag=deal" },
   { label: "New arrivals", href: "/shop?flag=new" },
   { label: "Best sellers", href: "/shop?flag=best" },

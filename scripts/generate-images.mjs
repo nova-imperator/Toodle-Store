@@ -4,15 +4,13 @@ import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { CATEGORIES, AGE_GROUPS } from "../src/config/catalogue.ts";
-import { PRODUCTS } from "../prisma/data/products.ts";
-import { slugify } from "../src/lib/slug.ts";
-import { productMain, productBox, productDetail, HERO_ART, AGE_ART, funGamesTile } from "./images/compose.mjs";
+import { HERO_ART, AGE_ART, funGamesTile } from "./images/compose.mjs";
 import { processLogo, processMascot, processBanner, processCategoryTile, writeIcons } from "./images/brand.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const SOURCE = path.join(ROOT, "My Sample Images");
 const OUT = path.join(ROOT, "public", "images");
-const dirs = ["brand", "categories", "products", "hero", "ages"].map((d) => path.join(OUT, d));
+const dirs = ["brand", "categories", "hero", "ages"].map((d) => path.join(OUT, d));
 
 const render = (svgText, file, opts = {}) =>
   sharp(Buffer.from(svgText), { density: opts.density ?? 96 })
@@ -37,24 +35,12 @@ async function categories() {
   console.log(`✓ ${CATEGORIES.length} category tiles`);
 }
 
-async function products() {
-  const colorOf = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.color]));
-  await Promise.all(PRODUCTS.map(async (p) => {
-    const slug = slugify(p.name);
-    const color = colorOf[p.categories[0]];
-    await render(productMain(p.art, color), path.join(dirs[2], `${slug}-1.webp`));
-    await render(productBox(p.art, color), path.join(dirs[2], `${slug}-2.webp`));
-    await render(productDetail(p.art, color), path.join(dirs[2], `${slug}-3.webp`));
-  }));
-  console.log(`✓ ${PRODUCTS.length * 3} product images`);
-}
-
 async function heroAndAges() {
   for (const [name, build] of Object.entries(HERO_ART)) {
-    await render(build(), path.join(dirs[3], `${name}.webp`), { width: 1000, density: 144 });
+    await render(build(), path.join(dirs[2], `${name}.webp`), { width: 1000, density: 144 });
   }
   for (const a of AGE_GROUPS) {
-    await render(AGE_ART[a.slug](), path.join(dirs[4], `${a.slug}.webp`), { width: 400, density: 144 });
+    await render(AGE_ART[a.slug](), path.join(dirs[3], `${a.slug}.webp`), { width: 400, density: 144 });
   }
   console.log("✓ hero and age artwork");
 }
@@ -62,5 +48,4 @@ async function heroAndAges() {
 await Promise.all([...dirs, path.join(ROOT, "src", "app")].map((d) => mkdir(d, { recursive: true })));
 await brand();
 await categories();
-await products();
 await heroAndAges();

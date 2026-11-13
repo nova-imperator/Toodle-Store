@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { CATEGORIES, AGE_GROUPS, BRANDS } from "../src/config/catalogue";
-import { PRODUCTS, SAFETY_BABY, SAFETY_SMALL_PARTS } from "./data/products";
-import { slugify } from "../src/lib/slug";
+// Store structure only (categories, ages, banners, admin, coupon). Products come from
+// prisma/data/imported-products.json via sync-imported.ts, or are added in the admin panel.
+import { CATEGORIES, AGE_GROUPS } from "../src/config/catalogue";
 import { hashPassword } from "../src/server/auth/password";
 
 const prisma = new PrismaClient();
@@ -10,17 +10,17 @@ const paise = (rupees: number) => rupees * 100;
 const BANNERS = [
   {
     eyebrow: "Every child deserves one",
-    title: "Toys starting at just ₹49",
-    subtitle: "Spinning tops, pull-back cars and party favours. Free delivery across India.",
-    ctaLabel: "Shop toys under ₹499",
-    ctaHref: "/shop?max=499",
+    title: "Toys for every age, delivered free",
+    subtitle: "Learning toys, musical toys, remote control toys and more. Free delivery across India.",
+    ctaLabel: "Shop all toys",
+    ctaHref: "/shop",
     image: "/images/hero/starting-49.webp",
     theme: "red",
   },
   {
     eyebrow: "Wheels, wings and remotes",
-    title: "Race-ready RC cars and trucks",
-    subtitle: "Rechargeable remote control cars, rock crawlers and stunt cars for 5 to 14 year olds.",
+    title: "Remote control toys",
+    subtitle: "Fly, drive and play with easy-to-use remote control toys for older kids.",
     ctaLabel: "See RC toys",
     ctaHref: "/category/remote-control-toys",
     image: "/images/hero/vehicles.webp",
@@ -28,10 +28,10 @@ const BANNERS = [
   },
   {
     eyebrow: "Birthday sorted",
-    title: "Gift boxes and return gift packs",
-    subtitle: "Ready-wrapped surprises picked by age. Add a message card for free.",
-    ctaLabel: "Shop birthday gifts",
-    ctaHref: "/category/birthday-gifts",
+    title: "Gifts they'll actually play with",
+    subtitle: "Pick an age and a budget in our gift finder. Free delivery across India.",
+    ctaLabel: "Find a gift",
+    ctaHref: "/#gift-h",
     image: "/images/hero/birthday.webp",
     theme: "orange",
   },
@@ -65,8 +65,14 @@ async function seedAccounts() {
   });
 }
 
+/** Banners have no admin editor yet, so the copy above is the source of truth on every deploy. */
+async function syncBanners() {
+  await prisma.$transaction([prisma.banner.deleteMany(), prisma.banner.createMany({ data: BANNERS.map((b, i) => ({ ...b, sortOrder: i })) })]);
+}
+
 async function main() {
   await seedAccounts();
+  await syncBanners();
 
   // Deploy builds pass --if-empty so an existing catalogue is never replaced.
   if (process.argv.includes("--if-empty") && (await prisma.category.count()) > 0) {
@@ -84,12 +90,10 @@ async function main() {
     prisma.category.deleteMany(),
     prisma.ageGroup.deleteMany(),
     prisma.brand.deleteMany(),
-    prisma.banner.deleteMany(),
   ]);
 
-  const categoryIds = new Map<string, string>();
   for (const [i, c] of CATEGORIES.entries()) {
-    const row = await prisma.category.create({
+    await prisma.category.create({
       data: {
         name: c.name, slug: c.slug, color: c.color, sortOrder: i, description: c.intro,
         image: `/images/categories/${c.slug}.webp`,
@@ -97,12 +101,10 @@ async function main() {
         seoDescription: c.intro.slice(0, 155),
       },
     });
-    categoryIds.set(c.slug, row.id);
   }
 
-  const ageIds = new Map<string, string>();
   for (const a of AGE_GROUPS) {
-    const row = await prisma.ageGroup.create({
+    await prisma.ageGroup.create({
       data: {
         name: a.name, slug: a.slug, minAgeMonths: a.minAgeMonths, maxAgeMonths: a.maxAgeMonths,
         color: a.color, description: a.intro,
@@ -110,47 +112,9 @@ async function main() {
         seoDescription: a.intro.slice(0, 155),
       },
     });
-    ageIds.set(a.slug, row.id);
   }
 
-  const brandIds = new Map<string, string>();
-  for (const b of BRANDS) {
-    const row = await prisma.brand.create({ data: b });
-    brandIds.set(b.slug, row.id);
-  }
-
-  for (const p of PRODUCTS) {
-    const slug = slugify(p.name);
-    const isBabySafe = p.ages.includes("0-24-months");
-    await prisma.product.create({
-      data: {
-        name: p.name, slug, sku: p.sku, description: p.description, highlights: p.highlights,
-        material: p.material, dimensions: p.dimensions,
-        safetyInfo: isBabySafe ? SAFETY_BABY : SAFETY_SMALL_PARTS,
-        mrp: paise(p.mrp), salePrice: paise(p.price), stockQty: p.stock,
-        brandId: brandIds.get(p.brand),
-        hsnCode: "9503", gstRate: 18,
-        isBestSeller: p.flags?.includes("best") ?? false,
-        isNewArrival: p.flags?.includes("new") ?? false,
-        isDeal: p.flags?.includes("deal") ?? false,
-        seoTitle: `${p.name} – Buy Online`.slice(0, 60),
-        seoDescription: p.description.slice(0, 155),
-        categories: { create: p.categories.map((c) => ({ categoryId: categoryIds.get(c)! })) },
-        ageGroups: { create: p.ages.map((a) => ({ ageGroupId: ageIds.get(a)! })) },
-        images: {
-          create: [
-            { url: `/images/products/${slug}-1.webp`, altText: p.name, sortOrder: 0 },
-            { url: `/images/products/${slug}-2.webp`, altText: `${p.name} in its box`, sortOrder: 1 },
-            { url: `/images/products/${slug}-3.webp`, altText: `${p.name} close-up`, sortOrder: 2 },
-          ],
-        },
-      },
-    });
-  }
-
-  await prisma.banner.createMany({ data: BANNERS.map((b, i) => ({ ...b, sortOrder: i })) });
-
-  console.log(`Seeded ${CATEGORIES.length} categories, ${AGE_GROUPS.length} age groups, ${PRODUCTS.length} products.`);
+  console.log(`Seeded ${CATEGORIES.length} categories and ${AGE_GROUPS.length} age groups.`);
 }
 
 main()

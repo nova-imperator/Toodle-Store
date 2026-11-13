@@ -166,16 +166,6 @@ export const AGE_GROUPS: AgeGroupDef[] = [
   },
 ];
 
-/** Placeholder house brands until the owner provides the real brand list. */
-export const BRANDS = [
-  { name: "Toodle Originals", slug: "toodle-originals" },
-  { name: "PlayNest", slug: "playnest" },
-  { name: "Zoomies", slug: "zoomies" },
-  { name: "TinyTune", slug: "tinytune" },
-  { name: "BrightMinds", slug: "brightminds" },
-  { name: "CuddleCo", slug: "cuddleco" },
-];
-
 export const BUDGETS = [
   { label: "Under ₹499", max: 499 },
   { label: "Under ₹999", max: 999 },

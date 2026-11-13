@@ -47,7 +47,7 @@ export const SEGMENTS = [
 export const BENEFITS = [
   { title: "Wholesale pricing", text: "Trade prices on every category, shared in a price list after you enquire." },
   { title: "No minimum order", text: "Start small, mix categories, scale up when you see what sells." },
-  { title: "11 categories, many brands", text: "Action figures to birthday gifts, all from one supplier." },
+  { title: "11 categories, one supplier", text: "Action figures to birthday gifts, all in one order." },
   { title: "Free delivery across India", text: "Your stock reaches you with no shipping charge." },
   { title: "GST invoice", text: "Proper tax invoices so registered businesses can claim input credit." },
   { title: "Real people on WhatsApp", text: "Talk to our team for quotes, samples and stock questions." },

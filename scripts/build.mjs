@@ -44,5 +44,6 @@ function run(cmd, { attempts = 1 } = {}) {
 run("npx prisma generate");
 run("npx prisma migrate deploy", { attempts: 3 });
 run("npx tsx prisma/seed.ts --if-empty", { attempts: 2 });
+run("npx tsx prisma/remove-sample-products.ts", { attempts: 2 });
 run("npx tsx prisma/sync-imported.ts", { attempts: 2 });
 run("npx next build");

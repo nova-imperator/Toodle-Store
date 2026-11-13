@@ -123,7 +123,7 @@ export async function getHomeData() {
     db.banner.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
     db.category.findMany({ where: { parentId: null }, orderBy: { sortOrder: "asc" } }),
     db.ageGroup.findMany({ orderBy: { minAgeMonths: "asc" } }),
-    db.brand.findMany({ orderBy: { name: "asc" }, include: { _count: { select: { products: true } } } }),
+    getAllBrands(),
     cards({ isBestSeller: true }),
     cards({ isNewArrival: true }, 12, ORDER.newest),
     cards({ isDeal: true }),
@@ -152,7 +152,9 @@ export async function getProductBySlug(slug: string) {
 export const getCategoryBySlug = (slug: string) => db.category.findUnique({ where: { slug } });
 export const getAgeGroupBySlug = (slug: string) => db.ageGroup.findUnique({ where: { slug } });
 export const getBrandBySlug = (slug: string) => db.brand.findUnique({ where: { slug } });
-export const getAllBrands = () => db.brand.findMany({ orderBy: { name: "asc" }, include: { _count: { select: { products: true } } } });
+/** Brands that currently have products in the store. */
+export const getAllBrands = () =>
+  db.brand.findMany({ where: { products: { some: { status: "active" } } }, orderBy: { name: "asc" }, include: { _count: { select: { products: true } } } });
 
 export async function getRecentReviews(take = 6) {
   const rows = await db.review.findMany({

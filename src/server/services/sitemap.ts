@@ -28,14 +28,14 @@ export async function b2cEntries(): Promise<Entry[]> {
     db.product.findMany({ where: { status: "active" }, select: { slug: true, updatedAt: true } }),
     db.category.findMany({ select: { slug: true } }),
     db.ageGroup.findMany({ select: { slug: true } }),
-    db.brand.findMany({ select: { slug: true } }),
+    db.brand.findMany({ where: { products: { some: { status: "active" } } }, select: { slug: true } }),
   ]);
   return [
     { path: "/", priority: 1 },
     { path: "/shop", priority: 0.8 },
     ...categories.map((c) => ({ path: `/category/${c.slug}`, priority: 0.9 })),
     ...ages.map((a) => ({ path: `/age/${a.slug}`, priority: 0.8 })),
-    { path: "/brands", priority: 0.5 },
+    ...(brands.length ? [{ path: "/brands", priority: 0.5 }] : []),
     ...brands.map((b) => ({ path: `/brand/${b.slug}`, priority: 0.6 })),
     ...products.map((p) => ({ path: `/product/${p.slug}`, lastmod: p.updatedAt, priority: 0.7 })),
     ...["/about", "/contact", "/shipping-policy", "/return-policy", "/privacy-policy", "/terms"].map((path) => ({ path, priority: 0.3 })),

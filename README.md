@@ -13,7 +13,8 @@ docker compose up -d          # PostgreSQL on port 5433
 npm install
 cp .env.example .env          # fill SESSION_SECRET, OTP_PEPPER, SEED_ADMIN_PASSWORD
 npx prisma migrate dev
-npm run db:seed               # demo catalogue, coupon TOODLE10, admin user
+npm run db:seed               # categories, ages, banners, coupon TOODLE10, admin user
+npx tsx prisma/sync-imported.ts   # products from prisma/data/imported-products.json
 npm run dev                   # http://localhost:3000  (admin: /admin)
 ```
 
@@ -22,7 +23,7 @@ Without SMTP settings, emails (including login codes) are printed in the termina
 ## Deploy a preview on Vercel
 
 1. **Import** this GitHub repo in Vercel (framework: Next.js; defaults are fine).
-2. **Database:** in the Vercel project open *Storage → Create → Neon (Postgres)* and connect it to the project. This adds `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
+2. **Database:** in the Vercel project open *Storage → Create Database* (Prisma Postgres or Neon) and connect it to the project for all environments.
 3. **Environment variables** (*Settings → Environment Variables*):
 
    | Name | Value |
@@ -30,19 +31,19 @@ Without SMTP settings, emails (including login codes) are printed in the termina
    | `SESSION_SECRET` | random 64-character string |
    | `OTP_PEPPER` | another random 64-character string |
    | `DEMO_MODE` | `true` for the approval preview only |
+   | `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | first admin login (created on deploy if missing) |
 
    Optional now, required before launch: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`, `TEAM_ALERT_EMAILS`, `NEXT_PUBLIC_GOOGLE_CLIENT_ID`, `NEXT_PUBLIC_SITE_URL`.
    Generate random strings with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
-4. **Deploy.** The build runs database migrations automatically.
-5. **Load the catalogue once** from your computer, pointing at the Neon database (copy both URLs from Vercel → Storage):
+4. **Deploy.** Each build (`scripts/build.mjs`) migrates the database, sets up categories and banners on an empty database, creates the admin login, and adds any new imported products. Products edited in the admin panel are never overwritten.
 
-   ```bash
-   DATABASE_URL="<neon url>" DATABASE_URL_UNPOOLED="<neon unpooled url>" \
-   SEED_ADMIN_EMAIL="admin@toodlestore.in" SEED_ADMIN_PASSWORD="<strong password>" \
-   npm run db:seed
-   ```
+## Adding real products from the old site
 
-   The seed replaces the catalogue, so run it only on a fresh database.
+```bash
+npm run import:products -- https://toodlestore.in/product/<slug>/ [more links]
+```
+
+This copies the name, prices, category, ages, badges, description and photos into `prisma/data/imported-products.json` and `public/images/products/wp/`, and updates the local database. Commit and push; the next deploy adds them to the live site.
 
 The preview is not indexed by Google (`robots.txt` blocks everything unless `NEXT_PUBLIC_ALLOW_INDEXING=true`).
 
@@ -57,6 +58,6 @@ The preview is not indexed by Google (`robots.txt` blocks everything unless `NEX
 
 | Command | What it does |
 |---------|--------------|
-| `npm run images` | Rebuilds product, hero, age and category artwork (needs the owner's `My Sample Images` folder, which is not in git) |
+| `npm run images` | Rebuilds hero, age and category artwork (needs the owner's `My Sample Images` folder, which is not in git) |
 | `npm run typecheck` / `npm run lint` | Type and lint checks |
 | `npm run db:reset` | Wipes and re-seeds the local database |
