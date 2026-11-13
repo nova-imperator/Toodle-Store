@@ -4,6 +4,5 @@ import { googleSchema } from "@/lib/validation/auth";
 
 export const POST = handle(async (req: Request) => {
   const { credential } = await parseJson(req, googleSchema);
-  const user = await loginWithGoogle(credential);
-  return ok({ user: { name: user.name, email: user.email } });
+  return ok(await loginWithGoogle(credential));
 });

@@ -5,6 +5,7 @@ import { verifyOtp } from "@/server/auth/otp";
 import { verifyGoogleCredential } from "@/server/auth/google";
 import { mergeGuestCart } from "./cart";
 import { mergeGuestWishlist } from "./wishlist";
+import type { LoginResult } from "@/types/auth";
 
 /** Starts a session and moves the guest cart and wishlist into the account. */
 async function completeLogin(userId: string) {
@@ -14,19 +15,20 @@ async function completeLogin(userId: string) {
 }
 
 /** Email OTP: first successful login creates the account, so login and signup are one step. */
-export async function loginWithOtp(email: string, code: string) {
+export async function loginWithOtp(email: string, code: string): Promise<LoginResult> {
   await verifyOtp(email, code);
+  const existing = await db.user.findUnique({ where: { email }, select: { id: true } });
   const user = await db.user.upsert({
     where: { email },
     update: { lastLoginAt: new Date() },
     create: { email, authProvider: "email_otp", lastLoginAt: new Date() },
   });
   await completeLogin(user.id);
-  return user;
+  return { name: user.name, isNew: !existing };
 }
 
 /** Google: matched by email, so an OTP customer and a Google customer with the same email are one account. */
-export async function loginWithGoogle(credential: string) {
+export async function loginWithGoogle(credential: string): Promise<LoginResult> {
   const profile = await verifyGoogleCredential(credential);
   const existing = await db.user.findUnique({ where: { email: profile.email } });
   const user = existing
@@ -38,7 +40,7 @@ export async function loginWithGoogle(credential: string) {
         data: { email: profile.email, name: profile.name, googleId: profile.sub, authProvider: "google", lastLoginAt: new Date() },
       });
   await completeLogin(user.id);
-  return user;
+  return { name: user.name, isNew: !existing };
 }
 
 export async function logout() {

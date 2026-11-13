@@ -7,12 +7,25 @@
 
 .form {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
+  animation: stepIn 0.35s var(--ease-pop);
+}
+
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form { animation: none; }
 }
 
 .label { font-weight: 800; }
 
 .input {
+  /* Without this, the code box sizes to ~20 big letter-spaced chars and overflows phones. */
+  width: 100%;
+  min-width: 0;
   height: 52px;
   padding: 0 14px;
   border: 2px solid var(--line-strong);

@@ -43,6 +43,7 @@ Dev conveniences:
 
 ## Dependencies added beyond Rules.md list
 - `eslint`, `eslint-config-next`, `@eslint/eslintrc` (linting)
+- `motion` (v12) — needed by the React Bits `BlurText` component (owner asked for React Bits motion, 13 Nov 2026)
 
 ## Progress
 - [x] 1.1 Foundation
@@ -89,8 +90,13 @@ Dev conveniences:
 
 ## Email (13 Nov 2026)
 - Sending via Gmail SMTP as toodlestoreindia@gmail.com (app password in local `.env`; owner adds the same SMTP_* vars in Vercel and removes DEMO_MODE). Gmail free limit ≈ 500 emails/day; move to Brevo/SES with an @toodlestore.in sender later.
-- Branded templates in `src/server/emails/` (layout + templates): login code (colour digit tiles), order confirmed, status updates (placed/packed/shipped/delivered/cancelled, with courier + Track parcel), wholesale enquiry auto-reply. Team B2B alert stays plain text.
+- Branded templates in `src/server/emails/` (layout + templates): login code (single-colour blue digit tiles — owner found multi-colour "over exaggerated"), order confirmed, status updates (placed/packed/shipped/delivered/cancelled, with courier + Track parcel), wholesale enquiry auto-reply. Team B2B alert stays plain text.
 - Email images load from the live site (`/images/brand/logo-wide.png`, `mascot-delivery.png`); locally they fall back to toodle-store.vercel.app (`EMAIL_ASSET_URL` overrides).
+
+## Login welcome & motion (13 Nov 2026)
+- OTP verify and Google login APIs return `{ name, isNew }` (`src/types/auth.ts`). `LoginForm` shows `WelcomeSplash` ("Welcome back, <first name>!" / "Welcome to Toodle Store!", mascot hop, confetti, progress bar) for ~2.4 s, then a full page load to `next`. Reduced motion: no confetti, 0.9 s.
+- React Bits components are vendored into `src/components/motion/` with their licence header (MIT + Commons Clause: fine to use in the site, don't redistribute as a component library). A user-level Claude skill `react-bits` explains how to add more.
+- Fixed: the login code box overflowed phone screens (input's default width at big letter-spaced font) — inputs now `width: 100%`.
 
 ## Deployment
 - GitHub: nova-imperator/Toodle-Store (public; plan PDF and `My Sample Images/` are git-ignored). Push with `gh auth switch --user nova-imperator`, then switch back to RRS-repositories.

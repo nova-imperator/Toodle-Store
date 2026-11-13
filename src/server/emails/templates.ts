@@ -10,29 +10,27 @@ export interface Email {
 }
 
 const FONT = "'Trebuchet MS', 'Segoe UI', Arial, sans-serif";
-const DIGIT_COLORS = [BRAND.red, BRAND.yellow, BRAND.blue, BRAND.green, BRAND.orange, BRAND.red];
 const trackLink = (orderNumber: string) => siteLink(`/track-order?order=${orderNumber}`);
 const firstName = (name: string) => escapeHtml(name.trim().split(/\s+/)[0] || "there");
 
-/** Each digit on its own toy-brick tile. */
+/** Each digit on its own tile, all in one brand colour so the code is easy to read. */
 function codeTiles(code: string) {
   const tiles = [...code]
-    .map((d, i) => {
-      const bg = DIGIT_COLORS[i % DIGIT_COLORS.length];
-      const fg = bg === BRAND.yellow ? BRAND.ink : "#ffffff";
-      return `<td style="padding:0 4px"><div style="width:46px;height:58px;line-height:58px;border-radius:12px;background:${bg};box-shadow:0 5px 0 rgba(0,0,0,.2);font-family:${FONT};font-size:32px;font-weight:bold;color:${fg};text-align:center">${d}</div></td>`;
-    })
+    .map(
+      (d) =>
+        `<td style="padding:0 4px"><div style="width:46px;height:58px;line-height:58px;border-radius:12px;background:${BRAND.blue};box-shadow:0 4px 0 #1660AD;font-family:${FONT};font-size:32px;font-weight:bold;color:#ffffff;text-align:center">${d}</div></td>`,
+    )
     .join("");
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:6px auto 22px"><tr>${tiles}</tr></table>`;
 }
 
 export function loginCodeEmail(code: string): Email {
   const body = [
-    heading("Yay, you're almost in! 🎉"),
-    paragraph("Here's your <strong style=\"color:#1D2B53\">magic login code</strong>. Pop it in and let the toy fun begin!"),
+    heading("You're almost in! 👋"),
+    paragraph("Here's your login code. Enter it on the Toodle Store page to continue."),
     codeTiles(code),
     panel(
-      `<div style="text-align:center;font-size:15px;line-height:1.6">⏰ <strong>Hurry, it's valid for 10 minutes</strong> and works only once.<br>Never share this code with anyone, not even us!</div>`,
+      `<div style="text-align:center;font-size:15px;line-height:1.6">The code is valid for <strong>10 minutes</strong> and works only once.<br>Please don't share it with anyone.</div>`,
       "#FFF3CF",
       BRAND.yellow,
     ),
@@ -41,9 +39,9 @@ export function loginCodeEmail(code: string): Email {
   ].join("");
 
   return {
-    subject: `${code} is your Toodle Store magic code ✨`,
-    text: `Yay, you're almost in!\n\nYour Toodle Store login code is ${code}.\n\nIt's valid for 10 minutes and works only once. Never share it with anyone.\n\nDidn't ask for this? Just ignore this email.\n\n${SITE.tagline}`,
-    html: emailLayout({ preheader: `Your magic code is ${code}. Valid for 10 minutes.`, body }),
+    subject: `${code} is your Toodle Store login code`,
+    text: `You're almost in!\n\nYour Toodle Store login code is ${code}.\n\nIt's valid for 10 minutes and works only once. Please don't share it with anyone.\n\nDidn't ask for this? Just ignore this email.\n\n${SITE.tagline}`,
+    html: emailLayout({ preheader: `Your login code is ${code}. Valid for 10 minutes.`, body }),
   };
 }
 

@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
+import type { LoginResult } from "@/types/auth";
 
 interface GoogleId {
   initialize: (o: { client_id: string; callback: (r: { credential: string }) => void; auto_select?: boolean }) => void;
@@ -19,15 +20,14 @@ declare global {
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 /** Sign in with Google (and One Tap on phones). Hidden when no client id is configured. */
-export function GoogleButton({ onSuccess, onError }: { onSuccess: () => void; onError: (message: string) => void }) {
+export function GoogleButton({ onSuccess, onError }: { onSuccess: (result: LoginResult) => void; onError: (message: string) => void }) {
   const box = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
 
   const handle = useCallback(
     async ({ credential }: { credential: string }) => {
       try {
-        await api("/api/auth/google", { body: { credential } });
-        onSuccess();
+        onSuccess(await api<LoginResult>("/api/auth/google", { body: { credential } }));
       } catch (e) {
         onError((e as Error).message);
       }

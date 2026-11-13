@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { api } from "@/lib/api";
+import type { LoginResult } from "@/types/auth";
 import { GoogleButton } from "./GoogleButton";
+import { WelcomeSplash } from "./WelcomeSplash";
 import styles from "./LoginForm.module.css";
 
 const RESEND_SECONDS = 30;
@@ -16,6 +18,7 @@ export function LoginForm({ next }: { next: string }) {
   const [error, setError] = useState<string | null>(null);
   const [wait, setWait] = useState(0);
   const [demoCode, setDemoCode] = useState<string | null>(null);
+  const [welcome, setWelcome] = useState<LoginResult | null>(null);
   const codeRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -51,8 +54,7 @@ export function LoginForm({ next }: { next: string }) {
     setBusy(true);
     setError(null);
     try {
-      await api("/api/auth/otp/verify", { body: { email, code: value } });
-      done();
+      setWelcome(await api<LoginResult>("/api/auth/otp/verify", { body: { email, code: value } }));
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);
@@ -61,8 +63,10 @@ export function LoginForm({ next }: { next: string }) {
 
   return (
     <div className={styles.card}>
+      {welcome && <WelcomeSplash result={welcome} onDone={done} />}
       {step === "email" ? (
         <form
+          key="email"
           className={styles.form}
           onSubmit={(e) => {
             e.preventDefault();
@@ -92,6 +96,7 @@ export function LoginForm({ next }: { next: string }) {
         </form>
       ) : (
         <form
+          key="code"
           className={styles.form}
           onSubmit={(e) => {
             e.preventDefault();
@@ -154,7 +159,7 @@ export function LoginForm({ next }: { next: string }) {
       {step === "email" && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
         <div className={styles.google}>
           <span className={styles.or}>or</span>
-          <GoogleButton onSuccess={done} onError={setError} />
+          <GoogleButton onSuccess={setWelcome} onError={setError} />
         </div>
       )}
     </div>
