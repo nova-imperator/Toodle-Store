@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/server/db";
 import { rateLimit } from "@/server/http";
 import { sendMail, teamRecipients } from "@/server/integrations/mailer";
+import { enquiryReceivedEmail } from "@/server/emails/templates";
 import { CATEGORIES } from "@/config/catalogue";
 import { SITE } from "@/config/site";
 import type { EnquiryInput } from "@/lib/validation/enquiry";
@@ -38,11 +39,7 @@ export async function createEnquiry(input: EnquiryInput, ip: string) {
     team.length
       ? sendMail({ to: team, subject: `New B2B enquiry: ${data.businessName ?? data.fullName} (${data.city})`, text: `${summary}\n\nOpen in admin: ${SITE.url}/admin/enquiries/${enquiry.id}` })
       : Promise.resolve(),
-    sendMail({
-      to: data.email,
-      subject: "We've received your Toodle Store wholesale enquiry",
-      text: `Hi ${data.fullName.split(" ")[0]},\n\nThank you for your enquiry. Our team will call you on ${data.phone} within 24 hours with our wholesale price list.\n\nNeed us sooner? WhatsApp ${SITE.phone}.\n\nToodle Store`,
-    }),
+    sendMail({ to: data.email, ...enquiryReceivedEmail(data) }),
   ]);
 
   return { id: enquiry.id };

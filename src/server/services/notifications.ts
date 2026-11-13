@@ -1,7 +1,6 @@
 import "server-only";
 import { sendMail } from "@/server/integrations/mailer";
-import { formatPaise } from "@/lib/money";
-import { SITE } from "@/config/site";
+import { orderConfirmedEmail, orderStatusEmail } from "@/server/emails/templates";
 
 interface OrderMailData {
   orderNumber: string;
@@ -12,30 +11,18 @@ interface OrderMailData {
   address: { name: string; line1: string; city: string; state: string; pincode: string };
 }
 
-const itemsText = (o: OrderMailData) => o.items.map((i) => `• ${i.name} × ${i.qty} = ${formatPaise(i.unitPrice * i.qty)}`).join("\n");
-// Works without logging in: the order number is pre-filled, the customer adds their email.
-const orderUrl = (n: string) => `${SITE.url}/track-order?order=${n}`;
-
 export async function sendOrderConfirmation(o: OrderMailData) {
-  await sendMail({
-    to: o.email,
-    subject: `Order ${o.orderNumber} confirmed – thank you!`,
-    text: `Hi ${o.address.name},\n\nThank you for shopping at Toodle Store. Your order ${o.orderNumber} is confirmed and paid.\n\n${itemsText(o)}\n\nDelivery: ${o.shipping ? formatPaise(o.shipping) : "Free"}\nTotal paid: ${formatPaise(o.total)}\n\nDelivering to: ${o.address.line1}, ${o.address.city}, ${o.address.state} ${o.address.pincode}\n\nTrack your order: ${orderUrl(o.orderNumber)}\n\nQuestions? WhatsApp us on ${SITE.phone}.`,
-  });
+  await sendMail({ to: o.email, ...orderConfirmedEmail({ ...o, name: o.address.name }) });
 }
 
-export async function sendOrderStatusUpdate(o: { orderNumber: string; email: string; status: string; trackingUrl?: string | null }) {
-  const words: Record<string, string> = {
-    placed: "has been confirmed",
-    packed: "is packed and ready to ship",
-    shipped: "is on its way",
-    delivered: "has been delivered. We hope they love it!",
-    cancelled: "has been cancelled",
-  };
-  if (!words[o.status]) return;
-  await sendMail({
-    to: o.email,
-    subject: `Your Toodle Store order ${o.orderNumber} ${words[o.status].split(".")[0]}`,
-    text: `Your order ${o.orderNumber} ${words[o.status]}.${o.trackingUrl ? `\n\nTrack the parcel: ${o.trackingUrl}` : ""}\n\nTrack your order: ${orderUrl(o.orderNumber)}`,
-  });
+export async function sendOrderStatusUpdate(o: {
+  orderNumber: string;
+  email: string;
+  status: string;
+  courier?: string | null;
+  awbNumber?: string | null;
+  trackingUrl?: string | null;
+}) {
+  const mail = orderStatusEmail(o);
+  if (mail) await sendMail({ to: o.email, ...mail });
 }

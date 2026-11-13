@@ -52,6 +52,8 @@ export async function processWideLogo(src, outDir) {
   const clean = await sharp(await removeWhiteBackground(src)).trim().png().toBuffer();
   const out = sharp(clean).resize({ height: 160 });
   await out.clone().webp({ quality: 90, alphaQuality: 95 }).toFile(`${outDir}/logo-wide.webp`);
+  // Email clients (Outlook, older Gmail apps) need PNG.
+  await out.clone().png({ compressionLevel: 9 }).toFile(`${outDir}/logo-wide.png`);
   const { width, height } = await sharp(await out.png().toBuffer()).metadata();
   return { width, height };
 }
@@ -59,6 +61,7 @@ export async function processWideLogo(src, outDir) {
 export async function processMascot(src, outDir) {
   const clean = await sharp(await removeWhiteBackground(src)).trim().png().toBuffer();
   await sharp(clean).resize({ height: 520 }).webp({ quality: 88 }).toFile(`${outDir}/mascot-delivery.webp`);
+  await sharp(clean).resize({ height: 240 }).png({ compressionLevel: 9 }).toFile(`${outDir}/mascot-delivery.png`);
 }
 
 export async function processBanner(src, outDir) {

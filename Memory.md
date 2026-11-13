@@ -87,6 +87,11 @@ Dev conveniences:
 - New order columns `placed_at, packed_at, shipped_at, delivered_at, cancelled_at` (migration `order_journey_dates`), set on payment capture and by admin status changes. Older orders show steps as "Done" without a time.
 - Layout follows owner's reference screenshots but without time slots, wallet rewards or invented stats.
 
+## Email (13 Nov 2026)
+- Sending via Gmail SMTP as toodlestoreindia@gmail.com (app password in local `.env`; owner adds the same SMTP_* vars in Vercel and removes DEMO_MODE). Gmail free limit ≈ 500 emails/day; move to Brevo/SES with an @toodlestore.in sender later.
+- Branded templates in `src/server/emails/` (layout + templates): login code (colour digit tiles), order confirmed, status updates (placed/packed/shipped/delivered/cancelled, with courier + Track parcel), wholesale enquiry auto-reply. Team B2B alert stays plain text.
+- Email images load from the live site (`/images/brand/logo-wide.png`, `mascot-delivery.png`); locally they fall back to toodle-store.vercel.app (`EMAIL_ASSET_URL` overrides).
+
 ## Deployment
 - GitHub: nova-imperator/Toodle-Store (public; plan PDF and `My Sample Images/` are git-ignored). Push with `gh auth switch --user nova-imperator`, then switch back to RRS-repositories.
 - Vercel: https://toodle-store.vercel.app (Prisma Postgres). `scripts/build.mjs` finds the DB URL, waits for the DB, migrates, seeds an empty DB (structure only) + syncs banners/admin/coupon, removes sample products, syncs imported products, builds.

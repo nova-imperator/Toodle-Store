@@ -61,7 +61,14 @@ export async function updateOrderStatus(id: string, status: OrderStatus, shipmen
     }
   });
 
-  await sendOrderStatusUpdate({ orderNumber: order.orderNumber, email: order.email, status, trackingUrl: shipment?.trackingUrl });
+  await sendOrderStatusUpdate({
+    orderNumber: order.orderNumber,
+    email: order.email,
+    status,
+    courier: shipment?.courier,
+    awbNumber: shipment?.awbNumber,
+    trackingUrl: shipment?.trackingUrl,
+  });
 }
 
 /** After the team calls the shopper: COD enquiry becomes a real order and stock is reserved. */

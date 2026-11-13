@@ -3,6 +3,7 @@ import { createHash, randomInt, timingSafeEqual } from "node:crypto";
 import { db } from "@/server/db";
 import { AppError } from "@/server/errors";
 import { sendMail } from "@/server/integrations/mailer";
+import { loginCodeEmail } from "@/server/emails/templates";
 import { isDemoMode } from "@/config/demo";
 
 const OTP_TTL_MS = 10 * 60_000;
@@ -29,12 +30,7 @@ export async function requestOtp(email: string): Promise<{ demoCode?: string }> 
     db.otpCode.create({ data: { email, otpHash: hash(email, code), expiresAt: new Date(Date.now() + OTP_TTL_MS) } }),
   ]);
 
-  await sendMail({
-    to: email,
-    subject: `${code} is your Toodle Store login code`,
-    text: `Your Toodle Store login code is ${code}.\n\nIt expires in 10 minutes. If you didn't ask for it, you can ignore this email.`,
-    html: `<p>Your Toodle Store login code is</p><p style="font-size:28px;font-weight:800;letter-spacing:6px">${code}</p><p>It expires in 10 minutes. If you didn't ask for it, you can ignore this email.</p>`,
-  });
+  await sendMail({ to: email, ...loginCodeEmail(code) });
   return isDemoMode() && !process.env.SMTP_HOST ? { demoCode: code } : {};
 }
 
