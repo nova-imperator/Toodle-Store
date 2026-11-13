@@ -9,6 +9,12 @@ export const MIN_ORDER = 50_00;
 
 export const FREE_SHIPPING_LABEL = "Free delivery on orders of ₹2,000+";
 
+/** Shown on the home page and at checkout (owner request, 13 Nov 2026). */
+export const DELIVERY_REGION_NOTE = {
+  title: "We deliver only within India",
+  text: "Orders can be shipped to Indian addresses (with a valid 6-digit pincode) only. We don't ship outside India yet.",
+};
+
 export function shippingFor(itemsTotal: number): number {
   return itemsTotal >= FREE_SHIPPING_FROM ? 0 : SHIPPING_FEE;
 }

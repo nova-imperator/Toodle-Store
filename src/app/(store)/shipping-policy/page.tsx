@@ -9,6 +9,8 @@ export const metadata: Metadata = { title: "Shipping Policy", alternates: { cano
 export default function ShippingPolicyPage() {
   return (
     <ContentPage title="Shipping policy" path="/shipping-policy" updated="13 November 2026">
+      <h2>Where we deliver</h2>
+      <p>We deliver only within India, to addresses with a valid 6-digit Indian pincode. We don&apos;t ship to other countries.</p>
       <h2>Delivery charges</h2>
       <p>
         Delivery is {formatPaise(SHIPPING_FEE)} per order, to any serviceable pincode in India. Orders of {formatPaise(FREE_SHIPPING_FROM)} or more (after any

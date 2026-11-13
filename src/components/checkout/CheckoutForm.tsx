@@ -10,6 +10,7 @@ import { Icon } from "@/components/ui/Icon";
 import { StudLoader } from "@/components/ui/StudLoader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { CartSummary } from "@/components/cart/CartSummary";
+import { IndiaOnlyNote } from "@/components/layout/IndiaOnlyNote";
 import { INDIAN_STATES } from "@/config/india";
 import { api, ApiError } from "@/lib/api";
 import { formatPaise } from "@/lib/money";
@@ -148,6 +149,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
           <h2 id="s2">
             <span className={styles.num}>2</span> Delivery address
           </h2>
+          <IndiaOnlyNote compact />
           <div className={styles.grid2}>
             <TextField label="Full name" autoComplete="name" value={address.name} onChange={set("name")} error={errors["address.name"]} />
             <TextField label="Phone at this address" type="tel" inputMode="numeric" autoComplete="tel-national" value={address.phone} onChange={set("phone")} error={errors["address.phone"]} maxLength={14} />
@@ -219,7 +221,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
           {busy ? "Please wait…" : `Pay ${formatPaise(cart.totals.total)}`}
         </Button>
         <p className={styles.policy}>
-          By placing this order you agree to our <Link href="/terms">terms</Link>. Toys can&apos;t be returned, so please check ages and sizes.
+          We deliver only within India. By placing this order you agree to our <Link href="/terms">terms</Link>. Toys can&apos;t be returned, so please check ages and sizes.
         </p>
       </aside>
 

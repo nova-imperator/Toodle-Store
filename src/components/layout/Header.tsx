@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/config/site";
-import { FREE_SHIPPING_LABEL } from "@/config/shipping";
+import { DELIVERY_REGION_NOTE, FREE_SHIPPING_LABEL } from "@/config/shipping";
 import { CATEGORY_LINKS, QUICK_LINKS } from "@/config/navigation";
 import { SearchBox } from "./SearchBox";
 import { HeaderActions } from "./HeaderActions";
@@ -14,7 +14,9 @@ export function Header({ userName }: { userName: string | null }) {
     <header className={styles.header}>
       <div className={styles.strip}>
         <div className={`container ${styles.stripInner}`}>
-          <span>{FREE_SHIPPING_LABEL} · Delivery across India</span>
+          <span>
+            {FREE_SHIPPING_LABEL} · {DELIVERY_REGION_NOTE.title}
+          </span>
           <span className={styles.desk}>
             Questions? WhatsApp <a href={SITE.whatsappHref}>{SITE.phone}</a>
           </span>

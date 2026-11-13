@@ -7,6 +7,7 @@ import { BrandStrip } from "@/components/home/BrandStrip";
 import { GiftFinder } from "@/components/home/GiftFinder";
 import { B2BStrip } from "@/components/home/B2BStrip";
 import { TrustBar } from "@/components/home/TrustBar";
+import { IndiaOnlyNote } from "@/components/layout/IndiaOnlyNote";
 import { Reviews } from "@/components/home/Reviews";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -26,6 +27,7 @@ export default async function HomePage() {
 
       <div className={`container ${styles.trust}`}>
         <TrustBar />
+        <IndiaOnlyNote />
       </div>
 
       <section className={`container ${styles.section}`} aria-labelledby="cat-h">

@@ -20,7 +20,7 @@ export default function TermsPage() {
       </ul>
       <h2>Delivery</h2>
       <p>
-        We deliver across India for {formatPaise(SHIPPING_FEE)} per order, free on orders of {formatPaise(FREE_SHIPPING_FROM)} or more. See our <Link href="/shipping-policy">shipping policy</Link> for
+        We deliver only within India, for {formatPaise(SHIPPING_FEE)} per order, free on orders of {formatPaise(FREE_SHIPPING_FROM)} or more. See our <Link href="/shipping-policy">shipping policy</Link> for
         details and timelines.
       </p>
       <h2>Returns</h2>
