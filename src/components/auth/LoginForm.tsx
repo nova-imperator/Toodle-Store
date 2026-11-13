@@ -122,7 +122,8 @@ export function LoginForm({ next }: { next: string }) {
             id="code"
             inputMode="numeric"
             autoComplete="one-time-code"
-            maxLength={6}
+            // No maxLength: a code copied from the email's digit tiles arrives as "0 3 5 9 3 7",
+            // and maxLength would cut it to "0 3 5" before the digits are picked out below.
             value={code}
             onChange={(e) => {
               const v = e.target.value.replace(/\D/g, "").slice(0, 6);
