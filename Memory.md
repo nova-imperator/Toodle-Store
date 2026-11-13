@@ -70,6 +70,13 @@ Dev conveniences:
 - Hero banners are synced from `prisma/seed.ts` on every deploy (no banner editor yet). Copy avoids claims not backed by real products (no "from ₹49", no "message card").
 - Source data quirks to raise with owner: dollhouse sets are in "Fun Games" on the old site; "Strike Gun With 6 Bullet" description says 10 bullets.
 
+## Payments (13 Nov 2026)
+- Razorpay **test** keys from `Payments/prompts and credentials` (git-ignored folder; repo is public) are in local `.env`. Live keys come later.
+- Integration already existed (order create in `/api/checkout`, modal in `components/checkout/razorpay.ts`, HMAC verify in `/api/payments/razorpay/verify`, webhook). Owner's prompt asked to not duplicate, so no `razorpay` npm SDK and no extra `/api/create-order` route.
+- Verified locally: real test-mode order created, bad signature → 400 and order stays unpaid, valid signature → order placed, cart cleared.
+- Vercel needs `RAZORPAY_KEY_ID` + `RAZORPAY_KEY_SECRET` (owner adds in dashboard). Webhook secret not set yet (optional in test).
+- Test card 4100 2800 0000 1007, CVV 123, expiry 12/26 · test UPI `test@razorpay`.
+
 ## Deployment
 - GitHub: nova-imperator/Toodle-Store (public; plan PDF and `My Sample Images/` are git-ignored). Push with `gh auth switch --user nova-imperator`, then switch back to RRS-repositories.
 - Vercel: https://toodle-store.vercel.app (Prisma Postgres). `scripts/build.mjs` finds the DB URL, waits for the DB, migrates, seeds an empty DB (structure only) + syncs banners/admin/coupon, removes sample products, syncs imported products, builds.

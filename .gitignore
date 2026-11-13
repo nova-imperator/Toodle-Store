@@ -12,3 +12,5 @@ npm-debug.log*
 # Processed versions of the brand images are committed in public/images.
 My Sample Images/
 *.pdf
+# Payment credentials and notes (contain secret keys)
+Payments/
