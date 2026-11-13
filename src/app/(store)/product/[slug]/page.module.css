@@ -84,6 +84,8 @@
 }
 
 .desc {
+  display: grid;
+  gap: 12px;
   font-size: 1.05rem;
   max-width: 65ch;
 }

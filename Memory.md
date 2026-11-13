@@ -58,6 +58,19 @@ Dev conveniences:
 - B2B/admin/SEO E2E (40 checks): all B2B pages, enquiry validation + save + honeypot, sitemaps, robots, policy pages, every admin page, enquiry CSV export, COD listing, product editor; 404s return real 404; redirect reaches target.
 - Screenshots reviewed: home (desktop + mobile), B2B landing, category, product (desktop + mobile).
 
+## Real products from the old site (13 Nov 2026)
+- Owner sends specific product links from toodlestore.in (only those, not the whole catalogue).
+- `npm run import:products -- <url> [<url>…]` reads the WooCommerce Store API by slug, saves data to `prisma/data/imported-products.json`, photos (square, white background, webp) to `public/images/products/wp/`, and updates the local DB.
+- Every deploy runs `prisma/sync-imported.ts`: creates missing imported products only, never overwrites admin edits.
+- Mapping: Woo categories → our 11 categories; age tags ("3+ years" → 3–5 and 5–7, etc.) → our age groups; "Best Seller"/"New Arrival" tags → badges; on sale → deal. Stock starts at 25 (Woo doesn't expose counts). SKU `TS-WP-<id>` when empty.
+- Imported products get **no safety text** (don't invent safety claims for real products).
+- Imported so far: LCD Writing Tablet.
+- Dummy (generated) products are still live alongside real ones. Ask owner when to remove them.
+
+## Deployment
+- GitHub: nova-imperator/Toodle-Store (public; plan PDF and `My Sample Images/` are git-ignored). Push with `gh auth switch --user nova-imperator`, then switch back to RRS-repositories.
+- Vercel: https://toodle-store.vercel.app (Prisma Postgres). `scripts/build.mjs` finds the DB URL, waits for the DB, migrates, seeds an empty DB, syncs imported products, builds.
+
 ## Not done yet / next steps
 - Admin modules from the plan still missing: categories/age groups/brands editing, home banner editor, FAQ/policy editor, review moderation, bulk CSV product import, image **upload** (currently image paths).
 - GST invoice PDF, WhatsApp alerts (needs a WhatsApp Business API provider), Shiprocket — phase 2.

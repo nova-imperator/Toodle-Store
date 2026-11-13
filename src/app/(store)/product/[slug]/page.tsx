@@ -109,7 +109,11 @@ export default async function ProductPage({ params }: Props) {
       <div className={styles.details}>
         <section aria-labelledby="about-h">
           <SectionHeading id="about-h" title="About this toy" />
-          <p className={styles.desc}>{product.description}</p>
+          <div className={styles.desc}>
+            {product.description.split(/\n{2,}/).map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
           <dl className={styles.specs}>
             {product.material && (
               <div>
