@@ -25,6 +25,29 @@
 
 .wide { display: none; }
 
+.track {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.track:hover { background: var(--yellow-tint); }
+
+/* Phones show only the truck icon; the label appears from tablet width. */
+.trackText { display: none; }
+
+@media (min-width: 600px) {
+  .trackText { display: inline; }
+}
+
 .icon,
 .cart {
   position: relative;

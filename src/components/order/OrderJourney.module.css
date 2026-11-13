@@ -1,0 +1,74 @@
+.journey {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.journey li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  padding-bottom: 22px;
+}
+
+.journey li:last-child { padding-bottom: 0; }
+
+/* Connector between steps. */
+.journey li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 36px;
+  bottom: 0;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.journey li.done:not(:last-child)::before { background: var(--brick-green); }
+
+.dot {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--card);
+  color: #fff;
+}
+
+.done .dot {
+  border-color: var(--brick-green-deep);
+  background: var(--brick-green);
+  box-shadow: inset 0 -4px 0 var(--brick-green-deep);
+}
+
+.cancelled .dot {
+  border-color: var(--brick-red-deep);
+  background: var(--brick-red);
+}
+
+[aria-current="step"] .dot { animation: pulse 1.8s ease-in-out infinite; }
+
+.journey strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.journey small {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.journey li:not(.done):not(.cancelled) strong { color: var(--ink-faint); }
+
+@keyframes pulse {
+  50% { transform: scale(1.1); }
+}

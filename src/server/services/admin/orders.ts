@@ -31,6 +31,14 @@ const NEXT: Partial<Record<OrderStatus, OrderStatus[]>> = {
   cod_enquiry: ["cancelled"],
 };
 
+/** Records when each journey step happened, for the order tracking page. */
+const STEP_TIME: Partial<Record<OrderStatus, () => Prisma.OrderUpdateInput>> = {
+  packed: () => ({ packedAt: new Date() }),
+  shipped: () => ({ shippedAt: new Date() }),
+  delivered: () => ({ deliveredAt: new Date() }),
+  cancelled: () => ({ cancelledAt: new Date() }),
+};
+
 export function allowedNext(status: OrderStatus): OrderStatus[] {
   return NEXT[status] ?? [];
 }
@@ -41,7 +49,7 @@ export async function updateOrderStatus(id: string, status: OrderStatus, shipmen
   if (!allowedNext(order.status).includes(status)) throw new AppError("bad_transition", `Can't move an order from ${order.status} to ${status}.`);
 
   await db.$transaction(async (tx) => {
-    await tx.order.update({ where: { id }, data: { status } });
+    await tx.order.update({ where: { id }, data: { status, ...STEP_TIME[status]?.() } });
     if (status === "shipped") {
       const data = { courier: shipment?.courier || null, awbNumber: shipment?.awbNumber || null, trackingUrl: shipment?.trackingUrl || null, status: "shipped" };
       await tx.shipment.upsert({ where: { orderId: id }, update: data, create: { orderId: id, ...data } });
@@ -66,7 +74,7 @@ export async function confirmCod(id: string) {
       const updated = await tx.product.updateMany({ where: { id: i.productId, stockQty: { gte: i.qty } }, data: { stockQty: { decrement: i.qty } } });
       if (updated.count === 0) throw new AppError("insufficient_stock", `Not enough stock for ${i.name}.`, 409);
     }
-    await tx.order.update({ where: { id }, data: { status: "placed" } });
+    await tx.order.update({ where: { id }, data: { status: "placed", placedAt: new Date() } });
   });
   await sendOrderStatusUpdate({ orderNumber: order.orderNumber, email: order.email, status: "placed" });
 }

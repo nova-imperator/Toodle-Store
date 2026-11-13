@@ -1,0 +1,25 @@
+.band {
+  padding: 28px 0 72px;
+  /* Navy so every status colour (blue, green, yellow, red) stands out against it. */
+  background: var(--ink);
+  color: #fff;
+}
+
+.band h1 { color: #fff; }
+
+.eyebrow {
+  color: var(--brick-yellow);
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lead {
+  margin-top: 8px;
+  max-width: 52ch;
+  color: #d7dcea;
+}
+
+/* Cards overlap the coloured band, like the reference layout. */
+.body { margin-top: -52px; }

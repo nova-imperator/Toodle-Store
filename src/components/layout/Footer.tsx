@@ -61,7 +61,7 @@ export function Footer() {
           <ul className={styles.links}>
             <li><Link href="/about">About us</Link></li>
             <li><Link href="/contact">Contact</Link></li>
-            <li><Link href="/account/orders">Track my order</Link></li>
+            <li><Link href="/track-order">Track my order</Link></li>
           </ul>
         </nav>
 

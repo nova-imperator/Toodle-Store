@@ -1,5 +1,5 @@
 import "server-only";
-import { SITE } from "@/config/site";
+import { deliveryWindow } from "@/lib/delivery";
 
 export interface PincodeInfo {
   pincode: string;
@@ -26,26 +26,11 @@ async function lookup(pincode: string) {
   }
 }
 
-function addBusinessDays(from: Date, days: number) {
-  const d = new Date(from);
-  let added = 0;
-  while (added < days) {
-    d.setDate(d.getDate() + 1);
-    if (d.getDay() !== 0) added++;
-  }
-  return d;
-}
-
-const fmt = new Intl.DateTimeFormat("en-IN", { weekday: "short", day: "numeric", month: "short" });
+const fmt = new Intl.DateTimeFormat("en-IN", { weekday: "short", day: "numeric", month: "short", timeZone: "Asia/Kolkata" });
 
 export async function checkPincode(pincode: string): Promise<PincodeInfo | null> {
   const place = await lookup(pincode);
   if (!place) return null;
-  const now = new Date();
-  return {
-    pincode,
-    ...place,
-    serviceable: true,
-    estimate: { from: fmt.format(addBusinessDays(now, SITE.deliveryDays.min)), to: fmt.format(addBusinessDays(now, SITE.deliveryDays.max)) },
-  };
+  const window = deliveryWindow(new Date());
+  return { pincode, ...place, serviceable: true, estimate: { from: fmt.format(window.from), to: fmt.format(window.to) } };
 }

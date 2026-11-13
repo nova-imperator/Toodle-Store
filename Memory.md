@@ -81,6 +81,12 @@ Dev conveniences:
 - Razorpay test checkout works on https://toodle-store.vercel.app (owner tested). Old deployment URLs (`toodle-store-<hash>-…vercel.app`) keep their old settings; always test on the main URL.
 - Shipping/minimum/COD-removal verified locally (15 checks): ₹395 → ₹495 charged; ₹1,975 pays ₹100; ₹2,370 free; ₹30 cart refused; COD request refused.
 
+## Order tracking (13 Nov 2026)
+- `/track-order`: guests look up an order with order number (`TS` + 10 digits) + order email; no login. Header "Track order" link (truck icon on phones), mobile menu, footer. Emails link to `/track-order?order=…` (order number pre-filled).
+- API `POST /api/orders/track`: both fields must match; rate limited 10/10 min per IP; returns progress, items, totals, first name, city/state/pincode, courier/AWB/tracking URL — never street address or phone.
+- New order columns `placed_at, packed_at, shipped_at, delivered_at, cancelled_at` (migration `order_journey_dates`), set on payment capture and by admin status changes. Older orders show steps as "Done" without a time.
+- Layout follows owner's reference screenshots but without time slots, wallet rewards or invented stats.
+
 ## Deployment
 - GitHub: nova-imperator/Toodle-Store (public; plan PDF and `My Sample Images/` are git-ignored). Push with `gh auth switch --user nova-imperator`, then switch back to RRS-repositories.
 - Vercel: https://toodle-store.vercel.app (Prisma Postgres). `scripts/build.mjs` finds the DB URL, waits for the DB, migrates, seeds an empty DB (structure only) + syncs banners/admin/coupon, removes sample products, syncs imported products, builds.

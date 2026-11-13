@@ -19,6 +19,10 @@ export function HeaderActions({ userName }: { userName: string | null }) {
           Bulk <span className={styles.wide}>/ B2B</span>
         </span>
       </Link>
+      <Link href="/track-order" className={styles.track} aria-label="Track my order">
+        <Icon name="truck" size={22} />
+        <span className={styles.trackText}>Track order</span>
+      </Link>
       <Link href="/account/wishlist" className={`${styles.icon} ${styles.hideSm}`} aria-label={`Wishlist, ${ids.size} saved`}>
         <Icon name="heart" />
         {ids.size > 0 && <span className={styles.dot}>{ids.size}</span>}

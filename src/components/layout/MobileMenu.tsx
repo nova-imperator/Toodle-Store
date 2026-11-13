@@ -67,6 +67,9 @@ export function MobileMenu({ userName }: { userName: string | null }) {
               </li>
             ))}
             <li>
+              <Link href="/track-order">Track my order</Link>
+            </li>
+            <li>
               <Link href="/account/wishlist">Wishlist</Link>
             </li>
             <li>

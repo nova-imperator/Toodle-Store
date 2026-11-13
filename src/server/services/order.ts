@@ -8,6 +8,7 @@ import { sendOrderConfirmation } from "./notifications";
 import { createRazorpayOrder, isMockPayments, publicKeyId } from "@/server/integrations/razorpay";
 import { formatPaise, includedGst } from "@/lib/money";
 import { MIN_ORDER } from "@/config/shipping";
+import { deliveryWindow } from "@/lib/delivery";
 import type { AddressInput, CheckoutInput } from "@/lib/validation/checkout";
 
 function newOrderNumber() {
@@ -117,7 +118,7 @@ export async function markPaymentCaptured(razorpayOrderId: string, details: { pa
       },
     });
     if (claimed.count === 0) return;
-    await tx.order.update({ where: { id: order.id }, data: { status: "placed", paymentStatus: "paid" } });
+    await tx.order.update({ where: { id: order.id }, data: { status: "placed", paymentStatus: "paid", placedAt: new Date() } });
     for (const item of order.items) {
       if (item.productId) await tx.product.update({ where: { id: item.productId }, data: { stockQty: { decrement: item.qty } } });
     }
@@ -160,6 +161,45 @@ export interface OrderAddress {
 export async function getOrderForUser(orderNumber: string, userId: string) {
   return db.order.findFirst({ where: { orderNumber, userId }, include: { items: true, shipment: true } });
 }
+
+/**
+ * Guest order tracking: needs both the order number and the email used for the order.
+ * Returns progress and items only — never the street address or phone number.
+ */
+export async function trackOrder(orderNumber: string, email: string) {
+  const order = await db.order.findFirst({
+    where: { orderNumber: orderNumber.trim().toUpperCase(), email: { equals: email.trim(), mode: "insensitive" } },
+    include: { items: { select: { id: true, name: true, qty: true, image: true, unitPrice: true } }, shipment: true },
+  });
+  if (!order) return null;
+
+  const address = order.address as unknown as OrderAddress;
+  const placedAt = order.placedAt ?? (order.paymentStatus === "paid" ? order.createdAt : null);
+  const open = order.status === "placed" || order.status === "packed" || order.status === "shipped";
+  const window = open && placedAt ? deliveryWindow(placedAt) : null;
+  const iso = (d: Date | null | undefined) => d?.toISOString() ?? null;
+
+  return {
+    orderNumber: order.orderNumber,
+    status: order.status,
+    paymentStatus: order.paymentStatus,
+    createdAt: order.createdAt.toISOString(),
+    steps: { placed: iso(placedAt), packed: iso(order.packedAt), shipped: iso(order.shippedAt), delivered: iso(order.deliveredAt), cancelled: iso(order.cancelledAt) },
+    expected: window ? { from: window.from.toISOString(), to: window.to.toISOString() } : null,
+    items: order.items,
+    subtotal: order.subtotal,
+    discount: order.discount,
+    shipping: order.shipping,
+    total: order.total,
+    recipient: address.name.split(" ")[0],
+    deliverTo: `${address.city}, ${address.state} ${address.pincode}`,
+    courier: order.shipment?.courier ?? null,
+    awbNumber: order.shipment?.awbNumber ?? null,
+    trackingUrl: order.shipment?.trackingUrl ?? null,
+  };
+}
+
+export type TrackedOrder = NonNullable<Awaited<ReturnType<typeof trackOrder>>>;
 
 export async function listOrdersForUser(userId: string) {
   return db.order.findMany({

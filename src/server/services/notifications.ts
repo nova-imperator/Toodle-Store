@@ -13,7 +13,8 @@ interface OrderMailData {
 }
 
 const itemsText = (o: OrderMailData) => o.items.map((i) => `• ${i.name} × ${i.qty} = ${formatPaise(i.unitPrice * i.qty)}`).join("\n");
-const orderUrl = (n: string) => `${SITE.url}/order/${n}`;
+// Works without logging in: the order number is pre-filled, the customer adds their email.
+const orderUrl = (n: string) => `${SITE.url}/track-order?order=${n}`;
 
 export async function sendOrderConfirmation(o: OrderMailData) {
   await sendMail({
@@ -35,6 +36,6 @@ export async function sendOrderStatusUpdate(o: { orderNumber: string; email: str
   await sendMail({
     to: o.email,
     subject: `Your Toodle Store order ${o.orderNumber} ${words[o.status].split(".")[0]}`,
-    text: `Your order ${o.orderNumber} ${words[o.status]}.${o.trackingUrl ? `\n\nTrack the parcel: ${o.trackingUrl}` : ""}\n\nOrder details: ${orderUrl(o.orderNumber)}`,
+    text: `Your order ${o.orderNumber} ${words[o.status]}.${o.trackingUrl ? `\n\nTrack the parcel: ${o.trackingUrl}` : ""}\n\nTrack your order: ${orderUrl(o.orderNumber)}`,
   });
 }
