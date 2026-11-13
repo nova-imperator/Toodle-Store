@@ -47,6 +47,15 @@ export async function processLogo(src, outDir) {
   return clean;
 }
 
+/** Horizontal header logo (mascot + wordmark). Returns its size for the <Image> width/height. */
+export async function processWideLogo(src, outDir) {
+  const clean = await sharp(await removeWhiteBackground(src)).trim().png().toBuffer();
+  const out = sharp(clean).resize({ height: 160 });
+  await out.clone().webp({ quality: 90, alphaQuality: 95 }).toFile(`${outDir}/logo-wide.webp`);
+  const { width, height } = await sharp(await out.png().toBuffer()).metadata();
+  return { width, height };
+}
+
 export async function processMascot(src, outDir) {
   const clean = await sharp(await removeWhiteBackground(src)).trim().png().toBuffer();
   await sharp(clean).resize({ height: 520 }).webp({ quality: 88 }).toFile(`${outDir}/mascot-delivery.webp`);

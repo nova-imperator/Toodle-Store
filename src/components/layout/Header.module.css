@@ -37,13 +37,13 @@
   padding-block: 8px;
 }
 
+/* Wide logo (mascot + wordmark): sized by height so it stays compact. */
 .logo {
   display: block;
-  width: 108px;
   flex-shrink: 0;
 }
 
-.logo img { width: 100%; height: auto; }
+.logo img { width: auto; height: 42px; }
 
 .left {
   display: flex;
@@ -64,7 +64,7 @@
 
 @media (min-width: 900px) {
   .bar { grid-template-columns: auto minmax(280px, 1fr) auto; gap: 24px; }
-  .logo { width: 140px; }
+  .logo img { height: 58px; }
   .search { grid-column: 2; grid-row: 1; }
 }
 

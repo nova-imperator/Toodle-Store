@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/config/site";
+import { SiteLogo } from "./SiteLogo";
 import { DELIVERY_REGION_NOTE, FREE_SHIPPING_LABEL } from "@/config/shipping";
 import { CATEGORY_LINKS, QUICK_LINKS } from "@/config/navigation";
 import { SearchBox } from "./SearchBox";
@@ -26,9 +26,7 @@ export function Header({ userName }: { userName: string | null }) {
       <div className={`container ${styles.bar}`}>
         <div className={styles.left}>
           <MobileMenu userName={userName} />
-          <Link href="/" className={styles.logo} aria-label={`${SITE.name} home`}>
-            <Image src="/images/brand/logo.webp" alt={SITE.name} width={520} height={489} priority />
-          </Link>
+          <SiteLogo className={styles.logo} />
         </div>
         <div className={styles.search}>
           <SearchBox />

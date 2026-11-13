@@ -14,3 +14,8 @@ My Sample Images/
 *.pdf
 # Payment credentials and notes (contain secret keys)
 Payments/
+
+# Raw images dropped in the project root (brand sources go in My Sample Images/)
+/*.jpeg
+/*.jpg
+/*.png

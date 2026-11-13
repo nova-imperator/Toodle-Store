@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EnquiryForm } from "./EnquiryForm";
 
 /** "Start now" button that opens the enquiry form in a popup. */
-export function EnquiryButton({ label = "Start now", variant = "yellow", size = "lg", source }: { label?: string; variant?: "yellow" | "red" | "blue" | "ink"; size?: "md" | "lg"; source?: string }) {
+export function EnquiryButton({ label = "Start now", variant = "yellow", size = "lg", source }: { label?: ReactNode; variant?: "yellow" | "red" | "blue" | "ink"; size?: "sm" | "md" | "lg"; source?: string }) {
   const [open, setOpen] = useState(false);
   return (
     <>

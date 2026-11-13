@@ -1,83 +1,87 @@
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: var(--ink);
-  color: #fff;
-}
-
+/* Layout on top of the shared store header styles (Header.module.css). */
 .bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "logo cta"
+    "switch switch";
   align-items: center;
-  gap: 16px;
-  min-height: 68px;
+  gap: 10px 12px;
+  min-height: var(--header-h);
+  padding-block: 8px;
 }
 
-.brand {
-  display: flex;
+.logo { grid-area: logo; }
+
+.cta {
+  grid-area: cta;
+  justify-self: end;
+}
+
+.switch {
+  grid-area: switch;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border: 2px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--card);
+}
+
+.switch a,
+.switch span {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
   text-decoration: none;
 }
 
-.logo {
-  width: 72px;
-  height: auto;
-  padding: 4px;
-  border-radius: var(--radius);
-  background: var(--paper);
-}
+.switch a { color: var(--ink-soft); }
+.switch a:hover { background: var(--yellow-tint); color: var(--ink); }
 
-.tag {
-  padding: 2px 10px;
-  border-radius: var(--radius-sm);
+.switch [aria-current="page"] {
   background: var(--brick-yellow);
   color: var(--ink);
-  font-family: var(--font-display);
-  font-weight: 800;
+  box-shadow: 0 3px 0 var(--brick-yellow-deep);
 }
 
-.nav {
-  display: none;
-  gap: 4px;
+.ctaLong { display: none; }
+
+/* The store header hides its link row on phones; here it stays as a swipeable row. */
+nav.links {
+  display: block;
+  border-top: 2px solid var(--line);
 }
 
-.nav a {
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  color: #fff;
-  font-weight: 700;
-  text-decoration: none;
+nav.links > div {
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.nav a:hover { background: rgba(255, 255, 255, 0.1); }
+nav.links > div::-webkit-scrollbar { display: none; }
 
-@media (min-width: 960px) {
-  .nav { display: flex; }
+nav.links a { flex-shrink: 0; white-space: nowrap; }
+
+@media (min-width: 900px) {
+  .bar {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "logo switch cta";
+    gap: 24px;
+  }
+
+  .switch {
+    justify-self: end;
+    grid-template-columns: auto auto;
+  }
+
+  .ctaLong { display: inline; }
+  .ctaShort { display: none; }
 }
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-left: auto;
-}
-
-.wa {
-  display: none;
-  color: var(--brick-yellow);
-  font-weight: 800;
-}
-
-@media (min-width: 600px) {
-  .wa { display: inline; }
-}
-
-.retail {
-  padding: 6px 0;
-  background: #142046;
-  font-size: 0.85rem;
-  color: #c9d0e4;
-}
-
-.retail a { color: var(--brick-yellow); }

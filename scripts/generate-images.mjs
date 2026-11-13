@@ -5,7 +5,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { CATEGORIES, AGE_GROUPS } from "../src/config/catalogue.ts";
 import { HERO_ART, AGE_ART, funGamesTile } from "./images/compose.mjs";
-import { processLogo, processMascot, processBanner, processCategoryTile, writeIcons } from "./images/brand.mjs";
+import { processLogo, processWideLogo, processMascot, processBanner, processCategoryTile, writeIcons } from "./images/brand.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const SOURCE = path.join(ROOT, "My Sample Images");
@@ -21,6 +21,8 @@ const render = (svgText, file, opts = {}) =>
 async function brand() {
   const logo = await processLogo(path.join(SOURCE, "WhatsApp Image 2026-11-02 at 7.15.42 PM.jpeg"), dirs[0]);
   await processMascot(path.join(SOURCE, "WhatsApp Image 2026-11-02 at 7.15.42 PM (1).jpeg"), dirs[0]);
+  const wide = await processWideLogo(path.join(SOURCE, "logo-wide.jpeg"), dirs[0]);
+  console.log(`  header logo ${wide.width}×${wide.height}`);
   await processBanner(path.join(SOURCE, "WhatsApp Image 2026-11-02 at 7.11.53 PM.jpeg"), dirs[0]);
   await writeIcons(logo, path.join(ROOT, "src", "app"));
   console.log("✓ brand assets");
