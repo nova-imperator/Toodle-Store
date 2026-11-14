@@ -19,7 +19,7 @@ export function Header({ userName }: { userName: string | null }) {
           {/* "We deliver only within India" removed from the strip (owner, 14 Nov 2026); it still shows on the home page and checkout. */}
           <span>{FREE_SHIPPING_LABEL}</span>
           <span className={styles.desk}>
-            Questions? WhatsApp <a href={WHATSAPP_RETAIL_HREF}>{SITE.phone}</a>
+            Questions? WhatsApp <a href={WHATSAPP_RETAIL_HREF} target="_blank" rel="noopener">{SITE.phone}</a>
           </span>
         </div>
       </div>

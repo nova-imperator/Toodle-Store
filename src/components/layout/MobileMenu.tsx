@@ -87,7 +87,7 @@ export function MobileMenu({ userName }: { userName: string | null }) {
         </div>
 
         <div className={`${styles.section} ${styles.contact}`}>
-          <a href={WHATSAPP_RETAIL_HREF}>
+          <a href={WHATSAPP_RETAIL_HREF} target="_blank" rel="noopener">
             <Icon name="whatsapp" size={20} /> WhatsApp {SITE.phone}
           </a>
         </div>

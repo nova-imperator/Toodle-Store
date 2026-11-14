@@ -66,7 +66,7 @@ export function EnquiryForm({ source }: { source?: string }) {
         <p className={styles.doneTitle}>Thank you, {values.fullName.split(" ")[0]}!</p>
         <p>Our team will call you within 24 hours with our wholesale price list.</p>
         <p>
-          Can&apos;t wait? <a href={WHATSAPP_BULK_HREF}>WhatsApp us on {SITE.phone}</a>
+          Can&apos;t wait? <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener">WhatsApp us on {SITE.phone}</a>
         </p>
       </div>
     );

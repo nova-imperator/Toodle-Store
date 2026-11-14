@@ -17,7 +17,7 @@ export function B2BHero({ title, text, source, image = "/images/hero/b2b.webp" }
           <p className={styles.heroText}>{text}</p>
           <div className={styles.ctaRow}>
             <EnquiryButton label="Start now" source={source} />
-            <a href={WHATSAPP_BULK_HREF} className={styles.wa}>
+            <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener" className={styles.wa}>
               or WhatsApp {SITE.phone}
             </a>
           </div>
@@ -141,7 +141,7 @@ export function CtaBand({ source }: { source: string }) {
         </div>
         <div className={styles.ctaRow}>
           <EnquiryButton label="Start now" source={source} />
-          <a href={WHATSAPP_BULK_HREF} className={styles.waBtn}>
+          <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener" className={styles.waBtn}>
             Chat on WhatsApp
           </a>
         </div>

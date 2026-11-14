@@ -21,7 +21,7 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href={WHATSAPP_RETAIL_HREF}>
+              <a href={WHATSAPP_RETAIL_HREF} target="_blank" rel="noopener">
                 <Icon name="whatsapp" size={18} /> Chat on WhatsApp
               </a>
             </li>

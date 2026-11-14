@@ -63,7 +63,7 @@ function Faqs() {
         ))}
       </div>
       <p className={styles.small}>
-        Still need help? <a href={WHATSAPP_RETAIL_HREF}>Chat with us on WhatsApp</a>
+        Still need help? <a href={WHATSAPP_RETAIL_HREF} target="_blank" rel="noopener">Chat with us on WhatsApp</a>
       </p>
     </section>
   );

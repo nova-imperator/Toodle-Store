@@ -23,7 +23,7 @@ export function B2BHeader() {
         <div className={`container ${header.stripInner}`}>
           <span>Wholesale toys for shops, schools &amp; resellers · No minimum order · {DELIVERY_REGION_NOTE.title}</span>
           <span className={header.desk}>
-            Questions? WhatsApp <a href={WHATSAPP_BULK_HREF}>{SITE.phone}</a>
+            Questions? WhatsApp <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener">{SITE.phone}</a>
           </span>
         </div>
       </div>

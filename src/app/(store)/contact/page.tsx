@@ -13,7 +13,7 @@ export default function ContactPage() {
       <ul className={styles.cards}>
         <li>
           <strong>WhatsApp</strong>
-          <a href={WHATSAPP_RETAIL_HREF}>{SITE.phone}</a>
+          <a href={WHATSAPP_RETAIL_HREF} target="_blank" rel="noopener">{SITE.phone}</a>
           <br />Fastest way to reach us.
         </li>
         <li>
