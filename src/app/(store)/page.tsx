@@ -1,7 +1,7 @@
 import { getHomeData, getRecentReviews } from "@/server/services/catalogue";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { CategoryTiles } from "@/components/home/CategoryTiles";
-import { AgeTiles } from "@/components/home/AgeTiles";
+// import { AgeTiles } from "@/components/home/AgeTiles"; // for the hidden "Shop by age" section
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { BrandStrip } from "@/components/home/BrandStrip";
 import { GiftFinder } from "@/components/home/GiftFinder";
@@ -30,15 +30,24 @@ export default async function HomePage() {
         <IndiaOnlyNote />
       </div>
 
+      {home.featured.length > 0 && (
+        <section className={`container ${styles.section}`} aria-labelledby="feat-h">
+          <SectionHeading id="feat-h" title="Featured toys" subtitle="Hand-picked by the Toodle team." />
+          <ProductCarousel products={home.featured} label="Featured toys" />
+        </section>
+      )}
+
       <section className={`container ${styles.section}`} aria-labelledby="cat-h">
         <SectionHeading id="cat-h" title="Shop by category" subtitle="Eleven aisles of fun, all in one place." />
         <CategoryTiles categories={home.categories} />
       </section>
 
+      {/* Shop by age hidden on owner's request, 14 Nov 2026.
       <section className={`container ${styles.section}`} aria-labelledby="age-h">
         <SectionHeading id="age-h" title="Shop by age" subtitle="The right toy for every stage." />
         <AgeTiles />
       </section>
+      */}
 
       {home.bestSellers.length > 0 && (
         <section className={`container ${styles.section}`} aria-labelledby="best-h">

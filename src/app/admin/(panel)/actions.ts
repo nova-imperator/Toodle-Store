@@ -7,7 +7,7 @@ import type { EnquiryStatus, OrderStatus } from "@prisma/client";
 import { requireAdmin } from "@/server/auth/admin";
 import { AppError } from "@/server/errors";
 import { confirmCod, refundOrder, updateOrderStatus } from "@/server/services/admin/orders";
-import { saveProduct } from "@/server/services/admin/products";
+import { PRODUCT_FLAGS, saveProduct, setProductFlag, setProductVisible, type ProductFlag } from "@/server/services/admin/products";
 import { updateEnquiry } from "@/server/services/admin/enquiries";
 import { createCoupon, setCouponActive } from "@/server/services/admin/coupons";
 import { addRedirect, deleteRedirect } from "@/server/services/redirects";
@@ -82,6 +82,7 @@ export async function saveProductAction(productId: string | null, _prev: ActionS
     isBestSeller: form.get("isBestSeller") === "on",
     isNewArrival: form.get("isNewArrival") === "on",
     isDeal: form.get("isDeal") === "on",
+    isFeatured: form.get("isFeatured") === "on",
     isB2bVisible: form.get("isB2bVisible") === "on",
   };
   const parsed = productFormSchema.safeParse(raw);
@@ -99,6 +100,16 @@ export async function saveProductAction(productId: string | null, _prev: ActionS
   revalidatePath("/", "layout");
   if (!productId) redirect(`/admin/products/${id}?saved=1`);
   return { error: null, ok: "Product saved." };
+}
+
+const flagSchema = z.enum(Object.keys(PRODUCT_FLAGS) as [ProductFlag, ...ProductFlag[]]);
+
+/** Quick switches on the product list. `flag` "visible" is the On website switch. */
+export async function toggleProductAction(productId: string, flag: string, value: boolean) {
+  await requireAdmin("products");
+  if (flag === "visible") await setProductVisible(productId, value);
+  else await setProductFlag(productId, flagSchema.parse(flag), value);
+  revalidatePath("/", "layout");
 }
 
 // ─── B2B enquiries ───────────────────────────────────

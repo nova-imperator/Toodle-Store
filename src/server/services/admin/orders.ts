@@ -49,14 +49,17 @@ export async function updateOrderStatus(id: string, status: OrderStatus, shipmen
   if (!allowedNext(order.status).includes(status)) throw new AppError("bad_transition", `Can't move an order from ${order.status} to ${status}.`);
 
   await db.$transaction(async (tx) => {
-    await tx.order.update({ where: { id }, data: { status, ...STEP_TIME[status]?.() } });
+    // COD: the courier collects the cash on delivery, so a delivered COD order is fully paid.
+    const codPaid = status === "delivered" && order.paymentMethod === "cod" ? { paymentStatus: "paid" as const } : {};
+    await tx.order.update({ where: { id }, data: { status, ...STEP_TIME[status]?.(), ...codPaid } });
     if (status === "shipped") {
       const data = { courier: shipment?.courier || null, awbNumber: shipment?.awbNumber || null, trackingUrl: shipment?.trackingUrl || null, status: "shipped" };
       await tx.shipment.upsert({ where: { orderId: id }, update: data, create: { orderId: id, ...data } });
     }
     if (status === "delivered") await tx.shipment.updateMany({ where: { orderId: id }, data: { status: "delivered" } });
-    // Paid orders cancelled before shipping return their stock.
-    if (status === "cancelled" && order.paymentStatus === "paid") {
+    // Placed/packed orders already took stock (paid online, or COD charge paid), so cancelling returns it.
+    // Old COD enquiries never reserved stock.
+    if (status === "cancelled" && (order.status === "placed" || order.status === "packed")) {
       for (const i of order.items) if (i.productId) await tx.product.update({ where: { id: i.productId }, data: { stockQty: { increment: i.qty } } });
     }
   });
@@ -86,7 +89,10 @@ export async function confirmCod(id: string) {
   await sendOrderStatusUpdate({ orderNumber: order.orderNumber, email: order.email, status: "placed" });
 }
 
-/** Manual refund for exceptions (store policy is no returns). Full amount of the captured payment. */
+/**
+ * Manual refund for exceptions (store policy is no returns). Full amount of the captured online
+ * payment: the whole order when paid online, the COD charge for cash on delivery orders.
+ */
 export async function refundOrder(id: string) {
   const order = await db.order.findUnique({ where: { id }, include: { payments: true } });
   const payment = order?.payments.find((p) => p.status === "paid" && p.razorpayPaymentId);

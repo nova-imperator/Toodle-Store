@@ -26,6 +26,7 @@ export const productFormSchema = z
     isBestSeller: z.coerce.boolean(),
     isNewArrival: z.coerce.boolean(),
     isDeal: z.coerce.boolean(),
+    isFeatured: z.coerce.boolean(),
     isB2bVisible: z.coerce.boolean(),
     seoTitle: z.string().trim().max(60, "Keep titles under 60 characters").optional(),
     seoDescription: z.string().trim().max(160).optional(),

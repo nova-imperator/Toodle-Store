@@ -5,6 +5,9 @@ import { toggleInList, withParams, type SearchParams } from "@/lib/listingParams
 import type { FacetOption, ListingFilters } from "@/types/catalogue";
 import styles from "./Filters.module.css";
 
+/** Age filter hidden on owner's request (14 Nov 2026). Set to true to bring it back. */
+const SHOW_AGE_FILTER: boolean = false;
+
 interface Props {
   basePath: string;
   sp: SearchParams;
@@ -50,7 +53,7 @@ export function Filters({ basePath, sp, filters, facets, hide = [] }: Props) {
           </ul>
         </fieldset>
 
-        {!hide.includes("ages") && facets.ages.length > 0 && (
+        {SHOW_AGE_FILTER && !hide.includes("ages") && facets.ages.length > 0 && (
           <fieldset className={styles.group}>
             <legend>Age</legend>
             <ul>

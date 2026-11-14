@@ -29,6 +29,7 @@ export interface ProductFormValues {
   isBestSeller: boolean;
   isNewArrival: boolean;
   isDeal: boolean;
+  isFeatured: boolean;
   isB2bVisible: boolean;
   seoTitle: string;
   seoDescription: string;
@@ -141,6 +142,7 @@ export function ProductForm({ productId, initial, categories, ageGroups, brands,
           </fieldset>
           <fieldset className={styles.checks}>
             <legend>Badges</legend>
+            <label><input type="checkbox" name="isFeatured" defaultChecked={initial.isFeatured} /> Featured (home page)</label>
             <label><input type="checkbox" name="isBestSeller" defaultChecked={initial.isBestSeller} /> Best seller</label>
             <label><input type="checkbox" name="isNewArrival" defaultChecked={initial.isNewArrival} /> New arrival</label>
             <label><input type="checkbox" name="isDeal" defaultChecked={initial.isDeal} /> Deal</label>

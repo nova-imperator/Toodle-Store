@@ -119,16 +119,17 @@ async function cards(where: Prisma.ProductWhereInput, take = 12, orderBy: Prisma
 }
 
 export async function getHomeData() {
-  const [banners, categories, ageGroups, brands, bestSellers, newArrivals, deals] = await Promise.all([
+  const [banners, categories, ageGroups, brands, featured, bestSellers, newArrivals, deals] = await Promise.all([
     db.banner.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
     db.category.findMany({ where: { parentId: null }, orderBy: { sortOrder: "asc" } }),
     db.ageGroup.findMany({ orderBy: { minAgeMonths: "asc" } }),
     getAllBrands(),
+    cards({ isFeatured: true }, 12, [{ updatedAt: "desc" }]),
     cards({ isBestSeller: true }),
     cards({ isNewArrival: true }, 12, ORDER.newest),
     cards({ isDeal: true }),
   ]);
-  return { banners, categories, ageGroups, brands, bestSellers, newArrivals, deals };
+  return { banners, categories, ageGroups, brands, featured, bestSellers, newArrivals, deals };
 }
 
 export async function getProductBySlug(slug: string) {

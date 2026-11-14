@@ -12,7 +12,7 @@ import { Stars } from "@/components/ui/Stars";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { productLd } from "@/lib/structuredData";
 import { SITE } from "@/config/site";
-import { FREE_SHIPPING_FROM, FREE_SHIPPING_LABEL, SHIPPING_FEE } from "@/config/shipping";
+import { COD_FEE, FREE_SHIPPING_FROM, FREE_SHIPPING_LABEL, SHIPPING_FEE } from "@/config/shipping";
 import { formatPaise } from "@/lib/money";
 import styles from "./page.module.css";
 
@@ -44,7 +44,7 @@ export default async function ProductPage({ params }: Props) {
   const faqs = [
     { q: "How long will delivery take?", a: `Most orders reach you in ${SITE.deliveryDays.min}–${SITE.deliveryDays.max} working days, anywhere in India.` },
     { q: "How much is delivery?", a: `Delivery is ${formatPaise(SHIPPING_FEE)} per order, and free when your order is ${formatPaise(FREE_SHIPPING_FROM)} or more.` },
-    { q: "How can I pay?", a: "Online by UPI, debit or credit card, netbanking or wallet, through Razorpay's secure checkout. We don't offer cash on delivery." },
+    { q: "How can I pay?", a: `Online by UPI, debit or credit card, netbanking or wallet, through Razorpay's secure checkout. Or choose cash on delivery for ${formatPaise(COD_FEE)} extra: you pay that charge online to confirm the order, and the rest in cash when it arrives.` },
     { q: "Can I return this toy?", a: "We don't offer returns or refunds, so please check the age range and size before ordering. If anything is wrong with your order, WhatsApp us and we'll help." },
     { q: "Is it safe for my child?", a: product.safetyInfo ?? "Please follow the age guidance on this page." },
   ];

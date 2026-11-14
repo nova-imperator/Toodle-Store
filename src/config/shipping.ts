@@ -7,6 +7,12 @@ export const FREE_SHIPPING_FROM = 2_000_00;
 /** Smallest item total (after coupon) that can be checked out. */
 export const MIN_ORDER = 50_00;
 
+/**
+ * Cash on delivery charge (owner, 14 Nov 2026). Paid online up front to confirm a COD order;
+ * the rest of the order is paid in cash to the courier.
+ */
+export const COD_FEE = 50_00;
+
 export const FREE_SHIPPING_LABEL = "Free delivery on orders of ₹2,000+";
 
 /** Shown on the home page and at checkout (owner request, 13 Nov 2026). */

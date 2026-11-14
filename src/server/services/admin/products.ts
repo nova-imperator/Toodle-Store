@@ -5,8 +5,29 @@ import { AppError } from "@/server/errors";
 import type { ProductFormInput } from "@/lib/validation/adminProduct";
 import { ADMIN_PAGE } from "./orders";
 
-export async function listProducts({ q, page = 1 }: { q?: string; page?: number }) {
-  const where: Prisma.ProductWhereInput = q ? { OR: [{ name: { contains: q, mode: "insensitive" } }, { sku: { contains: q, mode: "insensitive" } }] } : {};
+/** On/off flags the admin can flip straight from the product list. */
+export const PRODUCT_FLAGS = {
+  isFeatured: "Featured",
+  isBestSeller: "Best seller",
+  isNewArrival: "New arrival",
+  isDeal: "Deal",
+} as const;
+export type ProductFlag = keyof typeof PRODUCT_FLAGS;
+
+export async function setProductFlag(id: string, flag: ProductFlag, value: boolean) {
+  await db.product.update({ where: { id }, data: { [flag]: value } });
+}
+
+/** "On website" switch: active products show in the store, drafts are hidden. */
+export async function setProductVisible(id: string, visible: boolean) {
+  await db.product.update({ where: { id }, data: { status: visible ? "active" : "draft" } });
+}
+
+export async function listProducts({ q, page = 1, featured = false }: { q?: string; page?: number; featured?: boolean }) {
+  const where: Prisma.ProductWhereInput = {
+    ...(q ? { OR: [{ name: { contains: q, mode: "insensitive" } }, { sku: { contains: q, mode: "insensitive" } }] } : {}),
+    ...(featured ? { isFeatured: true } : {}),
+  };
   const [rows, total] = await Promise.all([
     db.product.findMany({
       where,
@@ -56,6 +77,7 @@ export async function saveProduct(id: string | null, input: ProductFormInput) {
     isBestSeller: input.isBestSeller,
     isNewArrival: input.isNewArrival,
     isDeal: input.isDeal,
+    isFeatured: input.isFeatured,
     isB2bVisible: input.isB2bVisible,
     seoTitle: input.seoTitle || null,
     seoDescription: input.seoDescription || null,

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SITE, POLICY_LINKS } from "@/config/site";
-import { CATEGORY_LINKS, AGE_LINKS } from "@/config/navigation";
+import { SITE, POLICY_LINKS, WHATSAPP_RETAIL_HREF } from "@/config/site";
+import { CATEGORY_LINKS } from "@/config/navigation";
+// import { AGE_LINKS } from "@/config/navigation"; // for the hidden "Shop by age" column
 import { Icon } from "@/components/ui/Icon";
 import styles from "./Footer.module.css";
 
@@ -20,13 +21,18 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href={SITE.whatsappHref}>
+              <a href={WHATSAPP_RETAIL_HREF}>
                 <Icon name="whatsapp" size={18} /> Chat on WhatsApp
               </a>
             </li>
             <li>
               <a href={SITE.instagramHref} rel="noopener" target="_blank">
                 <Icon name="instagram" size={18} /> {SITE.instagram}
+              </a>
+            </li>
+            <li>
+              <a href={SITE.facebookHref} rel="noopener" target="_blank">
+                <Icon name="facebook" size={18} /> Facebook
               </a>
             </li>
             <li>
@@ -48,7 +54,8 @@ export function Footer() {
           </ul>
         </nav>
 
-        <nav aria-label="Ages and help">
+        <nav aria-label="Help">
+          {/* Shop by age hidden on owner's request, 14 Nov 2026.
           <h2 className={styles.head}>Shop by age</h2>
           <ul className={styles.links}>
             {AGE_LINKS.map((a) => (
@@ -57,7 +64,8 @@ export function Footer() {
               </li>
             ))}
           </ul>
-          <h2 className={`${styles.head} ${styles.spaced}`}>Help</h2>
+          */}
+          <h2 className={styles.head}>Help</h2>
           <ul className={styles.links}>
             <li><Link href="/about">About us</Link></li>
             <li><Link href="/contact">Contact</Link></li>
@@ -85,7 +93,7 @@ export function Footer() {
       </div>
       <div className={`container ${styles.legal}`}>
         <p>
-          © {new Date().getFullYear()} {SITE.name}, operated by {SITE.legalName}. Payments secured by Razorpay.
+          © {new Date().getFullYear()} {SITE.name}. Payments secured by Razorpay.
         </p>
       </div>
     </footer>

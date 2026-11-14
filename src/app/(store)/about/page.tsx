@@ -36,7 +36,6 @@ export default function AboutPage() {
         We also supply toy shops, online sellers, schools and companies at wholesale prices with no minimum order.{" "}
         <Link href="/b2b">See our wholesale service</Link>.
       </p>
-      <p>Toodle Store is operated by {SITE.legalName}.</p>
     </ContentPage>
   );
 }

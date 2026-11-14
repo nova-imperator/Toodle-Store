@@ -16,7 +16,8 @@ function Result({ state }: { state: ActionState }) {
   return null;
 }
 
-export function OrderActions({ orderId, status, next, canRefund }: { orderId: string; status: OrderStatus; next: OrderStatus[]; canRefund: boolean }) {
+/** `refundLabel`: what the refund button returns, e.g. "₹1,149" or "the ₹50 COD charge". */
+export function OrderActions({ orderId, status, next, canRefund, refundLabel }: { orderId: string; status: OrderStatus; next: OrderStatus[]; canRefund: boolean; refundLabel: string }) {
   const [statusState, statusAction, statusPending] = useActionState(orderStatusAction.bind(null, orderId), INITIAL);
   const [codState, codAction, codPending] = useActionState(confirmCodAction.bind(null, orderId), INITIAL);
   const [refundState, refundFormAction, refundPending] = useActionState(refundAction.bind(null, orderId), INITIAL);
@@ -63,12 +64,12 @@ export function OrderActions({ orderId, status, next, canRefund }: { orderId: st
           action={refundFormAction}
           className={styles.inlineForm}
           onSubmit={(e) => {
-            if (!confirm("Refund the full amount to the customer through Razorpay? This can't be undone.")) e.preventDefault();
+            if (!confirm(`Refund ${refundLabel} to the customer through Razorpay? This can't be undone.`)) e.preventDefault();
           }}
         >
           <p>Store policy is no refunds. Use only for exceptions, such as an order you can&apos;t fulfil.</p>
           <Button type="submit" variant="ghost" disabled={refundPending}>
-            {refundPending ? "Refunding…" : "Issue full refund"}
+            {refundPending ? "Refunding…" : `Refund ${refundLabel}`}
           </Button>
           <Result state={refundState} />
         </form>

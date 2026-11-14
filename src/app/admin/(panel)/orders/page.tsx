@@ -60,7 +60,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                   <td>{dateTime.format(o.createdAt)}</td>
                   <td>{(o.address as { name?: string }).name}<br /><small>{o.phone}</small></td>
                   <td>{o._count.items}</td>
-                  <td>{o.paymentMethod === "cod" ? "COD" : o.paymentStatus}</td>
+                  <td>{o.paymentMethod === "cod" ? (o.paymentStatus === "paid" ? "COD · collected" : `COD · collect ${formatPaise(o.total - o.codFee)}`) : o.paymentStatus}</td>
                   <td><OrderPill status={o.status} /></td>
                   <td className={styles.num}>{formatPaise(o.total)}</td>
                 </tr>

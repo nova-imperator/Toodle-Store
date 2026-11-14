@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Drawer } from "@/components/ui/Drawer";
 import { Icon } from "@/components/ui/Icon";
-import { AGE_LINKS, CATEGORY_LINKS, QUICK_LINKS } from "@/config/navigation";
-import { SITE } from "@/config/site";
+import { CATEGORY_LINKS } from "@/config/navigation";
+// Used by the hidden menu sections below; restore together with them.
+// import { AGE_LINKS, QUICK_LINKS } from "@/config/navigation";
+import { SITE, WHATSAPP_RETAIL_HREF } from "@/config/site";
 import styles from "./MobileMenu.module.css";
 
 export function MobileMenu({ userName }: { userName: string | null }) {
@@ -29,6 +31,7 @@ export function MobileMenu({ userName }: { userName: string | null }) {
           </Link>
         </div>
 
+        {/* Shop by age hidden on owner's request, 14 Nov 2026.
         <div className={styles.section}>
           <h3 className={styles.label}>Shop by age</h3>
           <ul className={styles.ages}>
@@ -42,6 +45,7 @@ export function MobileMenu({ userName }: { userName: string | null }) {
             ))}
           </ul>
         </div>
+        */}
 
         <div className={styles.section}>
           <h3 className={styles.label}>Shop by category</h3>
@@ -61,11 +65,13 @@ export function MobileMenu({ userName }: { userName: string | null }) {
 
         <div className={styles.section}>
           <ul className={styles.links}>
+            {/* Offers / New arrivals / Best sellers hidden, same as the desktop menu bar (owner, 14 Nov 2026).
             {QUICK_LINKS.map((l) => (
               <li key={l.href}>
                 <Link href={l.href}>{l.label}</Link>
               </li>
             ))}
+            */}
             <li>
               <Link href="/track-order">Track my order</Link>
             </li>
@@ -81,7 +87,7 @@ export function MobileMenu({ userName }: { userName: string | null }) {
         </div>
 
         <div className={`${styles.section} ${styles.contact}`}>
-          <a href={SITE.whatsappHref}>
+          <a href={WHATSAPP_RETAIL_HREF}>
             <Icon name="whatsapp" size={20} /> WhatsApp {SITE.phone}
           </a>
         </div>

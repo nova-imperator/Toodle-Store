@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BENEFITS, FAQS, SEGMENTS, STEPS, WHOLESALE_CATEGORIES } from "@/config/b2b";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { EnquiryButton } from "./EnquiryButton";
@@ -17,7 +17,7 @@ export function B2BHero({ title, text, source, image = "/images/hero/b2b.webp" }
           <p className={styles.heroText}>{text}</p>
           <div className={styles.ctaRow}>
             <EnquiryButton label="Start now" source={source} />
-            <a href={SITE.whatsappHref} className={styles.wa}>
+            <a href={WHATSAPP_BULK_HREF} className={styles.wa}>
               or WhatsApp {SITE.phone}
             </a>
           </div>
@@ -141,7 +141,7 @@ export function CtaBand({ source }: { source: string }) {
         </div>
         <div className={styles.ctaRow}>
           <EnquiryButton label="Start now" source={source} />
-          <a href={SITE.whatsappHref} className={styles.waBtn}>
+          <a href={WHATSAPP_BULK_HREF} className={styles.waBtn}>
             Chat on WhatsApp
           </a>
         </div>

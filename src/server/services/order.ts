@@ -7,7 +7,7 @@ import { getCart } from "./cart";
 import { sendOrderConfirmation } from "./notifications";
 import { createRazorpayOrder, isMockPayments, publicKeyId } from "@/server/integrations/razorpay";
 import { formatPaise, includedGst } from "@/lib/money";
-import { MIN_ORDER } from "@/config/shipping";
+import { COD_FEE, MIN_ORDER } from "@/config/shipping";
 import { deliveryWindow } from "@/lib/delivery";
 import type { AddressInput, CheckoutInput } from "@/lib/validation/checkout";
 
@@ -36,7 +36,11 @@ export interface PlaceOrderResult {
   mock: boolean;
 }
 
-/** Creates the order and its Razorpay order. Every order is paid online in full (no cash on delivery). */
+/**
+ * Creates the order and its Razorpay order.
+ * Online: the whole total is paid now. Cash on delivery: only the COD charge is paid now (to confirm
+ * the order); the order total includes that charge and the rest is collected in cash.
+ */
 export async function placeOrder(user: { id: string; email: string; name: string | null }, input: CheckoutInput): Promise<PlaceOrderResult> {
   const cart = await getCart();
   if (cart.lines.length === 0) throw new AppError("cart_empty", "Your cart is empty.", 400);
@@ -58,6 +62,9 @@ export async function placeOrder(user: { id: string; email: string; name: string
   const scale = totals.subtotal ? (totals.subtotal - totals.discount) / totals.subtotal : 0;
   const address = { ...input.address, line2: input.address.line2 || null, landmark: input.address.landmark || null };
   const orderNumber = newOrderNumber();
+  const isCod = input.paymentMethod === "cod";
+  const codFee = isCod ? COD_FEE : 0;
+  const payNow = isCod ? COD_FEE : totals.total;
 
   const order = await db.order.create({
     data: {
@@ -69,9 +76,10 @@ export async function placeOrder(user: { id: string; email: string; name: string
       subtotal: totals.subtotal,
       discount: totals.discount,
       shipping: totals.shipping,
+      codFee,
       gst: totals.gstIncluded,
-      total: totals.total,
-      paymentMethod: "razorpay",
+      total: totals.total + codFee,
+      paymentMethod: isCod ? "cod" : "razorpay",
       status: "pending_payment",
       couponCode: totals.discount > 0 ? cart.couponCode : null,
       items: {
@@ -91,9 +99,9 @@ export async function placeOrder(user: { id: string; email: string; name: string
   if (input.saveAddress) await saveAddress(user.id, input.address);
   if (!user.name) await db.user.update({ where: { id: user.id }, data: { name: input.address.name, phone: input.phone } });
 
-  const rp = await createRazorpayOrder(order.total, orderNumber, { order_number: orderNumber });
-  await db.payment.create({ data: { orderId: order.id, razorpayOrderId: rp.id, amount: order.total } });
-  return { orderNumber, keyId: publicKeyId(), razorpayOrderId: rp.id, amount: order.total, mock: isMockPayments() };
+  const rp = await createRazorpayOrder(payNow, orderNumber, { order_number: orderNumber, ...(isCod ? { purpose: "cod_charge" } : {}) });
+  await db.payment.create({ data: { orderId: order.id, razorpayOrderId: rp.id, amount: payNow } });
+  return { orderNumber, keyId: publicKeyId(), razorpayOrderId: rp.id, amount: payNow, mock: isMockPayments() };
 }
 
 /**
@@ -118,7 +126,9 @@ export async function markPaymentCaptured(razorpayOrderId: string, details: { pa
       },
     });
     if (claimed.count === 0) return;
-    await tx.order.update({ where: { id: order.id }, data: { status: "placed", paymentStatus: "paid", placedAt: new Date() } });
+    // COD: only the COD charge was paid, so the order stays "unpaid" until the cash is collected on delivery.
+    const paymentStatus = order.paymentMethod === "cod" ? "unpaid" : "paid";
+    await tx.order.update({ where: { id: order.id }, data: { status: "placed", paymentStatus, placedAt: new Date() } });
     for (const item of order.items) {
       if (item.productId) await tx.product.update({ where: { id: item.productId }, data: { stockQty: { decrement: item.qty } } });
     }
@@ -132,6 +142,7 @@ export async function markPaymentCaptured(razorpayOrderId: string, details: { pa
     email: order.email,
     total: order.total,
     shipping: order.shipping,
+    codFee: order.codFee,
     items: order.items,
     address: order.address as unknown as OrderAddress,
   });
@@ -190,6 +201,8 @@ export async function trackOrder(orderNumber: string, email: string) {
     subtotal: order.subtotal,
     discount: order.discount,
     shipping: order.shipping,
+    codFee: order.codFee,
+    cashDue: order.paymentMethod === "cod" && order.paymentStatus !== "paid" ? order.total - order.codFee : 0,
     total: order.total,
     recipient: address.name.split(" ")[0],
     deliverTo: `${address.city}, ${address.state} ${address.pincode}`,

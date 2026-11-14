@@ -3,7 +3,8 @@ import { MIN_ORDER } from "@/config/shipping";
 import type { CartTotals } from "@/types/cart";
 import styles from "./CartSummary.module.css";
 
-export function CartSummary({ totals, couponCode }: { totals: CartTotals; couponCode: string | null }) {
+/** `codFee`: cash on delivery charge, shown at checkout when COD is chosen. */
+export function CartSummary({ totals, couponCode, codFee = 0 }: { totals: CartTotals; couponCode: string | null; codFee?: number }) {
   const savings = totals.mrpTotal - totals.subtotal + totals.discount;
   return (
     <dl className={styles.summary}>
@@ -21,6 +22,12 @@ export function CartSummary({ totals, couponCode }: { totals: CartTotals; coupon
         <dt>Delivery</dt>
         <dd>{totals.shipping ? formatPaise(totals.shipping) : "Free"}</dd>
       </div>
+      {codFee > 0 && (
+        <div>
+          <dt>Cash on delivery charge</dt>
+          <dd>{formatPaise(codFee)}</dd>
+        </div>
+      )}
       {/* Owner: prices don't include GST, so no GST amount is shown. */}
       <div className={styles.muted}>
         <dt>GST</dt>
@@ -28,7 +35,7 @@ export function CartSummary({ totals, couponCode }: { totals: CartTotals; coupon
       </div>
       <div className={styles.total}>
         <dt>Total</dt>
-        <dd>{formatPaise(totals.total)}</dd>
+        <dd>{formatPaise(totals.total + codFee)}</dd>
       </div>
       {totals.belowMinimumBy > 0 ? (
         <p className={styles.warn}>

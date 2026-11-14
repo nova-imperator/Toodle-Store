@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
 import { DELIVERY_REGION_NOTE } from "@/config/shipping";
 import { SiteLogo } from "@/components/layout/SiteLogo";
 import { Icon } from "@/components/ui/Icon";
@@ -23,7 +23,7 @@ export function B2BHeader() {
         <div className={`container ${header.stripInner}`}>
           <span>Wholesale toys for shops, schools &amp; resellers · No minimum order · {DELIVERY_REGION_NOTE.title}</span>
           <span className={header.desk}>
-            Questions? WhatsApp <a href={SITE.whatsappHref}>{SITE.phone}</a>
+            Questions? WhatsApp <a href={WHATSAPP_BULK_HREF}>{SITE.phone}</a>
           </span>
         </div>
       </div>

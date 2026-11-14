@@ -11,7 +11,7 @@ export function organizationLd() {
     url: SITE.url,
     logo: abs("/images/brand/logo.png"),
     contactPoint: { "@type": "ContactPoint", telephone: SITE.phone, contactType: "customer service", areaServed: "IN" },
-    sameAs: [SITE.instagramHref],
+    sameAs: [SITE.instagramHref, SITE.facebookHref],
   };
 }
 

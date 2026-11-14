@@ -9,7 +9,7 @@ import { TextField } from "@/components/ui/Field";
 import { Icon } from "@/components/ui/Icon";
 import { OrderJourney, type JourneySteps } from "./OrderJourney";
 import { TRACKING_FAQS } from "@/config/tracking";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_RETAIL_HREF, whatsappLink } from "@/config/site";
 import { api } from "@/lib/api";
 import { formatPaise } from "@/lib/money";
 import { trackOrderSchema } from "@/lib/validation/track";
@@ -25,6 +25,9 @@ interface Tracked {
   subtotal: number;
   discount: number;
   shipping: number;
+  codFee: number;
+  /** Cash still to pay on delivery (COD orders). */
+  cashDue: number;
   total: number;
   recipient: string;
   deliverTo: string;
@@ -38,7 +41,7 @@ const day = new Intl.DateTimeFormat("en-IN", { weekday: "short", day: "numeric",
 const HERO: Record<OrderStatus, { tone: string; label: string; title: (o: Tracked) => string; text: (o: Tracked) => string }> = {
   pending_payment: { tone: "red", label: "Payment pending", title: () => "Payment not completed", text: () => "This order isn't confirmed yet. Your cart is saved, so you can pay again from checkout." },
   cod_enquiry: { tone: "yellow", label: "Awaiting confirmation", title: () => "We'll confirm this order by phone", text: () => "Our team will call you to confirm it before it ships." },
-  placed: { tone: "yellow", label: "Confirmed", title: () => "Order confirmed", text: (o) => `Payment received. We're getting ${o.recipient}'s toys ready.` },
+  placed: { tone: "yellow", label: "Confirmed", title: () => "Order confirmed", text: (o) => (o.cashDue > 0 ? `Cash on delivery order. We're getting ${o.recipient}'s toys ready.` : `Payment received. We're getting ${o.recipient}'s toys ready.`) },
   packed: { tone: "blue", label: "Packed", title: () => "Packed and ready to go", text: () => "Your order is packed and will be handed to the courier soon." },
   shipped: { tone: "blue", label: "Shipped", title: () => "On its way!", text: (o) => `Your parcel is with ${o.courier ?? "the courier"} and heading to ${o.deliverTo.split(",")[0]}.` },
   delivered: { tone: "green", label: "Delivered", title: () => "Delivered with love", text: (o) => `Your order reached ${o.recipient}. We hope they love it!` },
@@ -60,7 +63,7 @@ function Faqs() {
         ))}
       </div>
       <p className={styles.small}>
-        Still need help? <a href={SITE.whatsappHref}>Chat with us on WhatsApp</a>
+        Still need help? <a href={WHATSAPP_RETAIL_HREF}>Chat with us on WhatsApp</a>
       </p>
     </section>
   );
@@ -68,7 +71,7 @@ function Faqs() {
 
 function Result({ order, onReset }: { order: Tracked; onReset: () => void }) {
   const hero = HERO[order.status];
-  const waText = encodeURIComponent(`Hi Toodle Store, I have a question about my order ${order.orderNumber}.`);
+  const waHref = whatsappLink(`Hi Toodle Store, I have a question about my order ${order.orderNumber}.`);
 
   return (
     <div className={styles.grid}>
@@ -167,10 +170,22 @@ function Result({ order, onReset }: { order: Tracked; onReset: () => void }) {
               <dt>Delivery</dt>
               <dd>{order.shipping ? formatPaise(order.shipping) : "Free"}</dd>
             </div>
+            {order.codFee > 0 && (
+              <div>
+                <dt>Cash on delivery charge</dt>
+                <dd>{formatPaise(order.codFee)}</dd>
+              </div>
+            )}
             <div className={styles.total}>
-              <dt>{order.status === "pending_payment" ? "Total" : "Total paid"}</dt>
+              <dt>{order.status === "pending_payment" || order.cashDue > 0 ? "Total" : "Total paid"}</dt>
               <dd>{formatPaise(order.total)}</dd>
             </div>
+            {order.cashDue > 0 && order.status !== "pending_payment" && order.status !== "cancelled" && (
+              <div className={styles.total}>
+                <dt>Pay in cash on delivery</dt>
+                <dd>{formatPaise(order.cashDue)}</dd>
+              </div>
+            )}
           </dl>
           {order.status === "delivered" && <p className={styles.note}>A delivery confirmation has been sent to your email.</p>}
         </section>
@@ -182,7 +197,7 @@ function Result({ order, onReset }: { order: Tracked; onReset: () => void }) {
             Need help with this order?
           </h2>
           <div className={styles.helpBtns}>
-            <a href={`${SITE.whatsappHref}?text=${waText}`} className={styles.wa} target="_blank" rel="noopener">
+            <a href={waHref} className={styles.wa} target="_blank" rel="noopener">
               <Icon name="whatsapp" size={20} /> WhatsApp us
             </a>
             <a href={SITE.phoneHref} className={styles.call}>

@@ -7,6 +7,8 @@ interface OrderMailData {
   email: string;
   total: number;
   shipping: number;
+  /** > 0 for cash on delivery orders. */
+  codFee: number;
   items: { name: string; qty: number; unitPrice: number }[];
   address: { name: string; line1: string; city: string; state: string; pincode: string };
 }

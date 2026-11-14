@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { CartSummary } from "@/components/cart/CartSummary";
 import { IndiaOnlyNote } from "@/components/layout/IndiaOnlyNote";
 import { INDIAN_STATES } from "@/config/india";
+import { COD_FEE } from "@/config/shipping";
 import { api, ApiError } from "@/lib/api";
 import { formatPaise } from "@/lib/money";
 import { checkoutSchema, type AddressInput } from "@/lib/validation/checkout";
@@ -47,6 +48,8 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
   const [busy, setBusy] = useState(false);
   const [estimate, setEstimate] = useState<string | null>(null);
   const [mock, setMock] = useState<{ razorpayOrderId: string; amount: number } | null>(null);
+  const [method, setMethod] = useState<"razorpay" | "cod">("razorpay");
+  const isCod = method === "cod";
 
   const set = (k: keyof AddressInput) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setAddress((a) => ({ ...a, [k]: e.target.value }));
 
@@ -109,7 +112,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
-    const parsed = checkoutSchema.safeParse({ phone, address, saveAddress });
+    const parsed = checkoutSchema.safeParse({ phone, address, saveAddress, paymentMethod: method });
     if (!parsed.success) {
       const map: Record<string, string> = {};
       for (const issue of parsed.error.issues) map[issue.path.join(".")] ??= issue.message;
@@ -187,12 +190,25 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
           <h2 id="s3">
             <span className={styles.num}>3</span> Payment
           </h2>
-          <div className={styles.method}>
-            <Icon name="shield" />
-            <span>
-              <strong>Pay securely online</strong>
-              <small>UPI, cards, netbanking and wallets via Razorpay. You choose in the next step.</small>
-            </span>
+          <div className={styles.methods} role="radiogroup" aria-label="Payment method">
+            <label className={styles.method} data-selected={method === "razorpay"}>
+              <input type="radio" name="paymentMethod" value="razorpay" checked={method === "razorpay"} onChange={() => setMethod("razorpay")} />
+              <Icon name="shield" />
+              <span>
+                <strong>Pay securely online</strong>
+                <small>UPI, cards, netbanking and wallets via Razorpay.</small>
+              </span>
+            </label>
+            <label className={styles.method} data-selected={method === "cod"}>
+              <input type="radio" name="paymentMethod" value="cod" checked={method === "cod"} onChange={() => setMethod("cod")} />
+              <Icon name="cash" />
+              <span>
+                <strong>Cash on delivery (+{formatPaise(COD_FEE)})</strong>
+                <small>
+                  Pay the {formatPaise(COD_FEE)} COD charge online now to confirm your order, then pay {formatPaise(cart.totals.total)} in cash when it arrives.
+                </small>
+              </span>
+            </label>
           </div>
         </section>
       </div>
@@ -211,14 +227,26 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props
             </li>
           ))}
         </ul>
-        <CartSummary totals={cart.totals} couponCode={cart.couponCode} />
+        <CartSummary totals={cart.totals} couponCode={cart.couponCode} codFee={isCod ? COD_FEE : 0} />
+        {isCod && (
+          <dl className={styles.codSplit}>
+            <div>
+              <dt>Pay online now</dt>
+              <dd>{formatPaise(COD_FEE)}</dd>
+            </div>
+            <div>
+              <dt>Pay in cash on delivery</dt>
+              <dd>{formatPaise(cart.totals.total)}</dd>
+            </div>
+          </dl>
+        )}
         {formError && (
           <p className={styles.error} role="alert">
             {formError}
           </p>
         )}
         <Button type="submit" size="lg" block disabled={busy || cart.totals.belowMinimumBy > 0}>
-          {busy ? "Please wait…" : `Pay ${formatPaise(cart.totals.total)}`}
+          {busy ? "Please wait…" : isCod ? `Pay ${formatPaise(COD_FEE)} & confirm order` : `Pay ${formatPaise(cart.totals.total)}`}
         </Button>
         <p className={styles.policy}>
           We deliver only within India. By placing this order you agree to our <Link href="/terms">terms</Link>. Toys can&apos;t be returned, so please check ages and sizes.

@@ -52,15 +52,23 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
             <dl className={`${styles.dl} ${styles.spaced}`}>
               <dt>Subtotal</dt><dd>{formatPaise(order.subtotal)}</dd>
               {order.discount > 0 && (<><dt>Coupon {order.couponCode}</dt><dd>−{formatPaise(order.discount)}</dd></>)}
+              <dt>Delivery</dt><dd>{order.shipping ? formatPaise(order.shipping) : "Free"}</dd>
+              {order.codFee > 0 && (<><dt>COD charge</dt><dd>{formatPaise(order.codFee)}</dd></>)}
               <dt>GST</dt><dd>–</dd>
               <dt>Total</dt><dd><strong>{formatPaise(order.total)}</strong></dd>
+              {order.paymentMethod === "cod" && (
+                <>
+                  <dt>Paid online</dt><dd>{formatPaise(order.codFee)} (COD charge)</dd>
+                  <dt>Cash to collect</dt><dd><strong>{order.paymentStatus === "paid" ? "Collected" : formatPaise(order.total - order.codFee)}</strong></dd>
+                </>
+              )}
             </dl>
           </section>
 
           <section className={styles.panel}>
             <h2>Payment</h2>
             <dl className={styles.dl}>
-              <dt>Method</dt><dd>{order.paymentMethod === "cod" ? "Cash on delivery" : "Razorpay"}</dd>
+              <dt>Method</dt><dd>{order.paymentMethod === "cod" ? "Cash on delivery (COD charge paid online)" : "Razorpay"}</dd>
               <dt>Status</dt><dd>{order.paymentStatus}</dd>
               {payment && (<><dt>Razorpay payment</dt><dd>{payment.razorpayPaymentId} {payment.method && `(${payment.method})`}</dd></>)}
               {order.refunds.map((r) => (
@@ -92,7 +100,8 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
               orderId={order.id}
               status={order.status}
               next={allowedNext(order.status)}
-              canRefund={admin.role === "admin" && order.paymentStatus === "paid"}
+              canRefund={admin.role === "admin" && !!payment?.razorpayPaymentId}
+              refundLabel={order.paymentMethod === "cod" ? `the ${formatPaise(payment?.amount ?? order.codFee)} COD charge` : formatPaise(payment?.amount ?? order.total)}
             />
           </section>
         </div>

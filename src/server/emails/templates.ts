@@ -1,5 +1,5 @@
 import "server-only";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
 import { formatPaise } from "@/lib/money";
 import { BRAND, asset, button, emailLayout, escapeHtml, heading, panel, paragraph, siteLink } from "./layout";
 
@@ -50,8 +50,16 @@ interface OrderMail {
   name: string;
   total: number;
   shipping: number;
+  codFee: number;
   items: { name: string; qty: number; unitPrice: number }[];
   address: { line1: string; city: string; state: string; pincode: string };
+}
+
+function totalRow(label: string, value: string, opts: { big?: boolean; color?: string } = {}) {
+  const size = opts.big ? 18 : 15;
+  const weight = opts.big ? "bold" : "normal";
+  return `<tr><td style="padding:6px 0;font-family:${FONT};font-size:${size}px;font-weight:${weight};color:${opts.big ? BRAND.ink : BRAND.inkSoft}">${label}</td>
+        <td align="right" style="padding:6px 0;font-family:${FONT};font-size:${size}px;font-weight:bold;color:${opts.color ?? BRAND.ink}">${value}</td></tr>`;
 }
 
 function itemsTable(o: OrderMail) {
@@ -66,15 +74,26 @@ function itemsTable(o: OrderMail) {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rows}
     <tr><td style="padding:10px 0 4px;border-top:2px dashed ${BRAND.line};font-family:${FONT};font-size:15px;color:${BRAND.inkSoft}">Delivery</td>
         <td align="right" style="padding:10px 0 4px;border-top:2px dashed ${BRAND.line};font-family:${FONT};font-size:15px;color:${o.shipping ? BRAND.ink : BRAND.green};font-weight:bold">${o.shipping ? formatPaise(o.shipping) : "Free"}</td></tr>
-    <tr><td style="padding:6px 0;font-family:${FONT};font-size:18px;font-weight:bold;color:${BRAND.ink}">Total paid</td>
-        <td align="right" style="padding:6px 0;font-family:${FONT};font-size:18px;font-weight:bold;color:${BRAND.ink}">${formatPaise(o.total)}</td></tr>
+    ${
+      o.codFee
+        ? totalRow("Cash on delivery charge", formatPaise(o.codFee)) +
+          totalRow("Order total", formatPaise(o.total), { big: true }) +
+          totalRow("Paid online", `−${formatPaise(o.codFee)}`, { color: BRAND.green }) +
+          totalRow("Pay in cash on delivery", formatPaise(o.total - o.codFee), { big: true, color: BRAND.red })
+        : totalRow("Total paid", formatPaise(o.total), { big: true })
+    }
   </table>`;
 }
 
 export function orderConfirmedEmail(o: OrderMail): Email {
+  const cashDue = o.total - o.codFee;
   const body = [
     heading(`Woohoo, ${firstName(o.name)}! Your order is confirmed 🎁`),
-    paragraph(`Thank you for shopping with us! We've received your payment and our elves are already getting your toys ready.`),
+    paragraph(
+      o.codFee
+        ? `Thank you for shopping with us! We've received your ${formatPaise(o.codFee)} cash on delivery charge, so your order is confirmed. Please keep <strong style="color:${BRAND.ink}">${formatPaise(cashDue)}</strong> ready to pay when it arrives.`
+        : `Thank you for shopping with us! We've received your payment and our elves are already getting your toys ready.`,
+    ),
     panel(`<div style="text-align:center;font-size:14px;color:${BRAND.inkSoft}">Order number</div><div style="text-align:center;font-size:24px;font-weight:bold;letter-spacing:1px">${o.orderNumber}</div>`, "#DDECFD", BRAND.blue),
     panel(itemsTable(o)),
     paragraph(`🚚 Delivering to <strong style="color:${BRAND.ink}">${escapeHtml(`${o.address.line1}, ${o.address.city}, ${o.address.state} ${o.address.pincode}`)}</strong>`),
@@ -84,7 +103,11 @@ export function orderConfirmedEmail(o: OrderMail): Email {
 
   return {
     subject: `🎉 Order ${o.orderNumber} confirmed! Your toys are on their way soon`,
-    text: `Woohoo! Your order ${o.orderNumber} is confirmed and paid.\n\n${o.items.map((i) => `• ${i.name} × ${i.qty} = ${formatPaise(i.unitPrice * i.qty)}`).join("\n")}\n\nDelivery: ${o.shipping ? formatPaise(o.shipping) : "Free"}\nTotal paid: ${formatPaise(o.total)}\n\nDelivering to: ${o.address.line1}, ${o.address.city}, ${o.address.state} ${o.address.pincode}\n\nTrack your order: ${trackLink(o.orderNumber)}\n\nQuestions? WhatsApp us on ${SITE.phone}.`,
+    text: `Woohoo! Your order ${o.orderNumber} is confirmed${o.codFee ? "" : " and paid"}.\n\n${o.items.map((i) => `• ${i.name} × ${i.qty} = ${formatPaise(i.unitPrice * i.qty)}`).join("\n")}\n\nDelivery: ${o.shipping ? formatPaise(o.shipping) : "Free"}\n${
+      o.codFee
+        ? `Cash on delivery charge: ${formatPaise(o.codFee)}\nOrder total: ${formatPaise(o.total)}\nPaid online: ${formatPaise(o.codFee)}\nPay in cash on delivery: ${formatPaise(cashDue)}`
+        : `Total paid: ${formatPaise(o.total)}`
+    }\n\nDelivering to: ${o.address.line1}, ${o.address.city}, ${o.address.state} ${o.address.pincode}\n\nTrack your order: ${trackLink(o.orderNumber)}\n\nQuestions? WhatsApp us on ${SITE.phone}.`,
     html: emailLayout({ preheader: `Order ${o.orderNumber} is confirmed. We're getting your toys ready!`, body }),
   };
 }
@@ -130,13 +153,13 @@ export function enquiryReceivedEmail(e: { fullName: string; phone: string }): Em
     paragraph("We're excited to help you stock up! Our wholesale team will call you within <strong style=\"color:#1D2B53\">24 hours</strong> with our price list."),
     panel(`<div style="text-align:center;font-size:15px">📞 We'll call you on <strong>${escapeHtml(e.phone)}</strong></div>`, "#E0F2E2", BRAND.green),
     paragraph("Can't wait? Chat with us right now on WhatsApp."),
-    button("WhatsApp us", SITE.whatsappHref, BRAND.green),
+    button("WhatsApp us", WHATSAPP_BULK_HREF, BRAND.green),
     paragraph(`Meanwhile, take a peek at our <a href="${siteLink("/b2b")}" style="color:${BRAND.blue};font-weight:bold">wholesale categories</a>.`, { size: 14 }),
   ].join("");
 
   return {
     subject: "🙌 We've got your Toodle Store wholesale enquiry!",
     text: `Hi ${e.fullName.split(" ")[0]},\n\nThank you for your enquiry! Our team will call you on ${e.phone} within 24 hours with our wholesale price list.\n\nNeed us sooner? WhatsApp ${SITE.phone}.\n\nToodle Store`,
-    html: emailLayout({ preheader: "Our wholesale team will call you within 24 hours.", body }),
+    html: emailLayout({ preheader: "Our wholesale team will call you within 24 hours.", body, whatsapp: WHATSAPP_BULK_HREF }),
   };
 }

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE } from "@/config/site";
-import { FREE_SHIPPING_FROM, MIN_ORDER, SHIPPING_FEE } from "@/config/shipping";
+import { COD_FEE, FREE_SHIPPING_FROM, MIN_ORDER, SHIPPING_FEE } from "@/config/shipping";
 import { formatPaise } from "@/lib/money";
 
 export const metadata: Metadata = { title: "Shipping Policy", alternates: { canonical: "/shipping-policy" } };
 
 export default function ShippingPolicyPage() {
   return (
-    <ContentPage title="Shipping policy" path="/shipping-policy" updated="13 November 2026">
+    <ContentPage title="Shipping policy" path="/shipping-policy" updated="14 November 2026">
       <h2>Where we deliver</h2>
       <p>We deliver only within India, to addresses with a valid 6-digit Indian pincode. We don&apos;t ship to other countries.</p>
       <h2>Delivery charges</h2>
@@ -19,7 +19,11 @@ export default function ShippingPolicyPage() {
       <h2>Minimum order</h2>
       <p>The minimum order value is {formatPaise(MIN_ORDER)}.</p>
       <h2>Payment</h2>
-      <p>All orders are paid in full online through Razorpay (UPI, cards, netbanking or wallets). We don&apos;t offer cash on delivery.</p>
+      <p>You can pay in full online through Razorpay (UPI, cards, netbanking or wallets), or choose cash on delivery.</p>
+      <p>
+        Cash on delivery has an extra charge of {formatPaise(COD_FEE)}. You pay this charge online at checkout to confirm the order, and pay the rest of the
+        order in cash when it is delivered.
+      </p>
       <h2>Delivery time</h2>
       <p>
         Most orders are delivered in {SITE.deliveryDays.min}–{SITE.deliveryDays.max} working days after payment. You can check an estimate for your pincode on

@@ -159,6 +159,7 @@ model Product {
   isBestSeller   Boolean       @default(false) @map("is_best_seller")
   isNewArrival   Boolean       @default(false) @map("is_new_arrival")
   isDeal         Boolean       @default(false) @map("is_deal")
+  isFeatured     Boolean       @default(false) @map("is_featured")
   isB2bVisible   Boolean       @default(true) @map("is_b2b_visible")
   seoTitle       String?       @map("seo_title")
   seoDescription String?       @map("seo_description")
@@ -288,6 +289,8 @@ model Order {
   subtotal      Int
   discount      Int           @default(0)
   shipping      Int           @default(0)
+  // Cash on delivery: this charge is paid online up front to confirm the order; the rest is paid in cash.
+  codFee        Int           @default(0) @map("cod_fee")
   gst           Int
   total         Int
   paymentMethod PaymentMethod @map("payment_method")

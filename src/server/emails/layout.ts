@@ -1,5 +1,5 @@
 import "server-only";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_RETAIL_HREF } from "@/config/site";
 
 // Email HTML: tables + inline styles only, so it renders in Gmail, Outlook and phone mail apps.
 
@@ -56,7 +56,8 @@ export function panel(html: string, bg = BRAND.paper, border = BRAND.line) {
 }
 
 /** Wraps content in the Toodle Store email shell (logo header, card, cheerful footer). */
-export function emailLayout({ preheader, body }: { preheader: string; body: string }) {
+/** `whatsapp`: footer WhatsApp link; defaults to the shopper message, wholesale emails pass the bulk one. */
+export function emailLayout({ preheader, body, whatsapp }: { preheader: string; body: string; whatsapp?: string }) {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Toodle Store</title></head>
 <body style="margin:0;padding:0;background:${BRAND.paper}">
@@ -75,10 +76,11 @@ export function emailLayout({ preheader, body }: { preheader: string; body: stri
     <tr><td align="center" style="padding:4px 12px;font-family:${FONT};font-size:14px;color:${BRAND.inkSoft}">
       <a href="${siteLink("/shop")}" style="color:${BRAND.blue};font-weight:bold;text-decoration:none">Shop toys</a> &nbsp;·&nbsp;
       <a href="${siteLink("/track-order")}" style="color:${BRAND.blue};font-weight:bold;text-decoration:none">Track an order</a> &nbsp;·&nbsp;
-      <a href="${SITE.whatsappHref}" style="color:${BRAND.green};font-weight:bold;text-decoration:none">WhatsApp ${SITE.phone}</a> &nbsp;·&nbsp;
-      <a href="${SITE.instagramHref}" style="color:${BRAND.red};font-weight:bold;text-decoration:none">${SITE.instagram}</a>
+      <a href="${whatsapp ?? WHATSAPP_RETAIL_HREF}" style="color:${BRAND.green};font-weight:bold;text-decoration:none">WhatsApp ${SITE.phone}</a> &nbsp;·&nbsp;
+      <a href="${SITE.instagramHref}" style="color:${BRAND.red};font-weight:bold;text-decoration:none">${SITE.instagram}</a> &nbsp;·&nbsp;
+      <a href="${SITE.facebookHref}" style="color:${BRAND.blue};font-weight:bold;text-decoration:none">Facebook</a>
     </td></tr>
-    <tr><td align="center" style="padding:10px 12px 0;font-family:${FONT};font-size:12px;color:#8a93ab">${SITE.name}, operated by ${SITE.legalName}. We deliver only within India.</td></tr>
+    <tr><td align="center" style="padding:10px 12px 0;font-family:${FONT};font-size:12px;color:#8a93ab">${SITE.name}. We deliver only within India.</td></tr>
   </table>
 </td></tr>
 </table>

@@ -21,9 +21,10 @@ export default async function OrderPage({ params }: Props) {
   if (!order) notFound();
 
   const address = order.address as unknown as OrderAddress;
-  // Cash on delivery is no longer offered; this only shows orders placed before 13 Nov 2026.
+  // Old-style COD enquiries (before 13 Nov 2026), confirmed by phone. New COD orders are normal orders.
   const isCod = order.status === "cod_enquiry";
   const pending = order.status === "pending_payment";
+  const cashDue = order.paymentMethod === "cod" && order.codFee > 0 ? order.total - order.codFee : 0;
 
   return (
     <div className={`container ${styles.wrap}`}>
@@ -50,6 +51,11 @@ export default async function OrderPage({ params }: Props) {
             <>
               <h1>Yay! Your order is confirmed</h1>
               <p>A confirmation has been sent to {order.email}. We&apos;ll let you know when it ships.</p>
+              {cashDue > 0 && order.paymentStatus !== "paid" && (
+                <p>
+                  <strong>Cash on delivery:</strong> please keep {formatPaise(cashDue)} ready to pay when your order arrives.
+                </p>
+              )}
             </>
           )}
           <p className={styles.number}>Order {order.orderNumber}</p>
@@ -81,8 +87,15 @@ export default async function OrderPage({ params }: Props) {
             <div><dt>Items</dt><dd>{formatPaise(order.subtotal)}</dd></div>
             {order.discount > 0 && <div><dt>Coupon {order.couponCode}</dt><dd>−{formatPaise(order.discount)}</dd></div>}
             <div><dt>Delivery</dt><dd>{order.shipping ? formatPaise(order.shipping) : "Free"}</dd></div>
+            {order.codFee > 0 && <div><dt>Cash on delivery charge</dt><dd>{formatPaise(order.codFee)}</dd></div>}
             <div><dt>GST</dt><dd>–</dd></div>
             <div className={styles.total}><dt>{isCod ? "To pay on delivery" : "Total"}</dt><dd>{formatPaise(order.total)}</dd></div>
+            {cashDue > 0 && (
+              <>
+                <div><dt>Paid online</dt><dd>{formatPaise(order.codFee)}</dd></div>
+                <div className={styles.total}><dt>{order.paymentStatus === "paid" ? "Paid in cash" : "Pay in cash on delivery"}</dt><dd>{formatPaise(cashDue)}</dd></div>
+              </>
+            )}
           </dl>
         </section>
 

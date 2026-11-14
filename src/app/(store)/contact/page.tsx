@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContentPage } from "@/components/content/Prose";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_RETAIL_HREF } from "@/config/site";
 import styles from "@/components/content/Prose.module.css";
 
 export const metadata: Metadata = { title: "Contact Us", description: "Call or WhatsApp Toodle Store, or email us. We're happy to help you choose a toy.", alternates: { canonical: "/contact" } };
@@ -13,7 +13,7 @@ export default function ContactPage() {
       <ul className={styles.cards}>
         <li>
           <strong>WhatsApp</strong>
-          <a href={SITE.whatsappHref}>{SITE.phone}</a>
+          <a href={WHATSAPP_RETAIL_HREF}>{SITE.phone}</a>
           <br />Fastest way to reach us.
         </li>
         <li>
@@ -28,6 +28,12 @@ export default function ContactPage() {
           <strong>Instagram</strong>
           <a href={SITE.instagramHref} target="_blank" rel="noopener">
             {SITE.instagram}
+          </a>
+        </li>
+        <li>
+          <strong>Facebook</strong>
+          <a href={SITE.facebookHref} target="_blank" rel="noopener">
+            Toodle Store on Facebook
           </a>
         </li>
       </ul>

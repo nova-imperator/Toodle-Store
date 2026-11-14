@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_RETAIL_HREF } from "@/config/site";
 import { SiteLogo } from "./SiteLogo";
-import { DELIVERY_REGION_NOTE, FREE_SHIPPING_LABEL } from "@/config/shipping";
-import { CATEGORY_LINKS, QUICK_LINKS } from "@/config/navigation";
+import { FREE_SHIPPING_LABEL } from "@/config/shipping";
+import { CATEGORY_LINKS } from "@/config/navigation";
+// Used by the hidden desktop menu bar below; restore these imports together with it.
+// import { QUICK_LINKS } from "@/config/navigation";
+// import { NavDropdowns } from "./NavDropdowns";
 import { SearchBox } from "./SearchBox";
 import { HeaderActions } from "./HeaderActions";
 import { MobileMenu } from "./MobileMenu";
-import { NavDropdowns } from "./NavDropdowns";
 import styles from "./Header.module.css";
 
 export function Header({ userName }: { userName: string | null }) {
@@ -14,11 +16,10 @@ export function Header({ userName }: { userName: string | null }) {
     <header className={styles.header}>
       <div className={styles.strip}>
         <div className={`container ${styles.stripInner}`}>
-          <span>
-            {FREE_SHIPPING_LABEL} · {DELIVERY_REGION_NOTE.title}
-          </span>
+          {/* "We deliver only within India" removed from the strip (owner, 14 Nov 2026); it still shows on the home page and checkout. */}
+          <span>{FREE_SHIPPING_LABEL}</span>
           <span className={styles.desk}>
-            Questions? WhatsApp <a href={SITE.whatsappHref}>{SITE.phone}</a>
+            Questions? WhatsApp <a href={WHATSAPP_RETAIL_HREF}>{SITE.phone}</a>
           </span>
         </div>
       </div>
@@ -34,6 +35,7 @@ export function Header({ userName }: { userName: string | null }) {
         <HeaderActions userName={userName} />
       </div>
 
+      {/* Desktop menu bar (Shop by Category, Shop by Age, Offers, New arrivals, Best sellers) hidden on owner's request, 14 Nov 2026.
       <nav className={styles.cats} aria-label="Shop">
         <div className={`container ${styles.catsInner}`}>
           <NavDropdowns />
@@ -44,6 +46,7 @@ export function Header({ userName }: { userName: string | null }) {
           ))}
         </div>
       </nav>
+      */}
 
       <nav className={styles.chips} aria-label="Categories">
         {CATEGORY_LINKS.map((c) => (

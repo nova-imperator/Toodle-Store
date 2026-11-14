@@ -7,7 +7,7 @@ import { TextField, SelectField, TextAreaField } from "@/components/ui/Field";
 import { BUSINESS_TYPES, ORDER_VALUES } from "@/config/b2b";
 import { CATEGORIES } from "@/config/catalogue";
 import { INDIAN_STATES } from "@/config/india";
-import { SITE } from "@/config/site";
+import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
 import { api } from "@/lib/api";
 import { readUtm, trackConversion } from "@/lib/utm";
 import { enquirySchema } from "@/lib/validation/enquiry";
@@ -66,7 +66,7 @@ export function EnquiryForm({ source }: { source?: string }) {
         <p className={styles.doneTitle}>Thank you, {values.fullName.split(" ")[0]}!</p>
         <p>Our team will call you within 24 hours with our wholesale price list.</p>
         <p>
-          Can&apos;t wait? <a href={SITE.whatsappHref}>WhatsApp us on {SITE.phone}</a>
+          Can&apos;t wait? <a href={WHATSAPP_BULK_HREF}>WhatsApp us on {SITE.phone}</a>
         </p>
       </div>
     );

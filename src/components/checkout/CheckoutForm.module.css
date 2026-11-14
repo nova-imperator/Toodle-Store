@@ -61,18 +61,56 @@
 
 .check input { width: 20px; height: 20px; accent-color: var(--brick-blue); }
 
+.methods {
+  display: grid;
+  gap: 10px;
+}
+
 .method {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px;
-  border: 2px solid var(--brick-blue);
+  border: 2px solid var(--line-strong);
   border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+}
+
+.method[data-selected="true"] {
+  border-color: var(--brick-blue);
   background: var(--blue-tint);
 }
 
+.method input {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--brick-blue);
+}
+
+.method svg { flex-shrink: 0; }
 .method strong { display: block; }
 .method small { color: var(--ink-soft); }
+
+.codSplit {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 2px dashed var(--brick-yellow-deep);
+  border-radius: var(--radius-sm);
+  background: var(--yellow-tint);
+}
+
+.codSplit div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 700;
+}
+
+.codSplit dd { margin: 0; }
 
 @media (min-width: 960px) {
   .summary { position: sticky; top: calc(var(--header-h) + 70px); }
