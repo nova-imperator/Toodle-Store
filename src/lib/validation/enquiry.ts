@@ -6,14 +6,20 @@ import { mobileSchema } from "./checkout";
 
 const optional = (max: number) => z.string().trim().max(max).optional().or(z.literal("")).transform((v) => v || undefined);
 
+/** Optional choice: empty string means "not given". */
+const optionalEnum = <T extends readonly [string, ...string[]]>(values: T, message: string) =>
+  z.enum(values, { errorMap: () => ({ message }) }).optional().or(z.literal("")).transform((v) => v || undefined);
+
+// The form asks only name, mobile and city (owner, 17 Nov 2026: fewer fields, more enquiries; the team
+// calls and asks the rest). The other fields stay optional so the API still accepts them.
 export const enquirySchema = z.object({
-  fullName: z.string().trim().min(2, "Enter your full name").max(80),
+  fullName: z.string().trim().min(2, "Enter your name").max(80),
   phone: mobileSchema,
-  email: z.string().trim().toLowerCase().email("Enter a valid email address").max(120),
-  businessName: optional(120),
-  businessType: z.enum(BUSINESS_TYPES, { errorMap: () => ({ message: "Choose your business type" }) }),
   city: z.string().trim().min(2, "Enter your city").max(60),
-  state: z.enum(INDIAN_STATES as [string, ...string[]], { errorMap: () => ({ message: "Choose your state" }) }),
+  email: z.string().trim().toLowerCase().email("Enter a valid email address").max(120).optional().or(z.literal("")).transform((v) => v || undefined),
+  businessName: optional(120),
+  businessType: optionalEnum(BUSINESS_TYPES, "Choose your business type"),
+  state: optionalEnum(INDIAN_STATES as [string, ...string[]], "Choose your state"),
   gstNumber: z
     .string()
     .trim()

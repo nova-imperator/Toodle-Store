@@ -1,58 +1,7 @@
 .form {
   display: grid;
   gap: 16px;
-}
-
-.grid {
-  display: grid;
-  gap: 14px;
-}
-
-@media (min-width: 600px) {
-  .grid { grid-template-columns: 1fr 1fr; }
-}
-
-.cats {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.cats legend {
-  margin-bottom: 8px;
-  font-weight: 800;
-  font-size: 0.95rem;
-}
-
-.cats legend span { font-weight: 600; color: var(--ink-faint); }
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 40px;
-  padding: 6px 12px;
-  border: 2px solid var(--accent);
-  border-radius: 999px;
-  background: var(--card);
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.chip:has(input:checked) { background: var(--accent); color: var(--on-accent); }
-.chip:has(input:focus-visible) { box-shadow: var(--focus); }
-
-.chip input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
+  max-width: 460px;
 }
 
 .trap {

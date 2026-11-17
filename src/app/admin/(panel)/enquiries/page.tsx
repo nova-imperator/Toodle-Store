@@ -57,8 +57,8 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
                 <tr key={e.id}>
                   <td>{dateTime.format(e.createdAt)}</td>
                   <td><Link href={`/admin/enquiries/${e.id}`}>{e.fullName}</Link><br /><small>{e.phone}</small></td>
-                  <td>{e.businessName ?? "—"}<br /><small>{e.businessType}</small></td>
-                  <td>{e.city}, {e.state}</td>
+                  <td>{e.businessName ?? "—"}{e.businessType && <><br /><small>{e.businessType}</small></>}</td>
+                  <td>{[e.city, e.state].filter(Boolean).join(", ")}</td>
                   <td>{e.estOrderValue ?? "—"}</td>
                   <td><EnquiryPill status={e.status} /></td>
                   <td>{e.assignee?.name ?? "—"}</td>

@@ -20,7 +20,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
     <>
       <div className={styles.pageHead}>
         <div>
-          <h1>{e.businessName ?? e.fullName}</h1>
+          <h1>{e.businessName ?? `${e.fullName} · ${e.city}`}</h1>
           <p className={styles.sub}>
             {dateTime.format(e.createdAt)} · <EnquiryPill status={e.status} />
           </p>
@@ -34,13 +34,14 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
           <dl className={styles.dl}>
             <dt>Name</dt><dd>{e.fullName}</dd>
             <dt>Mobile</dt><dd><a href={`tel:+91${e.phone}`}>{e.phone}</a> · <a href={wa} target="_blank" rel="noopener">WhatsApp</a></dd>
-            <dt>Email</dt><dd><a href={`mailto:${e.email}`}>{e.email}</a></dd>
-            <dt>Business</dt><dd>{e.businessName ?? "—"} ({e.businessType})</dd>
-            <dt>Location</dt><dd>{e.city}, {e.state}</dd>
-            <dt>GSTIN</dt><dd>{e.gstNumber ?? "—"}</dd>
-            <dt>Categories</dt><dd>{cats.length ? cats.join(", ") : "—"}</dd>
-            <dt>Order value</dt><dd>{e.estOrderValue ?? "—"}</dd>
-            <dt>Message</dt><dd>{e.message ?? "—"}</dd>
+            <dt>City</dt><dd>{[e.city, e.state].filter(Boolean).join(", ")}</dd>
+            {/* Short form (17 Nov 2026) asks only name, mobile, city; older enquiries also have these. */}
+            {e.email && (<><dt>Email</dt><dd><a href={`mailto:${e.email}`}>{e.email}</a></dd></>)}
+            {(e.businessName || e.businessType) && (<><dt>Business</dt><dd>{[e.businessName, e.businessType].filter(Boolean).join(" · ")}</dd></>)}
+            {e.gstNumber && (<><dt>GSTIN</dt><dd>{e.gstNumber}</dd></>)}
+            {cats.length > 0 && (<><dt>Categories</dt><dd>{cats.join(", ")}</dd></>)}
+            {e.estOrderValue && (<><dt>Order value</dt><dd>{e.estOrderValue}</dd></>)}
+            {e.message && (<><dt>Message</dt><dd>{e.message}</dd></>)}
             <dt>Source</dt><dd>{e.sourcePage ?? "—"}</dd>
             <dt>Campaign</dt><dd>{[e.utmSource, e.utmMedium, e.utmCampaign].filter(Boolean).join(" / ") || "—"}</dd>
           </dl>

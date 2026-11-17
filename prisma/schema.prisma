@@ -432,11 +432,12 @@ model B2bEnquiry {
   id             String        @id @default(cuid())
   fullName       String        @map("full_name")
   phone          String
-  email          String
+  // Form asks only name, mobile and city (owner, 17 Nov 2026); the rest is optional / filled by the team.
+  email          String?
   businessName   String?       @map("business_name")
-  businessType   String        @map("business_type")
+  businessType   String?       @map("business_type")
   city           String
-  state          String
+  state          String?
   gstNumber      String?       @map("gst_number")
   categories     Json          @default("[]")
   estOrderValue  String?       @map("est_order_value")
