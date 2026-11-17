@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { B2BHero, Benefits, CtaBand, Faq, Segments, Steps, WholesaleCategories } from "@/components/b2b/B2BSections";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE } from "@/config/site";
 
-export const metadata: Metadata = {
-  title: { absolute: "Wholesale Toys Supplier in India – Bulk Orders | Toodle Store" },
-  alternates: { canonical: "/b2b" },
-};
+export const metadata: Metadata = pageSeo({
+  title: {
+    absolute: "Wholesale Toys Supplier in India – Bulk Orders | Toodle Store"
+  },
+  description: "Wholesale toys for shops, resellers, schools and corporates across 11 categories. No minimum order, GST invoice, delivery across India. Get the price list.",
+  path: "/b2b",
+  site: "b2b"
+});
+
+// Category photos come from the catalogue; refresh hourly so admin changes show without a redeploy.
+export const revalidate = 3600;
 
 export default function B2BLanding() {
   return (

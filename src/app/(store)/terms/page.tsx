@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE } from "@/config/site";
 import { COD_FEE, FREE_SHIPPING_FROM, MIN_ORDER, SHIPPING_FEE } from "@/config/shipping";
 import { formatPaise } from "@/lib/money";
 
-export const metadata: Metadata = { title: "Terms and Conditions", alternates: { canonical: "/terms" } };
+export const metadata: Metadata = pageSeo({
+  title: "Terms and Conditions",
+  description: "Terms for shopping at Toodle Store: prices, payment online or cash on delivery, delivery within India, returns and coupons.",
+  path: "/terms"
+});
 
 export default function TermsPage() {
   return (
-    <ContentPage title="Terms and conditions" path="/terms" updated="14 November 2026">
-      <p>These terms apply when you use toodlestore.in or place an order with {SITE.legalName}. By placing an order you agree to them.</p>
+    <ContentPage title="Terms and conditions" path="/terms" updated="17 November 2026">
+      <p>These terms apply when you use the Toodle Store website or place an order with Toodle Store. By placing an order you agree to them.</p>
       <h2>Orders and prices</h2>
       <ul>
         <li>All prices are in Indian rupees.</li>
@@ -37,7 +42,7 @@ export default function TermsPage() {
       <p>Coupons can&apos;t be exchanged for cash, can&apos;t be combined unless stated, and may have a minimum order value, usage limit or expiry date.</p>
       <h2>Contact</h2>
       <p>
-        {SITE.legalName} · {SITE.email} · {SITE.phone}
+        {SITE.name} · {SITE.email} · {SITE.phone}
       </p>
     </ContentPage>
   );

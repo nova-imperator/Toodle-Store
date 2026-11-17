@@ -7,7 +7,6 @@ export function organizationLd() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE.name,
-    legalName: SITE.legalName,
     url: SITE.url,
     logo: abs("/images/brand/logo.png"),
     contactPoint: { "@type": "ContactPoint", telephone: SITE.phone, contactType: "customer service", areaServed: "IN" },

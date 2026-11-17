@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE } from "@/config/site";
 
-export const metadata: Metadata = { title: "Privacy Policy", alternates: { canonical: "/privacy-policy" } };
+export const metadata: Metadata = pageSeo({
+  title: "Privacy Policy",
+  description: "What personal data Toodle Store collects, how we use it to deliver orders and send login codes, and how to ask us to delete it.",
+  path: "/privacy-policy"
+});
 
 export default function PrivacyPolicyPage() {
   return (
-    <ContentPage title="Privacy policy" path="/privacy-policy" updated="2 November 2026">
+    <ContentPage title="Privacy policy" path="/privacy-policy" updated="17 November 2026">
       <p>
-        This policy explains what personal data {SITE.legalName} (&ldquo;Toodle Store&rdquo;, &ldquo;we&rdquo;) collects through this website and how we use it.
+        This policy explains what personal data Toodle Store (&ldquo;we&rdquo;) collects through this website and how we use it.
       </p>
       <h2>What we collect</h2>
       <ul>
-        <li>Account details: your email address, and your name if you sign in with Google or give it at checkout.</li>
+        <li>Account details: your email address, and your name and profile photo if you sign in with Google, or your name if you give it at checkout.</li>
         <li>Order details: delivery address, mobile number, items ordered and payment status.</li>
         <li>Wholesale enquiries: the details you enter in the business enquiry form, plus the page and campaign you came from.</li>
         <li>Technical data: cookies that keep you signed in and remember your cart and wishlist.</li>

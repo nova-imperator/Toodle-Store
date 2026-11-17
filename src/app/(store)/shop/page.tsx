@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { ListingView } from "@/components/product/ListingView";
 import type { SearchParams } from "@/lib/listingParams";
 
@@ -9,7 +10,12 @@ type Props = { searchParams: Promise<SearchParams> };
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const flag = (await searchParams).flag as string | undefined;
   const title = (flag && FLAG_TITLES[flag]) || "All Toys – Buy Toys Online in India";
-  return { title, alternates: { canonical: "/shop" } };
+  const path = flag && FLAG_TITLES[flag] ? `/shop?flag=${flag}` : "/shop";
+  return pageSeo({
+    title,
+    description: `${flag && FLAG_TITLES[flag] ? FLAG_TITLES[flag] : "All toys"} at Toodle Store: learning toys, RC vehicles, dollhouses, soft toys and gifts. Delivery across India, free on orders of ₹2,000+.`,
+    path,
+  });
 }
 
 export default async function ShopPage({ searchParams }: Props) {

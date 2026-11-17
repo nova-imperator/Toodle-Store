@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { getBrandBySlug } from "@/server/services/catalogue";
 import { ListingView } from "@/components/product/ListingView";
@@ -9,7 +10,11 @@ type Props = { params: Promise<{ slug: string }>; searchParams: Promise<SearchPa
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const brand = await getBrandBySlug((await params).slug);
   if (!brand) return {};
-  return { title: `${brand.name} Toys – Buy Online`, alternates: { canonical: `/brand/${brand.slug}` } };
+  return pageSeo({
+    title: `${brand.name} Toys – Buy Online`,
+    description: brand.description ?? `Shop ${brand.name} toys online at Toodle Store. Delivery across India, free on orders of ₹2,000+.`,
+    path: `/brand/${brand.slug}`,
+  });
 }
 
 export default async function BrandPage({ params, searchParams }: Props) {

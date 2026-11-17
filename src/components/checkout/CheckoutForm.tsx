@@ -33,15 +33,17 @@ interface Props {
   email: string;
   phone: string | null;
   address: AddressInput | null;
+  /** Account name (e.g. from Google), used to pre-fill a first delivery address. */
+  name?: string | null;
 }
 
 const EMPTY: AddressInput = { name: "", phone: "", pincode: "", city: "", state: "", line1: "", line2: "", landmark: "" };
 
-export function CheckoutForm({ email, phone: savedPhone, address: saved }: Props) {
+export function CheckoutForm({ email, phone: savedPhone, address: saved, name }: Props) {
   const router = useRouter();
   const { cart, ready, refresh } = useCart();
   const [phone, setPhone] = useState(savedPhone ?? saved?.phone ?? "");
-  const [address, setAddress] = useState<AddressInput>(saved ?? EMPTY);
+  const [address, setAddress] = useState<AddressInput>(saved ?? { ...EMPTY, name: name ?? "" });
   const [saveAddress, setSaveAddress] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);

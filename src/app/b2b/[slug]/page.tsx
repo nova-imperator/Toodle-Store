@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { SEGMENTS, WHOLESALE_CATEGORIES } from "@/config/b2b";
 import { B2BHero, Benefits, CtaBand, Faq, Steps, WholesaleCategories } from "@/components/b2b/B2BSections";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { getCategoryPhotos } from "@/server/services/catalogue";
 import styles from "../b2b.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
+
+// Category photos come from the catalogue; refresh hourly so admin changes show without a redeploy.
+export const revalidate = 3600;
 
 function resolve(slug: string) {
   const category = WHOLESALE_CATEGORIES.find((c) => c.wholesaleSlug === slug);
@@ -16,12 +21,12 @@ function resolve(slug: string) {
       title: `Wholesale ${category.name} Supplier in India`,
       h1: `Wholesale ${category.name.toLowerCase()} for your business`,
       text: `${category.intro} Order in bulk at trade prices, mix with any other category, and get a GST invoice with delivery across India.`,
-      image: `/images/categories/${category.slug}.webp`,
+      categorySlug: category.slug,
     };
   }
   const segment = SEGMENTS.find((s) => s.slug === slug);
   if (segment) {
-    return { kind: "segment" as const, name: segment.title, title: `Bulk Toys for ${segment.title}`, h1: `Toys in bulk for ${segment.title.toLowerCase()}`, text: `${segment.short} ${segment.body}`, image: undefined };
+    return { kind: "segment" as const, name: segment.title, title: `Bulk Toys for ${segment.title}`, h1: `Toys in bulk for ${segment.title.toLowerCase()}`, text: `${segment.short} ${segment.body}`, categorySlug: undefined };
   }
   return null;
 }
@@ -34,17 +39,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = resolve(slug);
   if (!page) return {};
-  return { title: `${page.title} – Bulk Orders`, description: page.text.slice(0, 155), alternates: { canonical: `/b2b/${slug}` } };
+  const photo = page.categorySlug ? (await getCategoryPhotos()).get(page.categorySlug) : undefined;
+  return pageSeo({ title: `${page.title} – Bulk Orders`, description: page.text, path: `/b2b/${slug}`, site: "b2b", image: photo?.url, imageAlt: photo?.alt });
 }
 
 export default async function B2BDetail({ params }: Props) {
   const { slug } = await params;
   const page = resolve(slug);
   if (!page) notFound();
+  // Real product photo for a category page; the stock collage otherwise.
+  const photo = page.categorySlug ? (await getCategoryPhotos()).get(page.categorySlug) : undefined;
 
   return (
     <>
-      <B2BHero title={page.h1} text={page.text} source={`b2b-${slug}`} image={page.image} />
+      <B2BHero title={page.h1} text={page.text} source={`b2b-${slug}`} image={photo?.url} imageAlt={photo ? `${photo.alt}, available wholesale` : undefined} />
       <div className={`container ${styles.crumbs}`}>
         <Breadcrumbs items={[{ name: "Wholesale", path: "/b2b" }, { name: page.name, path: `/b2b/${slug}` }]} />
       </div>

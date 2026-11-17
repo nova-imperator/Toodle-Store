@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { getProductBySlug } from "@/server/services/catalogue";
 import { redirectOrNotFound } from "@/server/services/redirects";
@@ -22,12 +23,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await getProductBySlug((await params).slug);
   if (!data) return {};
   const { product } = data;
-  return {
-    title: product.seoTitle ?? product.name,
-    description: product.seoDescription ?? product.description.slice(0, 155),
-    alternates: { canonical: `/product/${product.slug}` },
-    openGraph: { images: product.images.slice(0, 1).map((i) => i.url) },
-  };
+  const price = `₹${Math.round(product.salePrice / 100).toLocaleString("en-IN")}`;
+  return pageSeo({
+    title: product.seoTitle ?? `${product.name} – Buy Online at ${price}`,
+    description: product.seoDescription ?? product.description.replace(/\s+/g, " "),
+    path: `/product/${product.slug}`,
+    image: product.images[0]?.url,
+    imageAlt: product.images[0]?.altText ?? product.name,
+  });
 }
 
 export default async function ProductPage({ params }: Props) {

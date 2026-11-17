@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE, WHATSAPP_RETAIL_HREF } from "@/config/site";
 import styles from "@/components/content/Prose.module.css";
 
-export const metadata: Metadata = { title: "Contact Us", description: "Call or WhatsApp Toodle Store, or email us. We're happy to help you choose a toy.", alternates: { canonical: "/contact" } };
+export const metadata: Metadata = pageSeo({
+  title: "Contact Us",
+  description: "Call or WhatsApp Toodle Store on +91 99878 83903, or email toodlestoreindia@gmail.com. We're happy to help you choose a toy or track an order.",
+  path: "/contact"
+});
 
 export default function ContactPage() {
   return (

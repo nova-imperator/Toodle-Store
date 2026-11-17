@@ -25,6 +25,8 @@ model User {
   email        String       @unique
   phone        String?
   googleId     String?      @unique @map("google_id")
+  /// Profile photo from Google sign-in.
+  avatarUrl    String?      @map("avatar_url")
   authProvider AuthProvider @map("auth_provider")
   createdAt    DateTime     @default(now()) @map("created_at")
   lastLoginAt  DateTime?    @map("last_login_at")

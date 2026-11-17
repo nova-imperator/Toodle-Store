@@ -70,8 +70,9 @@
 .google {
   display: grid;
   justify-items: center;
-  gap: 12px;
-  margin-top: 18px;
+  gap: 14px;
+  margin-bottom: 16px;
+  min-height: 44px;
 }
 
 .or {

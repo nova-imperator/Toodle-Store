@@ -34,10 +34,10 @@ export async function loginWithGoogle(credential: string): Promise<LoginResult> 
   const user = existing
     ? await db.user.update({
         where: { id: existing.id },
-        data: { googleId: profile.sub, name: existing.name ?? profile.name, lastLoginAt: new Date() },
+        data: { googleId: profile.sub, name: existing.name ?? profile.name, avatarUrl: profile.picture ?? existing.avatarUrl, lastLoginAt: new Date() },
       })
     : await db.user.create({
-        data: { email: profile.email, name: profile.name, googleId: profile.sub, authProvider: "google", lastLoginAt: new Date() },
+        data: { email: profile.email, name: profile.name, avatarUrl: profile.picture, googleId: profile.sub, authProvider: "google", lastLoginAt: new Date() },
       });
   await completeLogin(user.id);
   return { name: user.name, isNew: !existing };

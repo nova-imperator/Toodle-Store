@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAgeGroupBySlug } from "@/server/services/catalogue";
@@ -11,11 +12,11 @@ type Props = { params: Promise<{ slug: string }>; searchParams: Promise<SearchPa
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const age = await getAgeGroupBySlug((await params).slug);
   if (!age) return {};
-  return {
+  return pageSeo({
     title: age.seoTitle ?? `Toys for ${age.name}`,
-    description: age.seoDescription ?? undefined,
-    alternates: { canonical: `/age/${age.slug}` },
-  };
+    description: age.seoDescription ?? age.description ?? `Toys for ${age.name} at Toodle Store. Delivery across India, free on orders of ₹2,000+.`,
+    path: `/age/${age.slug}`,
+  });
 }
 
 export default async function AgePage({ params, searchParams }: Props) {

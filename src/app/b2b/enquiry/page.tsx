@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { EnquiryForm } from "@/components/b2b/EnquiryForm";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import styles from "../b2b.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
   title: "Wholesale Enquiry – Get the Price List",
   description: "Tell us what you need and get Toodle Store's wholesale toy price list within 24 hours. No minimum order.",
-  alternates: { canonical: "/b2b/enquiry" },
-};
+  path: "/b2b/enquiry",
+  site: "b2b"
+});
 
 export default async function EnquiryPage({ searchParams }: { searchParams: Promise<{ source?: string }> }) {
   const { source } = await searchParams;

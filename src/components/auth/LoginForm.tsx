@@ -9,6 +9,7 @@ import { WelcomeSplash } from "./WelcomeSplash";
 import styles from "./LoginForm.module.css";
 
 const RESEND_SECONDS = 30;
+const HAS_GOOGLE = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 export function LoginForm({ next }: { next: string }) {
   const [step, setStep] = useState<"email" | "code">("email");
@@ -63,6 +64,14 @@ export function LoginForm({ next }: { next: string }) {
 
   return (
     <div className={styles.card}>
+      {/* Google first: one tap, no code to type. Email code is the fallback. */}
+      {!welcome && step === "email" && HAS_GOOGLE && (
+        <div className={styles.google}>
+          <GoogleButton onSuccess={setWelcome} onError={setError} />
+          <span className={styles.or}>or use your email</span>
+        </div>
+      )}
+
       {welcome ? (
         <WelcomeSplash result={welcome} onDone={done} />
       ) : step === "email" ? (
@@ -91,7 +100,7 @@ export function LoginForm({ next }: { next: string }) {
             aria-describedby={error ? "login-err" : undefined}
           />
           <Button type="submit" size="lg" block disabled={busy}>
-            {busy ? "Sending code…" : "Send me a login code"}
+            {busy ? "Sending code…" : "Email me a login code"}
           </Button>
           <p className={styles.small}>No password needed. New here? This creates your account.</p>
         </form>
@@ -156,13 +165,6 @@ export function LoginForm({ next }: { next: string }) {
         <p id="login-err" className={styles.error} role="alert">
           {error}
         </p>
-      )}
-
-      {!welcome && step === "email" && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
-        <div className={styles.google}>
-          <span className={styles.or}>or</span>
-          <GoogleButton onSuccess={setWelcome} onError={setError} />
-        </div>
       )}
     </div>
   );

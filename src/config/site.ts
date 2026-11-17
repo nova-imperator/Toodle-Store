@@ -12,8 +12,7 @@ export const SITE = {
   instagramHref: "https://www.instagram.com/toodlestore_india/",
   facebookHref: "https://www.facebook.com/share/1LT8iDaL28/",
   email: "toodlestoreindia@gmail.com",
-  // Kept for the legal pages (privacy, terms) and structured data; not shown in the footer (owner, 14 Nov 2026).
-  legalName: "Atreya Innovations Pvt Ltd",
+  // Company name intentionally not shown anywhere on the site (owner, 17 Nov 2026).
   deliveryDays: { min: 3, max: 7 },
 };
 

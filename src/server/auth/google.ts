@@ -8,6 +8,7 @@ export interface GoogleProfile {
   sub: string;
   email: string;
   name: string | null;
+  picture: string | null;
 }
 
 /** Verifies a Google Identity Services ID token (Sign in with Google / One Tap). */
@@ -19,7 +20,8 @@ export async function verifyGoogleCredential(credential: string): Promise<Google
     if (typeof payload.email !== "string" || payload.email_verified !== true || typeof payload.sub !== "string") {
       throw new Error("unverified");
     }
-    return { sub: payload.sub, email: payload.email.toLowerCase(), name: typeof payload.name === "string" ? payload.name : null };
+    const picture = typeof payload.picture === "string" && payload.picture.startsWith("https://lh3.googleusercontent.com/") ? payload.picture : null;
+    return { sub: payload.sub, email: payload.email.toLowerCase(), name: typeof payload.name === "string" ? payload.name : null, picture };
   } catch {
     throw new AppError("google_invalid", "Google sign-in failed. Please try again or use email.", 401);
   }

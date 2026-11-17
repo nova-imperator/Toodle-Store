@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { getHomeData, getRecentReviews } from "@/server/services/catalogue";
+import { pageSeo } from "@/lib/seo";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { CategoryTiles } from "@/components/home/CategoryTiles";
 // import { AgeTiles } from "@/components/home/AgeTiles"; // for the hidden "Shop by age" section
@@ -15,6 +17,13 @@ import { organizationLd, websiteLd } from "@/lib/structuredData";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = pageSeo({
+  title: { absolute: "Toodle Store – Buy Toys Online in India" },
+  description:
+    "Shop toys online in India: educational, musical and remote control toys, dollhouses, soft toys and gifts. Pay online or cash on delivery, free delivery on orders of ₹2,000+.",
+  path: "/",
+});
 
 export default async function HomePage() {
   const [home, reviews] = await Promise.all([getHomeData(), getRecentReviews()]);

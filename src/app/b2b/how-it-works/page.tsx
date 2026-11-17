@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { B2BHero, CtaBand, Steps, Benefits } from "@/components/b2b/B2BSections";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
   title: "How Bulk Toy Orders Work",
   description: "Enquire, get the catalogue and quote, confirm and pay against a GST invoice, and receive delivery anywhere in India.",
-  alternates: { canonical: "/b2b/how-it-works" },
-};
+  path: "/b2b/how-it-works",
+  site: "b2b"
+});
 
 export default function HowItWorksPage() {
   return (

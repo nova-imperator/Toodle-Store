@@ -2,12 +2,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { BENEFITS, FAQS, SEGMENTS, STEPS, WHOLESALE_CATEGORIES } from "@/config/b2b";
 import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
+import { getCategoryPhotoOptions } from "@/server/services/catalogue";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { EnquiryButton } from "./EnquiryButton";
 import styles from "./B2BSections.module.css";
 
-export function B2BHero({ title, text, source, image = "/images/hero/b2b.webp" }: { title: string; text: string; source: string; image?: string }) {
+// Wholesale site look (owner, 17 Nov 2026): real product photos, no cartoon art, plain headings.
+// Photos come from scripts/build-b2b-images.mjs (or the owner's own photos, see that script).
+export const B2B_HERO_IMAGE = "/images/b2b/hero.webp";
+
+export function B2BHero({
+  title,
+  text,
+  source,
+  image = B2B_HERO_IMAGE,
+  imageAlt = "Toys we supply in bulk: learning laptops, plush toys, RC planes, dollhouses, blasters and writing tablets",
+}: {
+  title: string;
+  text: string;
+  source: string;
+  image?: string;
+  imageAlt?: string;
+}) {
   return (
     <section className={styles.hero}>
       <div className={`container ${styles.heroInner}`}>
@@ -16,7 +33,7 @@ export function B2BHero({ title, text, source, image = "/images/hero/b2b.webp" }
           <h1>{title}</h1>
           <p className={styles.heroText}>{text}</p>
           <div className={styles.ctaRow}>
-            <EnquiryButton label="Start now" source={source} />
+            <EnquiryButton label="Get the price list" source={source} />
             <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener" className={styles.wa}>
               or WhatsApp {SITE.phone}
             </a>
@@ -27,7 +44,7 @@ export function B2BHero({ title, text, source, image = "/images/hero/b2b.webp" }
             <li>Delivery across India</li>
           </ul>
         </div>
-        <Image src={image} alt="" width={1000} height={760} className={styles.heroArt} priority />
+        <Image src={image} alt={imageAlt} width={1200} height={900} sizes="(min-width: 900px) 46vw, 100vw" className={styles.heroArt} priority />
       </div>
     </section>
   );
@@ -36,11 +53,11 @@ export function B2BHero({ title, text, source, image = "/images/hero/b2b.webp" }
 export function Segments() {
   return (
     <section id="who" className={`container ${styles.section}`} aria-labelledby="who-h">
-      <SectionHeading id="who-h" title="Who we supply" />
+      <SectionHeading id="who-h" title="Who we supply" plain />
       <ul className={styles.segments}>
-        {SEGMENTS.map((s, i) => (
+        {SEGMENTS.map((s) => (
           <li key={s.slug}>
-            <Link href={`/b2b/${s.slug}`} className={styles.segment} data-color={["red", "blue", "yellow", "green", "orange", "blue"][i]}>
+            <Link href={`/b2b/${s.slug}`} className={styles.segment}>
               <strong>{s.title}</strong>
               <span>{s.short}</span>
             </Link>
@@ -55,7 +72,7 @@ export function Benefits() {
   return (
     <section className={styles.band} aria-labelledby="why-h">
       <div className="container">
-        <SectionHeading id="why-h" title="Why businesses choose Toodle Store" />
+        <SectionHeading id="why-h" title="Why businesses choose Toodle Store" plain />
         <ul className={styles.benefits}>
           {BENEFITS.map((b, i) => (
             <li key={b.title}>
@@ -70,20 +87,49 @@ export function Benefits() {
   );
 }
 
-export function WholesaleCategories() {
+/**
+ * Photo cards for categories we have real product photos for (a different product on each card),
+ * then the remaining categories as a plain list. No illustrations or placeholders.
+ */
+export async function WholesaleCategories() {
+  const options = await getCategoryPhotoOptions();
+  const used = new Set<string>();
+  const withPhoto: { c: (typeof WHOLESALE_CATEGORIES)[number]; photo: { url: string; alt: string } }[] = [];
+  const without: (typeof WHOLESALE_CATEGORIES)[number][] = [];
+  for (const c of WHOLESALE_CATEGORIES) {
+    const photo = options.get(c.slug)?.find((o) => !used.has(o.url));
+    if (photo) {
+      used.add(photo.url);
+      withPhoto.push({ c, photo });
+    } else without.push(c);
+  }
+
   return (
     <section id="categories" className={`container ${styles.section}`} aria-labelledby="cat-h">
-      <SectionHeading id="cat-h" title="Wholesale categories" subtitle="Mix any of these in one order. No minimum quantity or value." />
+      <SectionHeading id="cat-h" title="Wholesale categories" subtitle="Mix any of these in one order. No minimum quantity or value." plain />
       <ul className={styles.cats}>
-        {WHOLESALE_CATEGORIES.map((c) => (
+        {withPhoto.map(({ c, photo }) => (
           <li key={c.slug}>
             <Link href={`/b2b/${c.wholesaleSlug}`} className={styles.cat}>
-              <Image src={`/images/categories/${c.slug}.webp`} alt="" width={480} height={508} sizes="160px" />
-              <span>{c.name}</span>
+              <Image src={photo.url} alt={photo.alt} width={400} height={400} sizes="(min-width: 1000px) 16vw, (min-width: 600px) 33vw, 50vw" />
+              <span className={styles.catName}>{c.name}</span>
             </Link>
           </li>
         ))}
       </ul>
+      {without.length > 0 && (
+        <div className={styles.moreCats}>
+          <span>Also available:</span>
+          <ul>
+            {without.map((c) => (
+              <li key={c.slug}>
+                <Link href={`/b2b/${c.wholesaleSlug}`}>{c.name}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <p className={styles.note}>Full catalogue with wholesale prices on request. Ask for the categories you stock.</p>
     </section>
   );
 }
@@ -91,7 +137,7 @@ export function WholesaleCategories() {
 export function Steps() {
   return (
     <section className={`container ${styles.section}`} aria-labelledby="how-h">
-      <SectionHeading id="how-h" title="How bulk orders work" />
+      <SectionHeading id="how-h" title="How bulk orders work" plain />
       <ol className={styles.steps}>
         {STEPS.map((s, i) => (
           <li key={s.title}>
@@ -117,7 +163,7 @@ export function Faq({ withLd = true }: { withLd?: boolean }) {
           }}
         />
       )}
-      <SectionHeading id="faq-h" title="Questions businesses ask" />
+      <SectionHeading id="faq-h" title="Questions businesses ask" plain />
       <div className={styles.faqs}>
         {FAQS.map((f) => (
           <details key={f.q} className={styles.faq}>
@@ -134,17 +180,17 @@ export function CtaBand({ source }: { source: string }) {
   return (
     <section className={styles.cta}>
       <div className={`container ${styles.ctaInner}`}>
-        <Image src="/images/brand/mascot-delivery.webp" alt="" width={376} height={520} className={styles.mascot} />
-        <div>
+        <div className={styles.ctaCopy}>
           <h2>Ready to stock up?</h2>
           <p>Send a quick enquiry and get our wholesale price list within 24 hours.</p>
+          <div className={styles.ctaRow}>
+            <EnquiryButton label="Get the price list" source={source} />
+            <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener" className={styles.waBtn}>
+              Chat on WhatsApp
+            </a>
+          </div>
         </div>
-        <div className={styles.ctaRow}>
-          <EnquiryButton label="Start now" source={source} />
-          <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener" className={styles.waBtn}>
-            Chat on WhatsApp
-          </a>
-        </div>
+        <Image src="/images/b2b/cta.webp" alt="" width={1200} height={400} sizes="(min-width: 900px) 50vw, 100vw" className={styles.ctaPhoto} />
       </div>
     </section>
   );

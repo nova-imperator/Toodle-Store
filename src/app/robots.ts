@@ -10,7 +10,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/api/", "/cart", "/checkout", "/account", "/order/", "/login", "/search"],
+      // /admin is NOT listed on purpose: Google must be able to fetch it to see its "noindex"
+      // (meta tag + X-Robots-Tag header). A robots.txt block alone can still leave the URL in results.
+      disallow: ["/api/", "/cart", "/checkout", "/account", "/order/", "/login", "/search"],
     },
     sitemap: `${SITE.url}/sitemap_index.xml`,
   };

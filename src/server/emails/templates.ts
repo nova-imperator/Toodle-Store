@@ -1,7 +1,7 @@
 import "server-only";
 import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
 import { formatPaise } from "@/lib/money";
-import { BRAND, asset, button, emailLayout, escapeHtml, heading, panel, paragraph, siteLink } from "./layout";
+import { BRAND, button, emailLayout, escapeHtml, heading, panel, paragraph, siteLink } from "./layout";
 
 export interface Email {
   subject: string;
@@ -13,35 +13,32 @@ const FONT = "'Trebuchet MS', 'Segoe UI', Arial, sans-serif";
 const trackLink = (orderNumber: string) => siteLink(`/track-order?order=${orderNumber}`);
 const firstName = (name: string) => escapeHtml(name.trim().split(/\s+/)[0] || "there");
 
-/** Each digit on its own tile, all in one brand colour so the code is easy to read. */
-function codeTiles(code: string) {
-  const tiles = [...code]
-    .map(
-      (d) =>
-        `<td style="padding:0 4px"><div style="width:46px;height:58px;line-height:58px;border-radius:12px;background:${BRAND.blue};box-shadow:0 4px 0 #1660AD;font-family:${FONT};font-size:32px;font-weight:bold;color:#ffffff;text-align:center">${d}</div></td>`,
-    )
-    .join("");
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:6px auto 22px"><tr>${tiles}</tr></table>`;
-}
-
+/**
+ * Login code email, deliberately plain (owner reported codes landing in spam, 17 Nov 2026):
+ * no images, no links, no emoji, short text, one code in one piece (easy to copy).
+ * Spam filters score new senders harshly on image-heavy, link-heavy mail.
+ */
 export function loginCodeEmail(code: string): Email {
-  const body = [
-    heading("You're almost in! 👋"),
-    paragraph("Here's your login code. Enter it on the Toodle Store page to continue."),
-    codeTiles(code),
-    panel(
-      `<div style="text-align:center;font-size:15px;line-height:1.6">The code is valid for <strong>10 minutes</strong> and works only once.<br>Please don't share it with anyone.</div>`,
-      "#FFF3CF",
-      BRAND.yellow,
-    ),
-    `<div style="text-align:center"><img src="${asset("/images/brand/mascot-delivery.png")}" width="96" alt="" style="width:96px;height:auto;border:0"></div>`,
-    paragraph("Didn't ask for this? No worries! Just ignore this email and nothing will change.", { size: 13 }),
-  ].join("");
+  const html = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your login code</title></head>
+<body style="margin:0;padding:24px 12px;background:#ffffff;font-family:${FONT};color:${BRAND.ink}">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:480px">
+      <tr><td style="padding:0 0 16px;font-size:20px;font-weight:bold">Toodle Store</td></tr>
+      <tr><td style="padding:0 0 12px;font-size:16px;line-height:1.6">Hi,</td></tr>
+      <tr><td style="padding:0 0 12px;font-size:16px;line-height:1.6">Use this code to log in to Toodle Store:</td></tr>
+      <tr><td style="padding:8px 0 16px;font-size:34px;font-weight:bold;letter-spacing:6px;color:${BRAND.ink}">${code}</td></tr>
+      <tr><td style="padding:0 0 12px;font-size:15px;line-height:1.6;color:${BRAND.inkSoft}">The code is valid for 10 minutes and works only once. Please don't share it with anyone.</td></tr>
+      <tr><td style="padding:0 0 12px;font-size:15px;line-height:1.6;color:${BRAND.inkSoft}">If you didn't ask for this code, you can ignore this email.</td></tr>
+      <tr><td style="padding:12px 0 0;border-top:1px solid ${BRAND.line};font-size:13px;color:${BRAND.inkSoft}">Toodle Store · ${SITE.email}</td></tr>
+    </table>
+  </td></tr></table>
+</body></html>`;
 
   return {
-    subject: `${code} is your Toodle Store login code`,
-    text: `You're almost in!\n\nYour Toodle Store login code is ${code}.\n\nIt's valid for 10 minutes and works only once. Please don't share it with anyone.\n\nDidn't ask for this? Just ignore this email.\n\n${SITE.tagline}`,
-    html: emailLayout({ preheader: `Your login code is ${code}. Valid for 10 minutes.`, body }),
+    subject: `Your Toodle Store login code: ${code}`,
+    text: `Hi,\n\nUse this code to log in to Toodle Store:\n\n${code}\n\nThe code is valid for 10 minutes and works only once. Please don't share it with anyone.\n\nIf you didn't ask for this code, you can ignore this email.\n\nToodle Store · ${SITE.email}`,
+    html,
   };
 }
 

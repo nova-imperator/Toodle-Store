@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE } from "@/config/site";
 
-export const metadata: Metadata = { title: "Return Policy", alternates: { canonical: "/return-policy" } };
+export const metadata: Metadata = pageSeo({
+  title: "Return Policy",
+  description: "Toodle Store's return policy: toys can't be returned, and what to do if something is wrong with your order.",
+  path: "/return-policy"
+});
 
 export default function ReturnPolicyPage() {
   return (

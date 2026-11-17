@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE } from "@/config/site";
 import styles from "@/components/content/Prose.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
   title: "About Toodle Store",
-  description: "Toodle Store brings toys for every age to families across India, with secure online payment and free delivery on orders of ₹2,000+.",
-  alternates: { canonical: "/about" },
-};
+  description: "Toodle Store brings toys for every age to families across India: learning toys, RC vehicles, dollhouses and gifts, with online payment or cash on delivery.",
+  path: "/about"
+});
 
 export default function AboutPage() {
   return (

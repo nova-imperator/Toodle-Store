@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Image from "next/image";
 import { getCategoryBySlug } from "@/server/services/catalogue";
 import { redirectOrNotFound } from "@/server/services/redirects";
@@ -11,11 +12,12 @@ type Props = { params: Promise<{ slug: string }>; searchParams: Promise<SearchPa
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = await getCategoryBySlug((await params).slug);
   if (!category) return {};
-  return {
+  return pageSeo({
     title: category.seoTitle ?? `${category.name} for Kids`,
-    description: category.seoDescription ?? undefined,
-    alternates: { canonical: `/category/${category.slug}` },
-  };
+    description:
+      category.seoDescription ?? category.description ?? `Buy ${category.name.toLowerCase()} online at Toodle Store. Delivery across India, free on orders of ₹2,000+.`,
+    path: `/category/${category.slug}`,
+  });
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {

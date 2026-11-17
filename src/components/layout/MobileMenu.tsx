@@ -12,7 +12,7 @@ import { CATEGORY_LINKS } from "@/config/navigation";
 import { SITE, WHATSAPP_RETAIL_HREF } from "@/config/site";
 import styles from "./MobileMenu.module.css";
 
-export function MobileMenu({ userName }: { userName: string | null }) {
+export function MobileMenu({ userName, userAvatar = null }: { userName: string | null; userAvatar?: string | null }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -26,7 +26,7 @@ export function MobileMenu({ userName }: { userName: string | null }) {
       <Drawer open={open} onClose={() => setOpen(false)} title="Menu" side="left">
         <div className={styles.section}>
           <Link href={userName ? "/account" : "/login"} className={styles.account}>
-            <Icon name="user" />
+            {userAvatar ? <Image src={userAvatar} alt="" width={28} height={28} className={styles.avatar} /> : <Icon name="user" />}
             {userName ? `Hi, ${userName}` : "Log in or sign up"}
           </Link>
         </div>

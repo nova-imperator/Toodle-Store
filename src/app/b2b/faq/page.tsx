@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { CtaBand, Faq } from "@/components/b2b/B2BSections";
 import styles from "../b2b.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
   title: "Wholesale FAQ – Pricing, Delivery and GST",
   description: "Answers about wholesale toy pricing, minimum order, delivery time, GST invoices, samples and returns.",
-  alternates: { canonical: "/b2b/faq" },
-};
+  path: "/b2b/faq",
+  site: "b2b"
+});
 
 export default function B2BFaqPage() {
   return (

@@ -6,10 +6,11 @@ import { CATEGORY_LINKS } from "@/config/navigation";
 import { Icon } from "@/components/ui/Icon";
 import styles from "./Footer.module.css";
 
-export function Footer() {
+/** `plain`: no brick-stud edge (wholesale site's business look). */
+export function Footer({ plain = false }: { plain?: boolean }) {
   return (
     <footer className={styles.footer}>
-      <div className={styles.studs} aria-hidden="true" />
+      {!plain && <div className={styles.studs} aria-hidden="true" />}
       <div className={`container ${styles.grid}`}>
         <div className={styles.brand}>
           <Image src="/images/brand/logo.webp" alt={SITE.name} width={520} height={489} className={styles.logo} />

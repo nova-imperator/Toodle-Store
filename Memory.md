@@ -91,9 +91,17 @@ Dev conveniences:
 ## Site changes (14 Nov 2026)
 - Contact: phone/WhatsApp **+91 99878 83903**, email **toodlestoreindia@gmail.com**, Facebook https://www.facebook.com/share/1LT8iDaL28/ (footer, contact page, email footer, JSON-LD sameAs).
 - WhatsApp pre-filled messages differ: shoppers (`WHATSAPP_RETAIL_HREF`) vs bulk buyers on `/b2b` pages and wholesale emails (`WHATSAPP_BULK_HREF`), in `src/config/site.ts`.
-- "Atreya Innovations Pvt Ltd" removed from footer, email footer and About page; kept in Terms/Privacy (legal entity) and JSON-LD.
+- "Atreya Innovations Pvt Ltd" removed from footer, email footer and About page (and from everywhere else on 17 Nov).
 - Hidden (commented out, easy to restore): header strip "We deliver only within India" (still on home + checkout), desktop menu bar (Shop by Category/Age, Offers, New arrivals, Best sellers), mobile menu age + quick links, listing age filter (`SHOW_AGE_FILTER`), footer "Shop by age", home "Shop by age" tiles. Age still shows on product cards/pages and in the gift finder.
 - **Featured** products: `products.is_featured`; "Featured toys" carousel on home (after trust bar). Admin → Products list has on/off switches per product: On website (active↔draft), Featured, Best seller, New arrival, Deal; plus a Featured filter tab.
+
+## Owner requests (17 Nov 2026)
+- "Atreya Innovations Pvt Ltd" removed from **everywhere** on the site (terms, privacy, JSON-LD; `SITE.legalName` deleted). Don't add it back.
+- Admin: `/admin/login`. Login = `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` set in Vercel env (created on first deploy; changing the env later does NOT change an existing admin's password). Admin pages: `noindex` meta + `X-Robots-Tag: noindex, nofollow, noarchive` header (next.config `headers()`, also `/api/*`). `/admin` deliberately not in robots.txt so Google can read the noindex.
+- Login: Google button first ("Continue with Google"), email code below. Needs `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (Web OAuth client; authorized JavaScript origins = site URLs) in Vercel — owner must create it. Google login saves name, email, photo (`users.avatar_url`, shown in header/menu) and pre-fills the checkout name.
+- OTP spam: login code email is now plain (no images/links/emoji, subject "Your Toodle Store login code: 123456"). Real fix later: send from an own domain (e.g. no-reply@toodlestore.in via Brevo/Resend/SES) with SPF + DKIM + DMARC.
+- B2B look: no cartoon art. Real product-photo banners from `scripts/build-b2b-images.mjs` (`public/images/b2b/{hero,cta}.webp`); owner's own photos go in `My Sample Images/b2b/hero.jpg` / `cta.jpg` and re-run. Category cards use real product photos (a different product per card, `getCategoryPhotoOptions`); categories without photos are listed as chips. Plain headings (`SectionHeading plain`), body font for headings, no stud edge on footer (`Footer plain`). B2B pages revalidate hourly.
+- SEO: `pageSeo()` in `src/lib/seo.ts` gives every public page title, description, canonical, Open Graph + Twitter card. Share images `public/images/og/{store,b2b}.jpg` (1200×630). Optional `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`. Site stays non-indexed until `NEXT_PUBLIC_ALLOW_INDEXING=true` (set it only on the real domain).
 
 ## Order tracking (13 Nov 2026)
 - `/track-order`: guests look up an order with order number (`TS` + 10 digits) + order email; no login. Header "Track order" link (truck icon on phones), mobile menu, footer. Emails link to `/track-order?order=…` (order number pre-filled).

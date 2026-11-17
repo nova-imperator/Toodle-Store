@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { ContentPage } from "@/components/content/Prose";
 import { SITE } from "@/config/site";
 import { COD_FEE, FREE_SHIPPING_FROM, MIN_ORDER, SHIPPING_FEE } from "@/config/shipping";
 import { formatPaise } from "@/lib/money";
 
-export const metadata: Metadata = { title: "Shipping Policy", alternates: { canonical: "/shipping-policy" } };
+export const metadata: Metadata = pageSeo({
+  title: "Shipping Policy",
+  description: "Delivery across India for ₹100, free on orders of ₹2,000 or more. Delivery times, cash on delivery and order tracking.",
+  path: "/shipping-policy"
+});
 
 export default function ShippingPolicyPage() {
   return (

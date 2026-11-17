@@ -25,6 +25,7 @@ export default async function CheckoutPage() {
             ? { name: address.name, phone: address.phone, pincode: address.pincode, city: address.city, state: address.state, line1: address.line1, line2: address.line2 ?? "", landmark: address.landmark ?? "" }
             : null
         }
+        name={user.name}
       />
     </div>
   );

@@ -17,7 +17,12 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <div className={styles.intro}>
         <Image src="/images/brand/mascot-delivery.webp" alt="" width={376} height={520} className={styles.mascot} priority />
         <h1>Hello! Let&apos;s get you in.</h1>
-        <p>Log in with a one-time code sent to your email. Your cart and wishlist come with you.</p>
+        <p>
+          {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+            ? "Continue with your Google account in one tap, or get a one-time code by email."
+            : "Log in with a one-time code sent to your email."}{" "}
+          Your cart and wishlist come with you.
+        </p>
       </div>
       <LoginForm next={next} />
     </div>

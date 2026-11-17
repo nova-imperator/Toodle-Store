@@ -11,6 +11,7 @@ import { getCurrentUser } from "@/server/auth/session";
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
   const userName = user ? (user.name?.split(" ")[0] ?? "there") : null;
+  const userAvatar = user?.avatarUrl ?? null;
 
   return (
     <CartProvider>
@@ -19,7 +20,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
           Skip to content
         </a>
         <Suspense>
-          <Header userName={userName} />
+          <Header userName={userName} userAvatar={userAvatar} />
         </Suspense>
         <main id="main">{children}</main>
         <Footer />

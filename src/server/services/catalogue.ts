@@ -113,6 +113,34 @@ export async function listProducts(f: ListingFilters): Promise<ListingResult> {
   };
 }
 
+/**
+ * Real product photos per category (featured and best sellers first), for wholesale pages instead of
+ * illustrations. Categories without active products are missing from the map.
+ */
+export async function getCategoryPhotoOptions(): Promise<Map<string, { url: string; alt: string }[]>> {
+  const rows = await db.productCategory.findMany({
+    where: { product: { status: "active" } },
+    select: {
+      category: { select: { slug: true } },
+      product: { select: { name: true, images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 } } },
+    },
+    orderBy: [{ product: { isFeatured: "desc" } }, { product: { isBestSeller: "desc" } }, { product: { updatedAt: "desc" } }],
+  });
+  const options = new Map<string, { url: string; alt: string }[]>();
+  for (const r of rows) {
+    const url = r.product.images[0]?.url;
+    if (!url) continue;
+    options.set(r.category.slug, [...(options.get(r.category.slug) ?? []), { url, alt: r.product.name }]);
+  }
+  return options;
+}
+
+/** One photo per category (the first option). */
+export async function getCategoryPhotos(): Promise<Map<string, { url: string; alt: string }>> {
+  const options = await getCategoryPhotoOptions();
+  return new Map([...options].map(([slug, list]) => [slug, list[0]]));
+}
+
 async function cards(where: Prisma.ProductWhereInput, take = 12, orderBy: Prisma.ProductOrderByWithRelationInput[] = ORDER.popular) {
   const rows = await db.product.findMany({ where: { AND: [active, where] }, select: cardSelect, orderBy, take });
   return rows.map(toCard);

@@ -11,7 +11,7 @@ import { HeaderActions } from "./HeaderActions";
 import { MobileMenu } from "./MobileMenu";
 import styles from "./Header.module.css";
 
-export function Header({ userName }: { userName: string | null }) {
+export function Header({ userName, userAvatar = null }: { userName: string | null; userAvatar?: string | null }) {
   return (
     <header className={styles.header}>
       <div className={styles.strip}>
@@ -26,13 +26,13 @@ export function Header({ userName }: { userName: string | null }) {
 
       <div className={`container ${styles.bar}`}>
         <div className={styles.left}>
-          <MobileMenu userName={userName} />
+          <MobileMenu userName={userName} userAvatar={userAvatar} />
           <SiteLogo className={styles.logo} />
         </div>
         <div className={styles.search}>
           <SearchBox />
         </div>
-        <HeaderActions userName={userName} />
+        <HeaderActions userName={userName} userAvatar={userAvatar} />
       </div>
 
       {/* Desktop menu bar (Shop by Category, Shop by Age, Offers, New arrivals, Best sellers) hidden on owner's request, 14 Nov 2026.

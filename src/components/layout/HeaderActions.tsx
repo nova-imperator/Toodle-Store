@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
 import styles from "./HeaderActions.module.css";
 
-export function HeaderActions({ userName }: { userName: string | null }) {
+export function HeaderActions({ userName, userAvatar = null }: { userName: string | null; userAvatar?: string | null }) {
   const { cart, openDrawer, bump } = useCart();
   const { ids } = useWishlist();
   const count = cart?.totals.count ?? 0;
@@ -28,7 +29,7 @@ export function HeaderActions({ userName }: { userName: string | null }) {
         {ids.size > 0 && <span className={styles.dot}>{ids.size}</span>}
       </Link>
       <Link href={userName ? "/account" : "/login"} className={`${styles.icon} ${styles.hideSm}`} aria-label={userName ? `My account (${userName})` : "Log in"}>
-        <Icon name="user" />
+        {userAvatar ? <Image src={userAvatar} alt="" width={32} height={32} className={styles.avatar} /> : <Icon name="user" />}
       </Link>
       <button type="button" className={styles.cart} onClick={openDrawer} aria-label={`Cart, ${count} items`} data-cart-target>
         <Icon name="cart" />
