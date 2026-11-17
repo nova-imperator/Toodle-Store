@@ -2,9 +2,11 @@
 // product photos in public/images/products/wp. No cartoon art.
 //
 // Own photos: put any of these in "My Sample Images/b2b/" and run again (`node scripts/build-b2b-images.mjs`):
-//   hero.jpg  – wholesale stock / warehouse / shop shelves (landscape)  → replaces the product collage
-//   cta.jpg   – packed cartons / dispatch (landscape)                   → replaces the bottom banner photo
-import { existsSync } from "node:fs";
+//   hero.jpg       – wholesale stock / godown aisle (landscape)  → replaces the product collage
+//   cta.jpg        – packed cartons / dispatch (wide)            → replaces the bottom banner photo
+//   gallery-1..6   – godown / bulk stock photos                  → "Bulk stock" gallery section
+// Prompts for generating these with an AI image tool: My Sample Images/b2b/AI-image-prompts.txt
+import { existsSync, writeFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
@@ -23,7 +25,7 @@ const roundMask = (w, h, r) => Buffer.from(`<svg width="${w}" height="${h}"><rec
 
 /** One photo, cover-cropped to w×h with rounded corners (transparent outside). */
 async function tile(file, w, h, r = 18, position = "centre") {
-  return sharp(file).resize(w, h, { fit: "cover", position }).composite([{ input: roundMask(w, h, r), blend: "dest-in" }]).png().toBuffer();
+  return sharp(file).rotate().resize(w, h, { fit: "cover", position }).composite([{ input: roundMask(w, h, r), blend: "dest-in" }]).png().toBuffer();
 }
 
 /** Grid of photos on a transparent or coloured canvas. */
@@ -40,8 +42,10 @@ async function collage({ files, cols, rows, width, height, gap = 16, radius = 18
   return sharp({ create: { width, height, channels: 4, background } }).composite(layers);
 }
 
+const findOwn = (name) => ["jpg", "jpeg", "png", "webp"].map((e) => path.join(OWN, `${name}.${e}`)).find(existsSync);
+
 async function ownOr(name, w, h, fallback) {
-  const own = ["jpg", "jpeg", "png", "webp"].map((e) => path.join(OWN, `${name}.${e}`)).find(existsSync);
+  const own = findOwn(name);
   if (own) {
     console.log(`using your photo ${path.relative(ROOT, own)}`);
     return sharp(await tile(own, w, h, 22));
@@ -117,4 +121,25 @@ await shareImage(path.join(OUT_OG, "b2b.jpg"), {
   files: [p("fighter-jet-toys-1"), p("strike-gun-with-6-bullet-1"), p("lcd-writing-tablet-kids-2"), p("nail-polish-organic-makeup-set-dollhouse-toy-for-kids-5-years-1")],
 });
 
-console.log("wrote public/images/b2b/{hero,cta}.webp and public/images/og/{store,b2b}.jpg");
+// 4. Gallery: owner's godown / bulk-stock photos (only the ones that exist). The page reads the
+//    manifest and hides the section when it's empty.
+const GALLERY_ALT = [
+  "Warehouse racks stocked with boxed toys",
+  "Soft toys stored in bulk on warehouse shelves",
+  "Packing a bulk toy order into cartons",
+  "Stack of sealed cartons of toys",
+  "Wholesale toy shop stocked floor to ceiling",
+  "Large boxed toys in bulk on pallet racks",
+];
+const gallery = [];
+for (let i = 1; i <= GALLERY_ALT.length; i++) {
+  const own = findOwn(`gallery-${i}`);
+  if (!own) continue;
+  const file = `gallery-${i}.webp`;
+  await sharp(own).rotate().resize(1200, 900, { fit: "cover", position: "attention" }).webp({ quality: 80 }).toFile(path.join(OUT_B2B, file));
+  gallery.push({ src: `/images/b2b/${file}`, alt: GALLERY_ALT[i - 1] });
+  console.log(`gallery ${i}: ${path.relative(ROOT, own)}`);
+}
+writeFileSync(path.join(ROOT, "src/config/b2b-gallery.json"), JSON.stringify(gallery, null, 2) + "\n");
+
+console.log(`wrote public/images/b2b/{hero,cta}.webp, ${gallery.length} gallery photos and public/images/og/{store,b2b}.jpg`);

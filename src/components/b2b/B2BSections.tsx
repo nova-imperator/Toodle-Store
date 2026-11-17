@@ -3,6 +3,10 @@ import Link from "next/link";
 import { BENEFITS, FAQS, SEGMENTS, STEPS, WHOLESALE_CATEGORIES } from "@/config/b2b";
 import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
 import { getCategoryPhotoOptions } from "@/server/services/catalogue";
+import galleryJson from "@/config/b2b-gallery.json";
+
+/** Written by scripts/build-b2b-images.mjs from the owner's godown photos. */
+const B2B_GALLERY: { src: string; alt: string }[] = galleryJson;
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { EnquiryButton } from "./EnquiryButton";
@@ -46,6 +50,23 @@ export function B2BHero({
         </div>
         <Image src={image} alt={imageAlt} width={1200} height={900} sizes="(min-width: 900px) 46vw, 100vw" className={styles.heroArt} priority />
       </div>
+    </section>
+  );
+}
+
+/** Godown / bulk-stock photo gallery. Hidden until the owner's photos are added (see build-b2b-images.mjs). */
+export function StockGallery() {
+  if (B2B_GALLERY.length === 0) return null;
+  return (
+    <section className={`container ${styles.section}`} aria-labelledby="stock-h">
+      <SectionHeading id="stock-h" title="Bulk stock, ready to ship" subtitle="Toys packed in cartons and dispatched across India." plain />
+      <ul className={styles.gallery}>
+        {B2B_GALLERY.map((g) => (
+          <li key={g.src}>
+            <Image src={g.src} alt={g.alt} width={1200} height={900} sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw" />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

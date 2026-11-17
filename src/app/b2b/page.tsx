@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { pageSeo } from "@/lib/seo";
-import { B2BHero, Benefits, CtaBand, Faq, Segments, Steps, WholesaleCategories } from "@/components/b2b/B2BSections";
+import { B2BHero, Benefits, CtaBand, Faq, Segments, Steps, StockGallery, WholesaleCategories } from "@/components/b2b/B2BSections";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE } from "@/config/site";
 
@@ -34,6 +34,7 @@ export default function B2BLanding() {
         text="Toys across 11 categories for shops, online sellers, schools and corporate buyers. Mix products freely, order any quantity, and get a GST invoice with delivery anywhere in India."
         source="b2b-hero"
       />
+      <StockGallery />
       <Segments />
       <Benefits />
       <WholesaleCategories />
