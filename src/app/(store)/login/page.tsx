@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/server/auth/session";
+import { googleClientId } from "@/server/auth/google";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { safeNext } from "@/lib/safeRedirect";
 import styles from "./page.module.css";
@@ -18,13 +19,13 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <Image src="/images/brand/mascot-delivery.webp" alt="" width={376} height={520} className={styles.mascot} priority />
         <h1>Hello! Let&apos;s get you in.</h1>
         <p>
-          {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+          {googleClientId()
             ? "Continue with your Google account in one tap, or get a one-time code by email."
             : "Log in with a one-time code sent to your email."}{" "}
           Your cart and wishlist come with you.
         </p>
       </div>
-      <LoginForm next={next} />
+      <LoginForm next={next} googleClientId={googleClientId()} />
     </div>
   );
 }

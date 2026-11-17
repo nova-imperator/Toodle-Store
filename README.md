@@ -33,7 +33,7 @@ Without SMTP settings, emails (including login codes) are printed in the termina
    | `DEMO_MODE` | `true` for the approval preview only |
    | `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | first admin login (created on deploy if missing) |
 
-   Optional now, required before launch: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`, `TEAM_ALERT_EMAILS`, `NEXT_PUBLIC_GOOGLE_CLIENT_ID`, `NEXT_PUBLIC_SITE_URL`.
+   Optional now, required before launch: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`, `TEAM_ALERT_EMAILS`, `GOOGLE_CLIENT_ID`, `NEXT_PUBLIC_SITE_URL`.
    Generate random strings with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
 4. **Deploy.** Each build (`scripts/build.mjs`) migrates the database, sets up categories and banners on an empty database, creates the admin login, and adds any new imported products. Products edited in the admin panel are never overwritten.
 

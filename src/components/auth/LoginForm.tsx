@@ -9,9 +9,9 @@ import { WelcomeSplash } from "./WelcomeSplash";
 import styles from "./LoginForm.module.css";
 
 const RESEND_SECONDS = 30;
-const HAS_GOOGLE = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
-export function LoginForm({ next }: { next: string }) {
+/** `googleClientId`: from the server (GOOGLE_CLIENT_ID); null hides the Google button. */
+export function LoginForm({ next, googleClientId = null }: { next: string; googleClientId?: string | null }) {
   const [step, setStep] = useState<"email" | "code">("email");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -65,9 +65,9 @@ export function LoginForm({ next }: { next: string }) {
   return (
     <div className={styles.card}>
       {/* Google first: one tap, no code to type. Email code is the fallback. */}
-      {!welcome && step === "email" && HAS_GOOGLE && (
+      {!welcome && step === "email" && googleClientId && (
         <div className={styles.google}>
-          <GoogleButton onSuccess={setWelcome} onError={setError} />
+          <GoogleButton clientId={googleClientId} onSuccess={setWelcome} onError={setError} />
           <span className={styles.or}>or use your email</span>
         </div>
       )}

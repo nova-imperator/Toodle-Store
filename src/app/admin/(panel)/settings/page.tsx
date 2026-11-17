@@ -1,6 +1,7 @@
 import { requireAdmin } from "@/server/auth/admin";
 import { isMockPayments } from "@/server/integrations/razorpay";
 import { teamRecipients } from "@/server/integrations/mailer";
+import { googleClientId } from "@/server/auth/google";
 import { SITE } from "@/config/site";
 import styles from "../../admin.module.css";
 
@@ -14,7 +15,7 @@ export default async function SettingsPage() {
     { name: "Razorpay webhook", ok: !!process.env.RAZORPAY_WEBHOOK_SECRET, detail: `Webhook URL: ${SITE.url}/api/payments/razorpay/webhook (events: payment.captured, payment.failed, refund.processed)` },
     { name: "Email (SMTP)", ok: !!process.env.SMTP_HOST, detail: process.env.SMTP_HOST ? `Sending via ${process.env.SMTP_HOST}` : "Not configured: emails are printed to the server log" },
     { name: "Team alert emails", ok: teamRecipients().length > 0, detail: teamRecipients().join(", ") || "Add TEAM_ALERT_EMAILS for B2B enquiry alerts" },
-    { name: "Google sign-in", ok: !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, detail: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? "Enabled" : "Hidden until NEXT_PUBLIC_GOOGLE_CLIENT_ID is set" },
+    { name: "Google sign-in", ok: !!googleClientId(), detail: googleClientId() ? "Enabled" : "Hidden until GOOGLE_CLIENT_ID is set" },
   ];
 
   return (

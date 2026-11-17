@@ -11,9 +11,18 @@ export interface GoogleProfile {
   picture: string | null;
 }
 
+/**
+ * Google OAuth client ID ("Web application"). Read on the server and passed to the login page, so the
+ * env var needs no NEXT_PUBLIC_ prefix (Vercel flags those). It isn't secret: Google shows it in the
+ * browser anyway. The old NEXT_PUBLIC_ name still works as a fallback.
+ */
+export function googleClientId(): string | null {
+  return process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || null;
+}
+
 /** Verifies a Google Identity Services ID token (Sign in with Google / One Tap). */
 export async function verifyGoogleCredential(credential: string): Promise<GoogleProfile> {
-  const audience = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const audience = googleClientId();
   if (!audience) throw new AppError("google_disabled", "Google sign-in is not set up yet.", 503);
   try {
     const { payload } = await jwtVerify(credential, JWKS, { audience, issuer: ["https://accounts.google.com", "accounts.google.com"] });
