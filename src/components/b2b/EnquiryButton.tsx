@@ -13,7 +13,7 @@ export function EnquiryButton({ label = "Start now", variant = "yellow", size = 
       <Button variant={variant} size={size} onClick={() => setOpen(true)}>
         {label}
       </Button>
-      <Modal open={open} onClose={() => setOpen(false)} title="Get the wholesale price list">
+      <Modal open={open} onClose={() => setOpen(false)} title="Get our wholesale prices">
         <EnquiryForm source={source} />
       </Modal>
     </>

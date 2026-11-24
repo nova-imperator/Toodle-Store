@@ -4,6 +4,10 @@
   max-width: 460px;
 }
 
+.intro {
+  color: var(--ink-soft);
+}
+
 .trap {
   position: absolute;
   left: -9999px;

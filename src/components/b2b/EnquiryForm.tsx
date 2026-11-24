@@ -10,9 +10,9 @@ import { readUtm, trackConversion } from "@/lib/utm";
 import { enquirySchema } from "@/lib/validation/enquiry";
 import styles from "./EnquiryForm.module.css";
 
-// Only what the team needs to call back (owner, 17 Nov 2026): every extra field loses enquiries.
-// Business type, categories, GST etc. are asked on the call. "website" is the hidden spam trap.
-const INITIAL = { fullName: "", phone: "", city: "", website: "" };
+// Phone + optional name only (owner, 24 Nov 2026): every extra field loses enquiries.
+// City, business type, categories etc. are asked on the call. "website" is the hidden spam trap.
+const INITIAL = { fullName: "", phone: "", website: "" };
 
 export function EnquiryForm({ source }: { source?: string }) {
   const pathname = usePathname();
@@ -54,10 +54,11 @@ export function EnquiryForm({ source }: { source?: string }) {
   };
 
   if (done) {
+    const first = values.fullName.trim().split(" ")[0];
     return (
       <div className={styles.done} role="status">
-        <p className={styles.doneTitle}>Thank you, {values.fullName.trim().split(" ")[0]}!</p>
-        <p>Our team will call you within 24 hours with our wholesale price list.</p>
+        <p className={styles.doneTitle}>Thank you{first ? `, ${first}` : ""}!</p>
+        <p>Our team will call you within 24 hours with our wholesale prices.</p>
         <p>
           Can&apos;t wait? <a href={WHATSAPP_BULK_HREF} target="_blank" rel="noopener">WhatsApp us on {SITE.phone}</a>
         </p>
@@ -67,9 +68,17 @@ export function EnquiryForm({ source }: { source?: string }) {
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      <TextField label="Your name" autoComplete="name" {...bind("fullName")} />
-      <TextField label="Mobile number" type="tel" inputMode="numeric" autoComplete="tel-national" maxLength={14} hint="We'll call you on this number" {...bind("phone")} />
-      <TextField label="City" autoComplete="address-level2" {...bind("city")} />
+      <p className={styles.intro}>Leave your number and our team will call you with wholesale prices. Takes 5 seconds.</p>
+      <TextField label="Name" optional autoComplete="name" placeholder="Your name or shop name" {...bind("fullName")} />
+      <TextField
+        label="Phone"
+        type="tel"
+        inputMode="numeric"
+        autoComplete="tel-national"
+        maxLength={14}
+        placeholder="10-digit mobile number"
+        {...bind("phone")}
+      />
 
       <div className={styles.trap} aria-hidden="true">
         <label>
@@ -85,7 +94,7 @@ export function EnquiryForm({ source }: { source?: string }) {
       <Button type="submit" variant="yellow" size="lg" block disabled={busy}>
         {busy ? "Sending…" : "Call me with prices"}
       </Button>
-      <p className={styles.note}>We call within 24 hours. No minimum order. Your number is only used for this enquiry.</p>
+      <p className={styles.note}>No minimum order. Your number is only used to call you about prices.</p>
     </form>
   );
 }

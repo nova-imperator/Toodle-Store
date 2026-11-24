@@ -10,12 +10,12 @@ const optional = (max: number) => z.string().trim().max(max).optional().or(z.lit
 const optionalEnum = <T extends readonly [string, ...string[]]>(values: T, message: string) =>
   z.enum(values, { errorMap: () => ({ message }) }).optional().or(z.literal("")).transform((v) => v || undefined);
 
-// The form asks only name, mobile and city (owner, 17 Nov 2026: fewer fields, more enquiries; the team
-// calls and asks the rest). The other fields stay optional so the API still accepts them.
+// The form asks only mobile number + optional name (owner, 24 Nov 2026: fewer fields, more enquiries;
+// the team calls and asks the rest). The other fields stay optional so the API still accepts them.
 export const enquirySchema = z.object({
-  fullName: z.string().trim().min(2, "Enter your name").max(80),
+  fullName: optional(80),
   phone: mobileSchema,
-  city: z.string().trim().min(2, "Enter your city").max(60),
+  city: optional(60),
   email: z.string().trim().toLowerCase().email("Enter a valid email address").max(120).optional().or(z.literal("")).transform((v) => v || undefined),
   businessName: optional(120),
   businessType: optionalEnum(BUSINESS_TYPES, "Choose your business type"),

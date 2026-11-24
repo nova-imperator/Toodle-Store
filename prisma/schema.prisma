@@ -430,13 +430,13 @@ enum EnquiryStatus {
 
 model B2bEnquiry {
   id             String        @id @default(cuid())
-  fullName       String        @map("full_name")
+  // Form asks only phone + optional name (owner, 24 Nov 2026); everything else is optional / asked on the call.
+  fullName       String?       @map("full_name")
   phone          String
-  // Form asks only name, mobile and city (owner, 17 Nov 2026); the rest is optional / filled by the team.
   email          String?
   businessName   String?       @map("business_name")
   businessType   String?       @map("business_type")
-  city           String
+  city           String?
   state          String?
   gstNumber      String?       @map("gst_number")
   categories     Json          @default("[]")

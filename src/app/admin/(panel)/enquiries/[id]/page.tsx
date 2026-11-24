@@ -14,13 +14,13 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
   const [e, assignees] = await Promise.all([getEnquiry((await params).id), listAssignees()]);
   if (!e) notFound();
   const cats = Array.isArray(e.categories) ? e.categories.map((s) => CATEGORIES.find((c) => c.slug === s)?.name ?? String(s)) : [];
-  const wa = `https://wa.me/91${e.phone}?text=${encodeURIComponent(`Hi ${e.fullName.split(" ")[0]}, this is Toodle Store about your wholesale enquiry.`)}`;
+  const wa = `https://wa.me/91${e.phone}?text=${encodeURIComponent(`Hi${e.fullName ? ` ${e.fullName.split(" ")[0]}` : ""}, this is Toodle Store about your wholesale enquiry.`)}`;
 
   return (
     <>
       <div className={styles.pageHead}>
         <div>
-          <h1>{e.businessName ?? `${e.fullName} · ${e.city}`}</h1>
+          <h1>{e.businessName ?? e.fullName ?? e.phone}</h1>
           <p className={styles.sub}>
             {dateTime.format(e.createdAt)} · <EnquiryPill status={e.status} />
           </p>
@@ -32,10 +32,10 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
         <section className={styles.panel}>
           <h2>Details</h2>
           <dl className={styles.dl}>
-            <dt>Name</dt><dd>{e.fullName}</dd>
+            <dt>Name</dt><dd>{e.fullName ?? "—"}</dd>
             <dt>Mobile</dt><dd><a href={`tel:+91${e.phone}`}>{e.phone}</a> · <a href={wa} target="_blank" rel="noopener">WhatsApp</a></dd>
-            <dt>City</dt><dd>{[e.city, e.state].filter(Boolean).join(", ")}</dd>
-            {/* Short form (17 Nov 2026) asks only name, mobile, city; older enquiries also have these. */}
+            {(e.city || e.state) && (<><dt>City</dt><dd>{[e.city, e.state].filter(Boolean).join(", ")}</dd></>)}
+            {/* The form now asks only phone + optional name; older enquiries also have these details. */}
             {e.email && (<><dt>Email</dt><dd><a href={`mailto:${e.email}`}>{e.email}</a></dd></>)}
             {(e.businessName || e.businessType) && (<><dt>Business</dt><dd>{[e.businessName, e.businessType].filter(Boolean).join(" · ")}</dd></>)}
             {e.gstNumber && (<><dt>GSTIN</dt><dd>{e.gstNumber}</dd></>)}

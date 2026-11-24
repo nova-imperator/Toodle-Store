@@ -17,7 +17,6 @@ export default async function EnquiryPage({ searchParams }: { searchParams: Prom
     <div className={`container ${styles.page}`}>
       <Breadcrumbs items={[{ name: "Wholesale", path: "/b2b" }, { name: "Enquiry", path: "/b2b/enquiry" }]} />
       <h1>Get the wholesale price list</h1>
-      <p>Just your name, number and city. Our team calls you within 24 hours with wholesale prices and answers all your questions.</p>
       <div className={styles.formCard}>
         <EnquiryForm source={source ? `enquiry-page:${source.slice(0, 40)}` : "enquiry-page"} />
       </div>

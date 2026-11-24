@@ -32,9 +32,9 @@ export async function createEnquiry(input: EnquiryInput, ip: string) {
     ["Message", data.message],
   ];
   const summary = [
-    `Name: ${data.fullName}`,
+    `Name: ${data.fullName ?? "(not given)"}`,
     `Phone: ${data.phone}  (call or WhatsApp: https://wa.me/91${data.phone})`,
-    `City: ${data.city}`,
+    ...(data.city ? [`City: ${data.city}`] : []),
     ...optionalLines.filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`),
     `Source: ${data.sourcePage ?? "-"} | UTM ${data.utmSource ?? "-"}/${data.utmMedium ?? "-"}/${data.utmCampaign ?? "-"}`,
   ].join("\n");
@@ -42,10 +42,10 @@ export async function createEnquiry(input: EnquiryInput, ip: string) {
   const team = teamRecipients();
   await Promise.all([
     team.length
-      ? sendMail({ to: team, subject: `New B2B enquiry: ${data.fullName} (${data.city}) – please call`, text: `${summary}\n\nOpen in admin: ${SITE.url}/admin/enquiries/${enquiry.id}` })
+      ? sendMail({ to: team, subject: `New B2B enquiry: ${data.fullName ?? data.phone}${data.city ? ` (${data.city})` : ""} – please call`, text: `${summary}\n\nOpen in admin: ${SITE.url}/admin/enquiries/${enquiry.id}` })
       : Promise.resolve(),
     // Auto-reply only when an email was given (the short form doesn't ask for one).
-    data.email ? sendMail({ to: data.email, ...enquiryReceivedEmail(data) }) : Promise.resolve(),
+    data.email ? sendMail({ to: data.email, ...enquiryReceivedEmail({ fullName: data.fullName ?? "there", phone: data.phone }) }) : Promise.resolve(),
   ]);
 
   return { id: enquiry.id };
