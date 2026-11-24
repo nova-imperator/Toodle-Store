@@ -6,7 +6,7 @@ import { AppError } from "@/server/errors";
 import { cookieOptions, getCurrentUser } from "@/server/auth/session";
 import { evaluateCoupon } from "@/server/services/coupon";
 import { includedGst } from "@/lib/money";
-import { FREE_SHIPPING_FROM, MIN_ORDER, shippingFor } from "@/config/shipping";
+import { FREE_SHIPPING_FROM, MIN_ORDER, isTestSku, shippingFor } from "@/config/shipping";
 import type { BrickColor } from "@/config/catalogue";
 import type { CartLine, CartView } from "@/types/cart";
 
@@ -67,7 +67,7 @@ async function toView(cart: CartRow | null): Promise<CartView> {
         stockQty: i.product.stockQty,
         lineTotal: i.product.salePrice * i.qty,
       };
-      return { line, gstRate: i.product.gstRate };
+      return { line, gstRate: i.product.gstRate, test: isTestSku(i.product.sku) };
     });
   const lines = rows.map((r) => r.line);
 
@@ -83,7 +83,9 @@ async function toView(cart: CartRow | null): Promise<CartView> {
   }
 
   const itemsTotal = subtotal - discount;
-  const shipping = lines.length ? shippingFor(itemsTotal) : 0;
+  // A cart with only test products (live payment test) pays no delivery and has no minimum.
+  const testOnly = rows.length > 0 && rows.every((r) => r.test);
+  const shipping = lines.length && !testOnly ? shippingFor(itemsTotal) : 0;
   // GST is reported on the toys; the delivery charge is shown separately.
   const scale = subtotal ? itemsTotal / subtotal : 0;
   const gstIncluded = rows.reduce((s, r) => s + includedGst(Math.round(r.line.lineTotal * scale), r.gstRate), 0);
@@ -101,7 +103,7 @@ async function toView(cart: CartRow | null): Promise<CartView> {
       gstIncluded,
       total: itemsTotal + shipping,
       toFreeShipping: shipping ? FREE_SHIPPING_FROM - itemsTotal : 0,
-      belowMinimumBy: lines.length && itemsTotal < MIN_ORDER ? MIN_ORDER - itemsTotal : 0,
+      belowMinimumBy: lines.length && !testOnly && itemsTotal < MIN_ORDER ? MIN_ORDER - itemsTotal : 0,
     },
   };
 }

@@ -13,7 +13,7 @@ import { Stars } from "@/components/ui/Stars";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { productLd } from "@/lib/structuredData";
 import { SITE } from "@/config/site";
-import { COD_FEE, FREE_SHIPPING_FROM, FREE_SHIPPING_LABEL, SHIPPING_FEE } from "@/config/shipping";
+import { COD_FEE, FREE_SHIPPING_FROM, FREE_SHIPPING_LABEL, SHIPPING_FEE, isTestSku } from "@/config/shipping";
 import { formatPaise } from "@/lib/money";
 import styles from "./page.module.css";
 
@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return {};
   const { product } = data;
   const price = `₹${Math.round(product.salePrice / 100).toLocaleString("en-IN")}`;
+  // Live-payment test products must never be indexed.
+  if (isTestSku(product.sku)) return { title: product.name, robots: { index: false, follow: false } };
   return pageSeo({
     title: product.seoTitle ?? `${product.name} – Buy Online at ${price}`,
     description: product.seoDescription ?? product.description.replace(/\s+/g, " "),

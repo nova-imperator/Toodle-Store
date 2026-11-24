@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/server/db";
 import { SITE } from "@/config/site";
+import { TEST_SKU_PREFIX } from "@/config/shipping";
 import { SEGMENTS, WHOLESALE_CATEGORIES } from "@/config/b2b";
 
 interface Entry {
@@ -25,7 +26,7 @@ export function sitemapIndex(files: string[]) {
 
 export async function b2cEntries(): Promise<Entry[]> {
   const [products, categories, ages, brands] = await Promise.all([
-    db.product.findMany({ where: { status: "active" }, select: { slug: true, updatedAt: true } }),
+    db.product.findMany({ where: { status: "active", NOT: { sku: { startsWith: TEST_SKU_PREFIX } } }, select: { slug: true, updatedAt: true } }),
     db.category.findMany({ select: { slug: true } }),
     db.ageGroup.findMany({ select: { slug: true } }),
     db.brand.findMany({ where: { products: { some: { status: "active" } } }, select: { slug: true } }),

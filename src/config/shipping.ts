@@ -21,6 +21,14 @@ export const DELIVERY_REGION_NOTE = {
   text: "Orders can be shipped to Indian addresses (with a valid 6-digit pincode) only. We don't ship outside India yet.",
 };
 
+/**
+ * Live payment testing (owner, 24 Nov 2026): products whose SKU starts with this are hidden from the shop,
+ * sitemap and Google, and a cart holding ONLY such products skips the minimum order and delivery charge,
+ * so a ₹2 real payment can be tested. Buy via the product's direct link. Delete the product after testing.
+ */
+export const TEST_SKU_PREFIX = "TEST-";
+export const isTestSku = (sku: string) => sku.toUpperCase().startsWith(TEST_SKU_PREFIX);
+
 export function shippingFor(itemsTotal: number): number {
   return itemsTotal >= FREE_SHIPPING_FROM ? 0 : SHIPPING_FEE;
 }

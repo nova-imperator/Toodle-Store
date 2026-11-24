@@ -2,6 +2,7 @@ import "server-only";
 import type { Prisma } from "@prisma/client";
 import { db } from "@/server/db";
 import { AGE_GROUPS, type BrickColor } from "@/config/catalogue";
+import { TEST_SKU_PREFIX } from "@/config/shipping";
 import type { ListingFilters, ListingResult, ProductCardData } from "@/types/catalogue";
 
 export const PAGE_SIZE = 24;
@@ -44,7 +45,8 @@ function toCard(p: CardRow): ProductCardData {
   };
 }
 
-const active: Prisma.ProductWhereInput = { status: "active" };
+// Test products (SKU TEST-…) never appear in listings; they're reachable only by direct link.
+const active: Prisma.ProductWhereInput = { status: "active", NOT: { sku: { startsWith: TEST_SKU_PREFIX } } };
 
 function buildWhere(f: ListingFilters): Prisma.ProductWhereInput {
   const and: Prisma.ProductWhereInput[] = [active];
@@ -119,7 +121,7 @@ export async function listProducts(f: ListingFilters): Promise<ListingResult> {
  */
 export async function getCategoryPhotoOptions(): Promise<Map<string, { url: string; alt: string }[]>> {
   const rows = await db.productCategory.findMany({
-    where: { product: { status: "active" } },
+    where: { product: active },
     select: {
       category: { select: { slug: true } },
       product: { select: { name: true, images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 } } },

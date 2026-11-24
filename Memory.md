@@ -84,6 +84,9 @@ Dev conveniences:
 ## Free delivery threshold (24 Nov 2026)
 - Free delivery now on item total (after coupon) of **₹999 or more** (`FREE_SHIPPING_FROM` in `src/config/shipping.ts`); ₹100 below that. All "₹2,000" copy updated.
 
+## Live payment test products (24 Nov 2026)
+- Products with SKU starting `TEST-` are hidden from listings/search/home/sitemap, noindex, and a cart with ONLY test products has no ₹50 minimum and no delivery charge (so a ₹2 real payment can be tested). Buy via direct link `/product/<slug>`. Owner adds/deletes the product in admin. Code can stay; delete the product (or set it to draft) after testing.
+
 ## Cash on delivery (14 Nov 2026)
 - Owner brought COD back: **₹50 extra** (`COD_FEE` in `src/config/shipping.ts`). Owner chose: the ₹50 is **paid online via Razorpay at checkout** to confirm the order; the rest (items − coupon + delivery) is paid in cash.
 - Order `total` includes the COD charge (`orders.cod_fee`, migration `featured_and_cod_fee`). Razorpay order amount = ₹50. After capture: status `placed`, `paymentStatus` stays `unpaid` (cash due); admin marking it **delivered** sets `paid`.
