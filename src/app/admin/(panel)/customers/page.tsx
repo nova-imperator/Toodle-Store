@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/server/auth/admin";
+import { markSeen } from "@/server/services/admin/badges";
 import { listCustomers } from "@/server/services/admin/customers";
 import { Pager, dateTime, listHref } from "@/components/admin/AdminBits";
 import { formatPaise } from "@/lib/money";
@@ -7,7 +8,8 @@ import styles from "../../admin.module.css";
 export const metadata = { title: "Customers" };
 
 export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string; page?: string }> }) {
-  await requireAdmin("customers");
+  const admin = await requireAdmin("customers");
+  await markSeen(admin.id, "customers"); // clears this list's sidebar badge
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const { rows, total, pageCount } = await listCustomers({ q: sp.q?.trim(), page });

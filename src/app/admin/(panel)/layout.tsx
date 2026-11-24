@@ -4,19 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { canAccess, getCurrentAdmin, type AdminModule } from "@/server/auth/admin";
-import { db } from "@/server/db";
+import { badgeCounts, type BadgeKey } from "@/server/services/admin/badges";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { adminLogoutAction } from "../actions";
 import styles from "../admin.module.css";
 
 export const metadata: Metadata = { title: { default: "Admin", template: "%s · Admin" }, robots: { index: false, follow: false } };
 
-const MODULES: { module: AdminModule; href: string; label: string }[] = [
+const MODULES: { module: AdminModule; href: string; label: string; badge?: BadgeKey }[] = [
   { module: "dashboard", href: "/admin", label: "Dashboard" },
-  { module: "orders", href: "/admin/orders", label: "Orders" },
-  { module: "enquiries", href: "/admin/enquiries", label: "B2B enquiries" },
+  { module: "orders", href: "/admin/orders", label: "Orders", badge: "orders" },
+  { module: "enquiries", href: "/admin/enquiries", label: "B2B enquiries", badge: "enquiries" },
   { module: "products", href: "/admin/products", label: "Products" },
-  { module: "customers", href: "/admin/customers", label: "Customers" },
+  { module: "customers", href: "/admin/customers", label: "Customers", badge: "customers" },
   { module: "coupons", href: "/admin/coupons", label: "Coupons" },
   { module: "content", href: "/admin/redirects", label: "Redirects (SEO)" },
   { module: "settings", href: "/admin/settings", label: "Settings" },
@@ -28,9 +28,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const admin = await getCurrentAdmin();
   if (!admin) redirect("/admin/login");
 
-  const enquiries = await db.b2bEnquiry.count({ where: { status: "new" } });
-  const counts: Record<string, number> = { "B2B enquiries": enquiries };
-  const links = MODULES.filter((m) => canAccess(admin.role, m.module)).map((m) => ({ href: m.href, label: m.label, count: counts[m.label] ?? 0 }));
+  // Badges = new since this admin last opened each list (see services/admin/badges.ts).
+  const counts = await badgeCounts(admin.id, admin.role);
+  const links = MODULES.filter((m) => canAccess(admin.role, m.module)).map((m) => ({ href: m.href, label: m.label, badge: m.badge }));
 
   return (
     <div className={styles.shell}>
@@ -40,7 +40,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           Toodle admin
         </Link>
         <Suspense>
-          <AdminNav links={links} />
+          <AdminNav links={links} initialCounts={counts} />
         </Suspense>
         <div className={styles.sideFoot}>
           <div>

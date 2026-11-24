@@ -1,0 +1,40 @@
+.box {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px dashed var(--brick-yellow-deep);
+  border-radius: var(--radius-sm);
+  background: var(--yellow-tint);
+  color: var(--ink);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+/* Inside the cart summary <dl>, ".summary > div" makes rows flex; keep this one stacked. */
+.box[role="status"] {
+  display: grid;
+}
+
+.box[data-done="true"] {
+  border-color: var(--brick-green);
+  background: var(--green-tint);
+  color: var(--brick-green-deep);
+}
+
+.box p { margin: 0; }
+
+.track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(29, 43, 83, 0.12);
+  overflow: hidden;
+}
+
+.track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brick-green);
+  transition: width 0.3s ease;
+}

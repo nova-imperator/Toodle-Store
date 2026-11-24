@@ -4,7 +4,7 @@
 // SKU starts with TEST- so it is hidden from the shop and skips minimum order + delivery (see src/config/shipping.ts).
 import { PrismaClient } from "@prisma/client";
 
-const ENABLED = true;
+const ENABLED = false; // tested on 24 Nov 2026; deploy removes it
 
 const SKU = "TEST-LIVE-2";
 const prisma = new PrismaClient();

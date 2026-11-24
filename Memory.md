@@ -84,6 +84,12 @@ Dev conveniences:
 ## Free delivery threshold (24 Nov 2026)
 - Free delivery now on item total (after coupon) of **₹999 or more** (`FREE_SHIPPING_FROM` in `src/config/shipping.ts`); ₹100 below that. All "₹2,000" copy updated.
 
+## Launch (24 Nov 2026)
+- Owner tested live payments and went live. `prisma/cleanup-before-launch.ts` (runs on deploy) deletes orders, customers, B2B enquiries, guest carts and OTPs created before 2026-11-24 20:30 IST, and resets coupon usage. Never touches newer data; can be removed after it has run in production. Test product disabled (`sync-test-product.ts` ENABLED=false deletes it).
+- Admin sidebar badges = new since that admin last opened Orders / B2B enquiries / Customers (`admin_users.seen_*_at`, `services/admin/badges.ts`); refresh every minute via `/api/admin/badges`; tab title shows total.
+- Free-delivery nudge: `FreeDeliveryProgress` (cart drawer, cart page, checkout) + line on phone cart bar.
+- Policies rewritten in our own words (owner pointed to mimikotoys.com pages; not copied): **no refunds; damaged/defective/wrong items exchanged or replaced, report within 48 h with photos** (`src/config/policy.ts` – 48 h and unboxing video are my defaults, owner to confirm). Refund only when WE cancel (legal). Grievance contact = role + email (owner may add a name). Governing law: India (no city given).
+
 ## Live payment test products (24 Nov 2026)
 - Products with SKU starting `TEST-` are hidden from listings/search/home/sitemap, noindex, and a cart with ONLY test products has no ₹50 minimum and no delivery charge (so a ₹2 real payment can be tested). Buy via direct link `/product/<slug>`. Owner adds/deletes the product in admin. Code can stay; delete the product (or set it to draft) after testing.
 

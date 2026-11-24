@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { OrderStatus } from "@prisma/client";
 import { requireAdmin } from "@/server/auth/admin";
+import { markSeen } from "@/server/services/admin/badges";
 import { listOrders } from "@/server/services/admin/orders";
 import { OrderPill, Pager, dateTime, listHref } from "@/components/admin/AdminBits";
 import { ORDER_STATUS_LABEL } from "@/config/orders";
@@ -14,7 +15,8 @@ const TABS: (OrderStatus | undefined)[] = [undefined, "placed", "packed", "shipp
 type SP = { status?: string; q?: string; page?: string };
 
 export default async function OrdersPage({ searchParams }: { searchParams: Promise<SP> }) {
-  await requireAdmin("orders");
+  const admin = await requireAdmin("orders");
+  await markSeen(admin.id, "orders"); // clears this list's sidebar badge
   const sp = await searchParams;
   const status = TABS.includes(sp.status as OrderStatus) ? (sp.status as OrderStatus) : undefined;
   const page = Math.max(1, Number(sp.page) || 1);

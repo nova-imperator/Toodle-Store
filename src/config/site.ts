@@ -31,7 +31,7 @@ export const WHATSAPP_BULK_HREF = whatsappLink(WHATSAPP_TEXT.bulk);
 
 export const POLICY_LINKS = [
   { label: "Shipping policy", href: "/shipping-policy" },
-  { label: "Return policy", href: "/return-policy" },
+  { label: "Return & exchange policy", href: "/return-policy" },
   { label: "Privacy policy", href: "/privacy-policy" },
   { label: "Terms", href: "/terms" },
 ];

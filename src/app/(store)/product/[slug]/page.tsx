@@ -15,6 +15,7 @@ import { productLd } from "@/lib/structuredData";
 import { SITE } from "@/config/site";
 import { COD_FEE, FREE_SHIPPING_FROM, FREE_SHIPPING_LABEL, SHIPPING_FEE, isTestSku } from "@/config/shipping";
 import { formatPaise } from "@/lib/money";
+import { EXCHANGE_POLICY } from "@/config/policy";
 import styles from "./page.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -50,7 +51,7 @@ export default async function ProductPage({ params }: Props) {
     { q: "How long will delivery take?", a: `Most orders reach you in ${SITE.deliveryDays.min}–${SITE.deliveryDays.max} working days, anywhere in India.` },
     { q: "How much is delivery?", a: `Delivery is ${formatPaise(SHIPPING_FEE)} per order, and free when your order is ${formatPaise(FREE_SHIPPING_FROM)} or more.` },
     { q: "How can I pay?", a: `Online by UPI, debit or credit card, netbanking or wallet, through Razorpay's secure checkout. Or choose cash on delivery for ${formatPaise(COD_FEE)} extra: you pay that charge online to confirm the order, and the rest in cash when it arrives.` },
-    { q: "Can I return this toy?", a: "We don't offer returns or refunds, so please check the age range and size before ordering. If anything is wrong with your order, WhatsApp us and we'll help." },
+    { q: "Can I return or exchange this toy?", a: `We don't give refunds, but if the toy arrives damaged, defective or wrong, we exchange or replace it free of charge. Just WhatsApp us within ${EXCHANGE_POLICY.reportWithinHours} hours of delivery with photos.` },
     { q: "Is it safe for my child?", a: product.safetyInfo ?? "Please follow the age guidance on this page." },
   ];
 

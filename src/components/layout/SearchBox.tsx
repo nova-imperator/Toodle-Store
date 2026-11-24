@@ -5,7 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
 import styles from "./SearchBox.module.css";
 
-const IDEAS = ["remote control cars", "teddy bears", "toys for 3 year olds", "birthday gift box", "puzzles", "water guns", "dollhouse"];
+// "toys for 3 year olds" removed (owner, 24 Nov 2026: age is no longer shown on the site).
+const IDEAS = ["remote control cars", "teddy bears", "birthday gift box", "puzzles", "water guns", "dollhouse"];
 
 export function SearchBox() {
   const params = useSearchParams();

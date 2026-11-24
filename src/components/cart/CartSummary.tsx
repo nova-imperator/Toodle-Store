@@ -1,6 +1,7 @@
 import { formatPaise } from "@/lib/money";
 import { MIN_ORDER } from "@/config/shipping";
 import type { CartTotals } from "@/types/cart";
+import { FreeDeliveryProgress } from "./FreeDeliveryProgress";
 import styles from "./CartSummary.module.css";
 
 /** `codFee`: cash on delivery charge, shown at checkout when COD is chosen. */
@@ -42,7 +43,7 @@ export function CartSummary({ totals, couponCode, codFee = 0 }: { totals: CartTo
           Minimum order is {formatPaise(MIN_ORDER)}. Add {formatPaise(totals.belowMinimumBy)} more to check out.
         </p>
       ) : (
-        totals.toFreeShipping > 0 && <p className={styles.nudge}>Add {formatPaise(totals.toFreeShipping)} more for free delivery</p>
+        <FreeDeliveryProgress totals={totals} />
       )}
       {savings > 0 && <p className={styles.save}>You save {formatPaise(savings)} on this order</p>}
     </dl>

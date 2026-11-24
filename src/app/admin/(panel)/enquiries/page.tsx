@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { EnquiryStatus } from "@prisma/client";
 import { requireAdmin } from "@/server/auth/admin";
+import { markSeen } from "@/server/services/admin/badges";
 import { listEnquiries } from "@/server/services/admin/enquiries";
 import { EnquiryPill, Pager, dateTime, listHref } from "@/components/admin/AdminBits";
 import { ENQUIRY_STATUS_LABEL } from "@/config/orders";
@@ -11,7 +12,8 @@ export const metadata = { title: "B2B enquiries" };
 const TABS = Object.keys(ENQUIRY_STATUS_LABEL) as EnquiryStatus[];
 
 export default async function EnquiriesPage({ searchParams }: { searchParams: Promise<{ status?: string; q?: string; page?: string }> }) {
-  await requireAdmin("enquiries");
+  const admin = await requireAdmin("enquiries");
+  await markSeen(admin.id, "enquiries"); // clears this list's sidebar badge
   const sp = await searchParams;
   const status = TABS.includes(sp.status as EnquiryStatus) ? (sp.status as EnquiryStatus) : undefined;
   const page = Math.max(1, Number(sp.page) || 1);

@@ -39,6 +39,17 @@
 
 .total { font-weight: 800; }
 
+.hint {
+  margin: 0 0 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--yellow-tint);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 .cta {
   margin-left: auto;
   padding: 6px 12px;

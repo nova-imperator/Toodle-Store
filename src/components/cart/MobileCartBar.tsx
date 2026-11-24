@@ -15,8 +15,11 @@ export function MobileCartBar() {
   const count = cart?.totals.count ?? 0;
   if (count === 0 || HIDDEN_ON.some((p) => pathname.startsWith(p))) return null;
 
+  const toFree = cart!.totals.belowMinimumBy > 0 ? 0 : cart!.totals.toFreeShipping;
+
   return (
     <div className={styles.bar}>
+      {toFree > 0 && <p className={styles.hint}>Add {formatPaise(toFree)} more for FREE delivery 🚚</p>}
       <button type="button" className={styles.btn} onClick={openDrawer}>
         <span key={bump} className={styles.count}>
           <Icon name="cart" size={18} /> {count} {count === 1 ? "toy" : "toys"}

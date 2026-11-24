@@ -90,7 +90,7 @@ export async function confirmCod(id: string) {
 }
 
 /**
- * Manual refund for exceptions (store policy is no returns). Full amount of the captured online
+ * Manual refund for exceptions (store policy: no refunds, only exchanges; refunds only when we cancel an order). Full amount of the captured online
  * payment: the whole order when paid online, the COD charge for cash on delivery orders.
  */
 export async function refundOrder(id: string) {

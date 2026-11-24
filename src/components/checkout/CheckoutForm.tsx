@@ -251,7 +251,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved, name }:
           {busy ? "Please wait…" : isCod ? `Pay ${formatPaise(COD_FEE)} & confirm order` : `Pay ${formatPaise(cart.totals.total)}`}
         </Button>
         <p className={styles.policy}>
-          We deliver only within India. By placing this order you agree to our <Link href="/terms">terms</Link>. Toys can&apos;t be returned, so please check ages and sizes.
+          We deliver only within India. By placing this order you agree to our <Link href="/terms">terms</Link>. No refunds; damaged or wrong items are exchanged.
         </p>
       </aside>
 
