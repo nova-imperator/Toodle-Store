@@ -81,6 +81,9 @@ Dev conveniences:
 - Razorpay test checkout works on https://toodle-store.vercel.app (owner tested). Old deployment URLs (`toodle-store-<hash>-…vercel.app`) keep their old settings; always test on the main URL.
 - Shipping/minimum verified locally (15 checks, 13 Nov): ₹395 → ₹495 charged; ₹1,975 pays ₹100; ₹2,370 free; ₹30 cart refused. (COD was refused then; brought back 14 Nov, see below.)
 
+## Free delivery threshold (24 Nov 2026)
+- Free delivery now on item total (after coupon) of **₹999 or more** (`FREE_SHIPPING_FROM` in `src/config/shipping.ts`); ₹100 below that. All "₹2,000" copy updated.
+
 ## Cash on delivery (14 Nov 2026)
 - Owner brought COD back: **₹50 extra** (`COD_FEE` in `src/config/shipping.ts`). Owner chose: the ₹50 is **paid online via Razorpay at checkout** to confirm the order; the rest (items − coupon + delivery) is paid in cash.
 - Order `total` includes the COD charge (`orders.cod_fee`, migration `featured_and_cod_fee`). Razorpay order amount = ₹50. After capture: status `placed`, `paymentStatus` stays `unpaid` (cash due); admin marking it **delivered** sets `paid`.

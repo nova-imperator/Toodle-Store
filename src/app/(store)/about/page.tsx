@@ -28,7 +28,7 @@ export default function AboutPage() {
       </figure>
       <h2>How we work</h2>
       <ul>
-        <li>Delivery anywhere in India: ₹100 per order, free on orders of ₹2,000 or more.</li>
+        <li>Delivery anywhere in India: ₹100 per order, free on orders of ₹999 or more.</li>
         <li>Pay securely online with UPI, cards, netbanking or wallets through Razorpay.</li>
         <li>Real people answer on WhatsApp at {SITE.phone}.</li>
       </ul>

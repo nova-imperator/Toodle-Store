@@ -3,7 +3,7 @@
 
 export const SHIPPING_FEE = 100_00;
 /** Orders whose item total (after coupon) reaches this get free delivery. */
-export const FREE_SHIPPING_FROM = 2_000_00;
+export const FREE_SHIPPING_FROM = 999_00; // owner, 24 Nov 2026 (was ₹2,000)
 /** Smallest item total (after coupon) that can be checked out. */
 export const MIN_ORDER = 50_00;
 
@@ -13,7 +13,7 @@ export const MIN_ORDER = 50_00;
  */
 export const COD_FEE = 50_00;
 
-export const FREE_SHIPPING_LABEL = "Free delivery on orders of ₹2,000+";
+export const FREE_SHIPPING_LABEL = "Free delivery on orders of ₹999+";
 
 /** Shown on the home page and at checkout (owner request, 13 Nov 2026). */
 export const DELIVERY_REGION_NOTE = {

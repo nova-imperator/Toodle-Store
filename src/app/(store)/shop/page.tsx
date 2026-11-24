@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const path = flag && FLAG_TITLES[flag] ? `/shop?flag=${flag}` : "/shop";
   return pageSeo({
     title,
-    description: `${flag && FLAG_TITLES[flag] ? FLAG_TITLES[flag] : "All toys"} at Toodle Store: learning toys, RC vehicles, dollhouses, soft toys and gifts. Delivery across India, free on orders of ₹2,000+.`,
+    description: `${flag && FLAG_TITLES[flag] ? FLAG_TITLES[flag] : "All toys"} at Toodle Store: learning toys, RC vehicles, dollhouses, soft toys and gifts. Delivery across India, free on orders of ₹999+.`,
     path,
   });
 }
@@ -26,7 +26,7 @@ export default async function ShopPage({ searchParams }: Props) {
     <ListingView
       basePath="/shop"
       title={title}
-      intro="Every toy in the Toodle Store, from first learning toys to big birthday surprises. Free delivery on orders of ₹2,000+."
+      intro="Every toy in the Toodle Store, from first learning toys to big birthday surprises. Free delivery on orders of ₹999+."
       color={flag === "deal" ? "orange" : "blue"}
       crumbs={[{ name: title, path: "/shop" }]}
       fixed={{}}

@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = pageSeo({
   title: { absolute: "Toodle Store – Buy Toys Online in India" },
   description:
-    "Shop toys online in India: educational, musical and remote control toys, dollhouses, soft toys and gifts. Pay online or cash on delivery, free delivery on orders of ₹2,000+.",
+    "Shop toys online in India: educational, musical and remote control toys, dollhouses, soft toys and gifts. Pay online or cash on delivery, free delivery on orders of ₹999+.",
   path: "/",
 });
 

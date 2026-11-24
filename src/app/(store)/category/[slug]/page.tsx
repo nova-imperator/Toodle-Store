@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageSeo({
     title: category.seoTitle ?? `${category.name} for Kids`,
     description:
-      category.seoDescription ?? category.description ?? `Buy ${category.name.toLowerCase()} online at Toodle Store. Delivery across India, free on orders of ₹2,000+.`,
+      category.seoDescription ?? category.description ?? `Buy ${category.name.toLowerCase()} online at Toodle Store. Delivery across India, free on orders of ₹999+.`,
     path: `/category/${category.slug}`,
   });
 }

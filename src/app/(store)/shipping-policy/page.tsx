@@ -7,7 +7,7 @@ import { formatPaise } from "@/lib/money";
 
 export const metadata: Metadata = pageSeo({
   title: "Shipping Policy",
-  description: "Delivery across India for ₹100, free on orders of ₹2,000 or more. Delivery times, cash on delivery and order tracking.",
+  description: "Delivery across India for ₹100, free on orders of ₹999 or more. Delivery times, cash on delivery and order tracking.",
   path: "/shipping-policy"
 });
 
