@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { B2BHeader } from "@/components/b2b/B2BHeader";
 import { UtmCapture } from "@/components/b2b/UtmCapture";
+import { VisitTracker } from "@/components/analytics/VisitTracker";
+import { Suspense } from "react";
 import { Footer } from "@/components/layout/Footer";
 import styles from "./b2b.module.css";
 
@@ -16,6 +18,9 @@ export default function B2BLayout({ children }: { children: React.ReactNode }) {
         Skip to content
       </a>
       <UtmCapture />
+      <Suspense>
+        <VisitTracker />
+      </Suspense>
       <div className={styles.theme}>
         <B2BHeader />
         <main id="main">{children}</main>

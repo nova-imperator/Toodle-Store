@@ -9,7 +9,7 @@ const baloo = localFont({ src: "../assets/fonts/baloo-2-latin-wght.woff2", weigh
 const nunito = localFont({ src: "../assets/fonts/nunito-latin-wght.woff2", weight: "200 1000", variable: "--font-nunito", display: "swap" });
 
 const DEFAULT_DESCRIPTION =
-  "Toys for every age: educational, musical and remote control toys, dollhouses and more. Pay online or cash on delivery, free delivery on orders of ₹999+.";
+  "Toys for every age: educational, musical and remote control toys, dollhouses and more. Pay online or cash on delivery, free delivery on orders above ₹999.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),

@@ -11,7 +11,7 @@ const BANNERS = [
   {
     eyebrow: "Every child deserves one",
     title: "Toys for every age, delivered to your door",
-    subtitle: "Learning toys, musical toys, remote control toys and more. Free delivery on orders of ₹999+.",
+    subtitle: "Learning toys, musical toys, remote control toys and more. Free delivery on orders above ₹999.",
     ctaLabel: "Shop all toys",
     ctaHref: "/shop",
     image: "/images/hero/starting-49.webp",

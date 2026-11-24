@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
         </li>
         <li>
           <strong>Technical data:</strong> cookies that keep you signed in and remember your cart and wishlist, plus basic information your browser
-          sends (such as IP address and device type) for security.
+          sends (such as IP address and device type) for security. We also count page visits with a random visitor ID (no name or contact details) to see how many people use the site.
         </li>
       </ul>
 

@@ -13,7 +13,7 @@ export const MIN_ORDER = 50_00;
  */
 export const COD_FEE = 50_00;
 
-export const FREE_SHIPPING_LABEL = "Free delivery on orders of ₹999+";
+export const FREE_SHIPPING_LABEL = "Free delivery on orders above ₹999";
 
 /** Shown on the home page and at checkout (owner request, 13 Nov 2026). */
 export const DELIVERY_REGION_NOTE = {

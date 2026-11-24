@@ -7,6 +7,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { MobileCartBar } from "@/components/cart/MobileCartBar";
 import { CartToast } from "@/components/cart/CartToast";
 import { getCurrentUser } from "@/server/auth/session";
+import { VisitTracker } from "@/components/analytics/VisitTracker";
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
@@ -27,6 +28,9 @@ export default async function StoreLayout({ children }: { children: React.ReactN
         <CartDrawer />
         <MobileCartBar />
         <CartToast />
+        <Suspense>
+          <VisitTracker />
+        </Suspense>
       </WishlistProvider>
     </CartProvider>
   );

@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { OrderStatus } from "@prisma/client";
 import { requireAdmin } from "@/server/auth/admin";
 import { markSeen } from "@/server/services/admin/badges";
-import { listOrders } from "@/server/services/admin/orders";
+import { listOrders, orderStatusCounts } from "@/server/services/admin/orders";
+import { listUnpaidCheckouts } from "@/server/services/admin/analytics";
 import { OrderPill, Pager, dateTime, listHref } from "@/components/admin/AdminBits";
 import { ORDER_STATUS_LABEL } from "@/config/orders";
 import { formatPaise } from "@/lib/money";
@@ -20,7 +21,11 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
   const sp = await searchParams;
   const status = TABS.includes(sp.status as OrderStatus) ? (sp.status as OrderStatus) : undefined;
   const page = Math.max(1, Number(sp.page) || 1);
-  const { rows, total, pageCount } = await listOrders({ status, q: sp.q?.trim(), page });
+  const [{ rows, total, pageCount }, counts, unpaid] = await Promise.all([
+    listOrders({ status, q: sp.q?.trim(), page }),
+    orderStatusCounts(),
+    listUnpaidCheckouts("7d").then((r) => r.length),
+  ]);
 
   return (
     <>
@@ -31,13 +36,14 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
             {total} {total === 1 ? "order" : "orders"}
           </p>
         </div>
+        <Link href="/admin/checkouts">Unpaid checkouts this week: {unpaid} →</Link>
       </div>
 
       <div className={styles.toolbar}>
         <nav className={styles.tabs} aria-label="Filter by status">
           {TABS.map((t) => (
             <Link key={t ?? "all"} href={listHref("/admin/orders", { status: t, q: sp.q })} aria-current={t === status ? "true" : undefined}>
-              {t ? ORDER_STATUS_LABEL[t] : "All"}
+              {t ? ORDER_STATUS_LABEL[t] : "All"} ({t ? (counts[t] ?? 0) : counts.all})
             </Link>
           ))}
         </nav>

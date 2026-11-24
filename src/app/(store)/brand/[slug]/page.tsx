@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!brand) return {};
   return pageSeo({
     title: `${brand.name} Toys – Buy Online`,
-    description: brand.description ?? `Shop ${brand.name} toys online at Toodle Store. Delivery across India, free on orders of ₹999+.`,
+    description: brand.description ?? `Shop ${brand.name} toys online at Toodle Store. Delivery across India, free on orders above ₹999.`,
     path: `/brand/${brand.slug}`,
   });
 }

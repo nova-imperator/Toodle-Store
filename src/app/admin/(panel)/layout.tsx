@@ -14,6 +14,7 @@ export const metadata: Metadata = { title: { default: "Admin", template: "%s · 
 const MODULES: { module: AdminModule; href: string; label: string; badge?: BadgeKey }[] = [
   { module: "dashboard", href: "/admin", label: "Dashboard" },
   { module: "orders", href: "/admin/orders", label: "Orders", badge: "orders" },
+  { module: "orders", href: "/admin/checkouts", label: "Unpaid checkouts" },
   { module: "enquiries", href: "/admin/enquiries", label: "B2B enquiries", badge: "enquiries" },
   { module: "products", href: "/admin/products", label: "Products" },
   { module: "customers", href: "/admin/customers", label: "Customers", badge: "customers" },

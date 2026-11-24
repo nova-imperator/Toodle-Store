@@ -506,3 +506,21 @@ model AdminUser {
 
   @@map("admin_users")
 }
+
+// ─── Analytics ───────────────────────────────────────────────────
+
+/// One row per page view on the store/wholesale site (owner wanted visitor counts in the dashboard).
+/// visitorId is a random id from a first-party cookie – no name, email or IP is stored.
+model PageView {
+  id          String   @id @default(cuid())
+  visitorId   String   @map("visitor_id")
+  path        String
+  productSlug String?  @map("product_slug")
+  site        String   @default("store") // "store" or "b2b"
+  referrer    String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([productSlug, createdAt])
+  @@map("page_views")
+}

@@ -84,6 +84,14 @@ Dev conveniences:
 ## Free delivery threshold (24 Nov 2026)
 - Free delivery now on item total (after coupon) of **₹999 or more** (`FREE_SHIPPING_FROM` in `src/config/shipping.ts`); ₹100 below that. All "₹2,000" copy updated.
 
+## Analytics & follow-up (24 Nov 2026)
+- Dashboard (`/admin?range=today|7d|30d|all`, IST days): orders, sales value, money received, average order, to ship, on the way, COD cash to collect, unpaid checkouts, visitors, page views, product views, conversion, new customers, enquiries, cancelled, most viewed, best sellers, day-by-day table. `services/admin/analytics.ts`.
+- Visitors come from our own `page_views` table (`/api/track` + `VisitTracker` in store and b2b layouts): random `ts_vid` cookie id, path, product slug, external referrer host. No IP/name stored; bots and /admin ignored. Privacy policy mentions it.
+- `/admin/checkouts`: unpaid checkouts (status pending_payment) with call/WhatsApp, hides people who ordered later. Only people who pressed Pay are captured (that's when the phone is saved).
+- Order list tabs show counts.
+- Free delivery wording is 'Free delivery on orders **above** ₹999' (₹999 itself still free).
+- B2B alert recipients: `TEAM_ALERT_EMAILS` in Vercel (comma-separated). Owner asked to add wilfredgonsalves5@gmail.com – kept out of the public repo; owner adds it in Vercel.
+
 ## Launch (24 Nov 2026)
 - Owner tested live payments and went live. `prisma/cleanup-before-launch.ts` (runs on deploy) deletes orders, customers, B2B enquiries, guest carts and OTPs created before 2026-11-24 20:30 IST, and resets coupon usage. Never touches newer data; can be removed after it has run in production. Test product disabled (`sync-test-product.ts` ENABLED=false deletes it).
 - Admin sidebar badges = new since that admin last opened Orders / B2B enquiries / Customers (`admin_users.seen_*_at`, `services/admin/badges.ts`); refresh every minute via `/api/admin/badges`; tab title shows total.

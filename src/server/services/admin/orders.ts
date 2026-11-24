@@ -19,6 +19,17 @@ export async function listOrders({ status, q, page = 1 }: { status?: OrderStatus
   return { rows, total, pageCount: Math.max(1, Math.ceil(total / ADMIN_PAGE)) };
 }
 
+/** Count per status for the order list tabs (abandoned checkouts excluded from "all"). */
+export async function orderStatusCounts(): Promise<Record<string, number>> {
+  const rows = await db.order.groupBy({ by: ["status"], _count: { _all: true } });
+  const counts: Record<string, number> = { all: 0 };
+  for (const r of rows) {
+    counts[r.status] = r._count._all;
+    if (r.status !== "pending_payment") counts.all += r._count._all;
+  }
+  return counts;
+}
+
 export function getOrder(id: string) {
   return db.order.findUnique({ where: { id }, include: { items: true, payments: true, refunds: true, shipment: true, user: true } });
 }
