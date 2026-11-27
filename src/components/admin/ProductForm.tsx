@@ -5,6 +5,7 @@ import { saveProductAction, type ActionState } from "@/app/admin/(panel)/actions
 import { Button } from "@/components/ui/Button";
 import { SelectField, TextAreaField, TextField } from "@/components/ui/Field";
 import { slugify } from "@/lib/slug";
+import { ImagePicker } from "./ImagePicker";
 import styles from "@/app/admin/admin.module.css";
 
 export interface ProductFormValues {
@@ -90,14 +91,8 @@ export function ProductForm({ productId, initial, categories, ageGroups, brands,
       </section>
 
       <section className={styles.panel}>
-        <h2>Images</h2>
-        <TextAreaField
-          label="Image paths"
-          name="images"
-          defaultValue={initial.images}
-          error={f.images}
-          hint="One per line, first is the main photo. Use /images/products/… or an https:// link. Square images (1:1) work best."
-        />
+        <h2>Photos</h2>
+        <ImagePicker name="images" initial={initial.images} error={f.images} />
       </section>
 
       <section className={styles.panel}>

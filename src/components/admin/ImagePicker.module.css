@@ -1,0 +1,140 @@
+.wrap {
+  display: grid;
+  gap: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.item[data-main] { border-color: var(--brick-green); }
+
+.thumb {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: #f4f2ec;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--brick-green);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tools button {
+  flex: 1;
+  min-height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.tools button:disabled { opacity: 0.35; cursor: default; }
+.tools .remove { color: var(--brick-red-deep); }
+
+.loading {
+  place-items: center;
+  aspect-ratio: 1;
+  color: var(--ink-soft);
+  font-weight: 700;
+  font-size: 0.85rem;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.add {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  border: 2px dashed var(--brick-blue);
+  border-radius: var(--radius);
+  background: var(--blue-tint);
+  color: var(--brick-blue);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.add span { font-size: 2rem; line-height: 1; }
+
+.hint { color: var(--ink-soft); font-size: 0.88rem; }
+
+.error {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--red-tint);
+  color: var(--brick-red-deep);
+  font-weight: 700;
+}
+
+.linkBox summary {
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.linkBox div {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.linkBox input {
+  flex: 1;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 2px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+}
+
+.linkBox button {
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}

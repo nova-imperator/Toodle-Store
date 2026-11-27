@@ -524,3 +524,19 @@ model PageView {
   @@index([productSlug, createdAt])
   @@map("page_views")
 }
+
+// ─── Media ───────────────────────────────────────────────────────
+
+/// Product photos uploaded from the admin (owner, 27 Nov 2026). Stored in the database because Vercel
+/// can't keep uploaded files; resized to webp on upload and served from /media/<id>.webp with long caching.
+model MediaImage {
+  id        String   @id @default(cuid())
+  data      Bytes
+  mimeType  String   @default("image/webp") @map("mime_type")
+  width     Int
+  height    Int
+  size      Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("media_images")
+}

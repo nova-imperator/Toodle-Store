@@ -84,6 +84,11 @@ Dev conveniences:
 ## Free delivery threshold (24 Nov 2026)
 - Free delivery now on item total (after coupon) of **₹999 or more** (`FREE_SHIPPING_FROM` in `src/config/shipping.ts`); ₹100 below that. All "₹2,000" copy updated.
 
+## Product photo upload (27 Nov 2026)
+- Admin product form has an image picker (`components/admin/ImagePicker.tsx`): pick photos from computer/phone, thumbnails, set main, reorder, remove, or add by link. Browser shrinks big photos (>1.5 MB) to ≤1600 px before upload (Vercel ~4.5 MB request limit).
+- `POST /api/admin/uploads` (admin with products access) re-encodes to webp ≤1600 px with sharp (strips EXIF/GPS) and stores bytes in `media_images` (Vercel has no persistent disk; no extra service needed). Served at `/media/<id>.webp` with 1-year immutable caching; works with next/image. `sharp` moved to dependencies.
+- Photos removed from a product stay in `media_images` (small); could add a cleanup later.
+
 ## Analytics & follow-up (24 Nov 2026)
 - Dashboard (`/admin?range=today|7d|30d|all`, IST days): orders, sales value, money received, average order, to ship, on the way, COD cash to collect, unpaid checkouts, visitors, page views, product views, conversion, new customers, enquiries, cancelled, most viewed, best sellers, day-by-day table. `services/admin/analytics.ts`.
 - Visitors come from our own `page_views` table (`/api/track` + `VisitTracker` in store and b2b layouts): random `ts_vid` cookie id, path, product slug, external referrer host. No IP/name stored; bots and /admin ignored. Privacy policy mentions it.
