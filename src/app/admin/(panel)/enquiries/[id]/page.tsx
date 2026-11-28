@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/server/auth/admin";
+import { isB2bUnlocked } from "@/server/auth/b2bPin";
+import { B2bPinGate } from "@/components/admin/B2bPinGate";
 import { getEnquiry, listAssignees } from "@/server/services/admin/enquiries";
 import { EnquiryPill, dateTime } from "@/components/admin/AdminBits";
 import { EnquiryEditor } from "@/components/admin/EnquiryEditor";
@@ -10,8 +12,10 @@ import styles from "../../../admin.module.css";
 export const metadata = { title: "Enquiry" };
 
 export default async function EnquiryDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireAdmin("enquiries");
-  const [e, assignees] = await Promise.all([getEnquiry((await params).id), listAssignees()]);
+  const admin = await requireAdmin("enquiries");
+  const { id } = await params;
+  if (!(await isB2bUnlocked(admin.id))) return <B2bPinGate next={`/admin/enquiries/${id}`} />;
+  const [e, assignees] = await Promise.all([getEnquiry(id), listAssignees()]);
   if (!e) notFound();
   const cats = Array.isArray(e.categories) ? e.categories.map((s) => CATEGORIES.find((c) => c.slug === s)?.name ?? String(s)) : [];
   const wa = `https://wa.me/91${e.phone}?text=${encodeURIComponent(`Hi${e.fullName ? ` ${e.fullName.split(" ")[0]}` : ""}, this is Toodle Store about your wholesale enquiry.`)}`;

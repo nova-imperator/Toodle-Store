@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { TextField } from "@/components/ui/Field";
+import { PhoneField } from "@/components/ui/PhoneField";
 import { SITE, WHATSAPP_BULK_HREF } from "@/config/site";
 import { api } from "@/lib/api";
 import { readUtm, trackConversion } from "@/lib/utm";
@@ -70,15 +71,7 @@ export function EnquiryForm({ source }: { source?: string }) {
     <form className={styles.form} onSubmit={submit} noValidate>
       <p className={styles.intro}>Leave your number and our team will call you with wholesale prices. Takes 5 seconds.</p>
       <TextField label="Name" optional autoComplete="name" placeholder="Your name or shop name" {...bind("fullName")} />
-      <TextField
-        label="Phone"
-        type="tel"
-        inputMode="numeric"
-        autoComplete="tel-national"
-        maxLength={14}
-        placeholder="10-digit mobile number"
-        {...bind("phone")}
-      />
+      <PhoneField label="Phone" value={values.phone} onChange={(v) => setValues((s) => ({ ...s, phone: v }))} error={errors.phone} />
 
       <div className={styles.trap} aria-hidden="true">
         <label>

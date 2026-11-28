@@ -67,7 +67,7 @@ export function OrderActions({ orderId, status, next, canRefund, refundLabel }: 
             if (!confirm(`Refund ${refundLabel} to the customer through Razorpay? This can't be undone.`)) e.preventDefault();
           }}
         >
-          <p>Store policy is no refunds. Use only for exceptions, such as an order you can&apos;t fulfil.</p>
+          <p>Use for orders you cancel, or approved claims for damaged, defective, wrong or missing items (when a replacement isn&apos;t possible).</p>
           <Button type="submit" variant="ghost" disabled={refundPending}>
             {refundPending ? "Refunding…" : `Refund ${refundLabel}`}
           </Button>

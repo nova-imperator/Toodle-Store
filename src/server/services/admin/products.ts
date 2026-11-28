@@ -10,7 +10,6 @@ export const PRODUCT_FLAGS = {
   isFeatured: "Featured",
   isBestSeller: "Best seller",
   isNewArrival: "New arrival",
-  isDeal: "Deal",
 } as const;
 export type ProductFlag = keyof typeof PRODUCT_FLAGS;
 
@@ -54,14 +53,30 @@ export async function getTaxonomy() {
   return { categories, ageGroups, brands };
 }
 
+/** SKU when the admin leaves it empty: keeps the existing one, or makes a new TS-XXXXXX code. */
+async function resolveSku(id: string | null, sku: string | undefined) {
+  if (sku) return sku;
+  if (id) {
+    const existing = await db.product.findUnique({ where: { id }, select: { sku: true } });
+    if (existing) return existing.sku;
+  }
+  for (;;) {
+    const candidate = `TS-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    if (!(await db.product.findUnique({ where: { sku: candidate }, select: { id: true } }))) return candidate;
+  }
+}
+
 export async function saveProduct(id: string | null, input: ProductFormInput) {
-  const clash = await db.product.findFirst({ where: { OR: [{ slug: input.slug }, { sku: input.sku }], ...(id ? { id: { not: id } } : {}) } });
+  const sku = await resolveSku(id, input.sku);
+  const clash = await db.product.findFirst({ where: { OR: [{ slug: input.slug }, { sku }], ...(id ? { id: { not: id } } : {}) } });
   if (clash) throw new AppError("duplicate", clash.slug === input.slug ? "Another product already uses this slug." : "Another product already uses this SKU.", 409);
 
+  // "Deal" and "Available for B2B" were removed from the form (owner, 28 Nov 2026), so saving leaves them as they are.
   const data = {
     name: input.name,
     slug: input.slug,
-    sku: input.sku,
+    sku,
+    videoUrl: input.videoUrl || null,
     description: input.description,
     highlights: input.highlights,
     material: input.material || null,
@@ -76,9 +91,7 @@ export async function saveProduct(id: string | null, input: ProductFormInput) {
     status: input.status,
     isBestSeller: input.isBestSeller,
     isNewArrival: input.isNewArrival,
-    isDeal: input.isDeal,
     isFeatured: input.isFeatured,
-    isB2bVisible: input.isB2bVisible,
     seoTitle: input.seoTitle || null,
     seoDescription: input.seoDescription || null,
   };

@@ -3,9 +3,10 @@
   gap: 10px;
 }
 
+/* Fixed-size tiles: one photo looks the same as five (no stretching). */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, 160px);
   gap: 12px;
   list-style: none;
   margin: 0;
@@ -28,9 +29,9 @@
   width: 100%;
   height: auto;
   aspect-ratio: 1;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: var(--radius-sm);
-  background: #f4f2ec;
+  background: #fff;
 }
 
 .badge {

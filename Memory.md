@@ -84,6 +84,17 @@ Dev conveniences:
 ## Free delivery threshold (24 Nov 2026)
 - Free delivery now on item total (after coupon) of **₹999 or more** (`FREE_SHIPPING_FROM` in `src/config/shipping.ts`); ₹100 below that. All "₹2,000" copy updated.
 
+## Owner requests (28 Nov 2026)
+- SKU optional: empty → generated `TS-XXXXXX` (kept on re-save). Admin badges no longer show Deal / Available for B2B (saving leaves those DB flags unchanged); home 'Deals of the week' row hidden because Deal can't be managed.
+- Uploaded photos are centred on a white 1600×1600 square; gallery, cards and admin thumbnails use object-fit: contain (no crop/zoom).
+- Optional product video: `products.video_url` (YouTube link incl. Shorts, or https .mp4) → last gallery slide (youtube-nocookie embed). `src/lib/video.ts`.
+- Age shown again: listing age filter, home 'Shop by age', footer column, phone menu (desktop menu bar still hidden).
+- 'Sold out for now' label on product photos (cards + product page).
+- Admin → B2B enquiries behind a PIN: env `B2B_PANEL_PIN` (owner's PIN, set in Vercel; never in repo). Unlock = signed cookie, 12 h; wrong tries rate-limited; export and edits also gated; 'Lock' link.
+- `src/middleware.ts`: on production, any *.vercel.app host 308-redirects to NEXT_PUBLIC_SITE_URL.
+- Phone inputs: `PhoneField` (digits only, strips +91/0, 10 digits, message on blur) on checkout and wholesale form.
+- Legal fix: damaged/defective/wrong/missing items → replacement, exchange **or refund** within 48 h with unboxing photos/video; none for change of mind, wrong size ordered, damage after delivery (Consumer Protection Act 2019 / E-Commerce Rules 2020). Earlier 'no refunds' wording removed everywhere.
+
 ## Product photo upload (27 Nov 2026)
 - Admin product form has an image picker (`components/admin/ImagePicker.tsx`): pick photos from computer/phone, thumbnails, set main, reorder, remove, or add by link. Browser shrinks big photos (>1.5 MB) to ≤1600 px before upload (Vercel ~4.5 MB request limit).
 - `POST /api/admin/uploads` (admin with products access) re-encodes to webp ≤1600 px with sharp (strips EXIF/GPS) and stores bytes in `media_images` (Vercel has no persistent disk; no extra service needed). Served at `/media/<id>.webp` with 1-year immutable caching; works with next/image. `sharp` moved to dependencies.

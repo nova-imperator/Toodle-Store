@@ -9,13 +9,13 @@ import { formatPaise } from "@/lib/money";
 
 export const metadata: Metadata = pageSeo({
   title: "Terms and Conditions",
-  description: "Terms for shopping at Toodle Store: products, prices, payment online or cash on delivery, delivery within India, exchanges for damaged items and more.",
+  description: "Terms for shopping at Toodle Store: products, prices, payment online or cash on delivery, delivery within India, returns, exchanges and refunds for damaged items.",
   path: "/terms",
 });
 
 export default function TermsPage() {
   return (
-    <ContentPage title="Terms and conditions" path="/terms" updated="24 November 2026">
+    <ContentPage title="Terms and conditions" path="/terms" updated="28 November 2026">
       <p>
         These terms apply to everyone who visits the Toodle Store website or places an order with Toodle Store (&ldquo;we&rdquo;, &ldquo;us&rdquo;). By using
         the site or placing an order you agree to them. We may update these terms from time to time; the version on this page applies to your order.
@@ -57,10 +57,9 @@ export default function TermsPage() {
         Delivery times are estimates and depend on the courier. See our <Link href="/shipping-policy">shipping policy</Link>.
       </p>
 
-      <h2>5. Exchanges and refunds</h2>
+      <h2>5. Returns, exchanges and refunds</h2>
       <p>
-        {EXCHANGE_POLICY.summary} Problems must be reported within {EXCHANGE_POLICY.reportWithinHours} hours of delivery. Full details are in our{" "}
-        <Link href="/return-policy">return and exchange policy</Link>.
+        {EXCHANGE_POLICY.summary} Full details are in our <Link href="/return-policy">return, exchange and refund policy</Link>.
       </p>
 
       <h2>6. Cancellations</h2>

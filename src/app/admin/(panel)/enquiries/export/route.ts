@@ -1,11 +1,13 @@
 import type { EnquiryStatus } from "@prisma/client";
 import { getCurrentAdmin, canAccess } from "@/server/auth/admin";
+import { isB2bUnlocked } from "@/server/auth/b2bPin";
 import { exportEnquiriesCsv } from "@/server/services/admin/enquiries";
 import { ENQUIRY_STATUS_LABEL } from "@/config/orders";
 
 export async function GET(req: Request) {
   const admin = await getCurrentAdmin();
   if (!admin || !canAccess(admin.role, "enquiries")) return new Response("Not allowed", { status: 403 });
+  if (!(await isB2bUnlocked(admin.id))) return new Response("Enter the B2B panel PIN first.", { status: 403 });
 
   const url = new URL(req.url);
   const s = url.searchParams.get("status");

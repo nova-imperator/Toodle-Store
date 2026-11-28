@@ -5,8 +5,8 @@ import { toggleInList, withParams, type SearchParams } from "@/lib/listingParams
 import type { FacetOption, ListingFilters } from "@/types/catalogue";
 import styles from "./Filters.module.css";
 
-/** Age filter hidden on owner's request (14 Nov 2026). Set to true to bring it back. */
-const SHOW_AGE_FILTER: boolean = false;
+/** Age filter: hidden 14 Nov 2026, shown again on owner's request 28 Nov 2026. */
+const SHOW_AGE_FILTER: boolean = true;
 
 interface Props {
   basePath: string;

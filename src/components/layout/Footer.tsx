@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SITE, POLICY_LINKS, WHATSAPP_RETAIL_HREF } from "@/config/site";
 import { CATEGORY_LINKS } from "@/config/navigation";
-// import { AGE_LINKS } from "@/config/navigation"; // for the hidden "Shop by age" column
+import { AGE_LINKS } from "@/config/navigation";
 import { Icon } from "@/components/ui/Icon";
 import styles from "./Footer.module.css";
 
@@ -55,8 +55,7 @@ export function Footer({ plain = false }: { plain?: boolean }) {
           </ul>
         </nav>
 
-        <nav aria-label="Help">
-          {/* Shop by age hidden on owner's request, 14 Nov 2026.
+        <nav aria-label="Ages and help">
           <h2 className={styles.head}>Shop by age</h2>
           <ul className={styles.links}>
             {AGE_LINKS.map((a) => (
@@ -65,8 +64,7 @@ export function Footer({ plain = false }: { plain?: boolean }) {
               </li>
             ))}
           </ul>
-          */}
-          <h2 className={styles.head}>Help</h2>
+          <h2 className={`${styles.head} ${styles.spaced}`}>Help</h2>
           <ul className={styles.links}>
             <li><Link href="/about">About us</Link></li>
             <li><Link href="/contact">Contact</Link></li>

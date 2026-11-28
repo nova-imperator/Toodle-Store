@@ -51,7 +51,7 @@ export default async function ProductPage({ params }: Props) {
     { q: "How long will delivery take?", a: `Most orders reach you in ${SITE.deliveryDays.min}–${SITE.deliveryDays.max} working days, anywhere in India.` },
     { q: "How much is delivery?", a: `Delivery is ${formatPaise(SHIPPING_FEE)} per order, and free when your order is ${formatPaise(FREE_SHIPPING_FROM)} or more.` },
     { q: "How can I pay?", a: `Online by UPI, debit or credit card, netbanking or wallet, through Razorpay's secure checkout. Or choose cash on delivery for ${formatPaise(COD_FEE)} extra: you pay that charge online to confirm the order, and the rest in cash when it arrives.` },
-    { q: "Can I return or exchange this toy?", a: `We don't give refunds, but if the toy arrives damaged, defective or wrong, we exchange or replace it free of charge. Just WhatsApp us within ${EXCHANGE_POLICY.reportWithinHours} hours of delivery with photos.` },
+    { q: "Can I return or exchange this toy?", a: `If the toy arrives damaged, defective, wrong or with something missing, we replace, exchange or refund it. WhatsApp us within ${EXCHANGE_POLICY.reportWithinHours} hours of delivery with unboxing photos or video. Change of mind or a wrong size ordered isn't covered.` },
     { q: "Is it safe for my child?", a: product.safetyInfo ?? "Please follow the age guidance on this page." },
   ];
 
@@ -78,7 +78,7 @@ export default async function ProductPage({ params }: Props) {
       />
 
       <div className={styles.top}>
-        <BuyBox productId={product.id} name={product.name} salePrice={product.salePrice} inStock={inStock} images={product.images}>
+        <BuyBox productId={product.id} name={product.name} salePrice={product.salePrice} inStock={inStock} images={product.images} videoUrl={product.videoUrl}>
           {product.brand && (
             <Link href={`/brand/${product.brand.slug}`} className={styles.brand}>
               {product.brand.name}

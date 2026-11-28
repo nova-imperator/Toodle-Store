@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { EnquiryStatus, OrderStatus } from "@prisma/client";
 import { requireAdmin } from "@/server/auth/admin";
+import { isB2bUnlocked, lockB2b, unlockB2b } from "@/server/auth/b2bPin";
 import { AppError } from "@/server/errors";
 import { confirmCod, refundOrder, updateOrderStatus } from "@/server/services/admin/orders";
 import { PRODUCT_FLAGS, saveProduct, setProductFlag, setProductVisible, type ProductFlag } from "@/server/services/admin/products";
@@ -81,9 +82,7 @@ export async function saveProductAction(productId: string | null, _prev: ActionS
     ageGroupIds: form.getAll("ageGroupIds"),
     isBestSeller: form.get("isBestSeller") === "on",
     isNewArrival: form.get("isNewArrival") === "on",
-    isDeal: form.get("isDeal") === "on",
     isFeatured: form.get("isFeatured") === "on",
-    isB2bVisible: form.get("isB2bVisible") === "on",
   };
   const parsed = productFormSchema.safeParse(raw);
   if (!parsed.success) {
@@ -114,6 +113,23 @@ export async function toggleProductAction(productId: string, flag: string, value
 
 // ─── B2B enquiries ───────────────────────────────────
 
+/** PIN in front of the B2B panel (see server/auth/b2bPin.ts). */
+export async function unlockB2bAction(next: string, _prev: ActionState, form: FormData): Promise<ActionState> {
+  const admin = await requireAdmin("enquiries");
+  try {
+    await unlockB2b(admin.id, String(form.get("pin") ?? ""));
+  } catch (e) {
+    return { error: message(e) };
+  }
+  redirect(next.startsWith("/admin/enquiries") ? next : "/admin/enquiries");
+}
+
+export async function lockB2bAction() {
+  await requireAdmin("enquiries");
+  await lockB2b();
+  redirect("/admin");
+}
+
 const enquirySchema = z.object({
   status: z.enum(["new", "contacted", "quote_sent", "won", "lost"]),
   assignedTo: z.string().optional(),
@@ -121,7 +137,8 @@ const enquirySchema = z.object({
 });
 
 export async function updateEnquiryAction(id: string, _prev: ActionState, form: FormData): Promise<ActionState> {
-  await requireAdmin("enquiries");
+  const admin = await requireAdmin("enquiries");
+  if (!(await isB2bUnlocked(admin.id))) return { error: "Enter the B2B panel PIN first." };
   const parsed = enquirySchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return { error: parsed.error.issues[0].message };
   await updateEnquiry(id, { status: parsed.data.status as EnquiryStatus, assignedTo: parsed.data.assignedTo || null, notes: parsed.data.notes?.trim() || null });

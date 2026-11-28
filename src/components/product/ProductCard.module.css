@@ -27,8 +27,24 @@
 .media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: #fff;
 }
+
+.soldOut {
+  position: absolute;
+  inset: auto 8px 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(29, 43, 83, 0.85);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.media[data-sold-out] img { opacity: 0.55; }
 
 .ribbon {
   position: absolute;

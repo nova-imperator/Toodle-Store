@@ -3,7 +3,7 @@ import { getHomeData, getRecentReviews } from "@/server/services/catalogue";
 import { pageSeo } from "@/lib/seo";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { CategoryTiles } from "@/components/home/CategoryTiles";
-// import { AgeTiles } from "@/components/home/AgeTiles"; // for the hidden "Shop by age" section
+import { AgeTiles } from "@/components/home/AgeTiles";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { BrandStrip } from "@/components/home/BrandStrip";
 import { GiftFinder } from "@/components/home/GiftFinder";
@@ -51,12 +51,10 @@ export default async function HomePage() {
         <CategoryTiles categories={home.categories} />
       </section>
 
-      {/* Shop by age hidden on owner's request, 14 Nov 2026.
       <section className={`container ${styles.section}`} aria-labelledby="age-h">
         <SectionHeading id="age-h" title="Shop by age" subtitle="The right toy for every stage." />
         <AgeTiles />
       </section>
-      */}
 
       {home.bestSellers.length > 0 && (
         <section className={`container ${styles.section}`} aria-labelledby="best-h">
@@ -65,6 +63,7 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* "Deals of the week" hidden (owner, 28 Nov 2026): the Deal badge was removed from the admin, so it can't be managed.
       {home.deals.length > 0 && (
         <section className={`${styles.band} ${styles.section}`} aria-labelledby="deal-h">
           <div className="container">
@@ -73,6 +72,7 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+      */}
 
       <section className={`container ${styles.section}`} aria-labelledby="gift-h">
         <SectionHeading id="gift-h" title="Gift finder" subtitle="Two taps to the perfect birthday present." />

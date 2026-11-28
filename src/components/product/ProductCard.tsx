@@ -16,10 +16,11 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
 
   return (
     <article className={styles.card} data-color={product.color}>
-      <div className={styles.media} ref={mediaRef}>
+      <div className={styles.media} ref={mediaRef} data-sold-out={!product.inStock || undefined}>
         <Image src={product.image} alt={product.imageAlt} fill sizes="(min-width: 1200px) 280px, (min-width: 900px) 30vw, 48vw" priority={priority} />
         {off >= 10 && <span className={styles.ribbon}>-{off}%</span>}
-        {product.isNew && <span className={styles.newTag}>New</span>}
+        {product.isNew && product.inStock && <span className={styles.newTag}>New</span>}
+        {!product.inStock && <span className={styles.soldOut}>Sold out for now</span>}
       </div>
       <WishlistHeart productId={product.id} productName={product.name} className={styles.heart} />
       <div className={styles.body}>

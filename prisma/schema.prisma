@@ -150,6 +150,8 @@ model Product {
   material       String?
   safetyInfo     String?       @map("safety_info")
   dimensions     String?
+  /// Optional product video (YouTube link or direct .mp4 https link), shown as the last gallery slide.
+  videoUrl       String?       @map("video_url")
   mrp            Int
   salePrice      Int           @map("sale_price")
   stockQty       Int           @default(0) @map("stock_qty")

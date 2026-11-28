@@ -18,9 +18,13 @@ export async function POST(req: Request) {
   if (file.size > MAX_BYTES) return NextResponse.json({ error: { code: "too_big", message: "That photo is too big. Please use one under 4 MB." } }, { status: 413 });
 
   try {
-    const { data, info } = await sharp(Buffer.from(await file.arrayBuffer()))
-      .rotate()
-      .resize(MAX_SIDE, MAX_SIDE, { fit: "inside", withoutEnlargement: true })
+    // Upright first (phone EXIF rotation), then centre the whole photo on a white square so every product
+    // photo has the same shape on cards and in the gallery – nothing cropped, nothing zoomed (owner, 28 Nov 2026).
+    const upright = await sharp(Buffer.from(await file.arrayBuffer())).rotate().toBuffer({ resolveWithObject: true });
+    const side = Math.min(MAX_SIDE, Math.max(upright.info.width, upright.info.height));
+    const { data, info } = await sharp(upright.data)
+      .resize(side, side, { fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 1 } })
+      .flatten({ background: "#ffffff" })
       .webp({ quality: 82 })
       .toBuffer({ resolveWithObject: true });
     const image = await db.mediaImage.create({ data: { data: new Uint8Array(data), width: info.width, height: info.height, size: info.size }, select: { id: true } });

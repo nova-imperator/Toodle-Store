@@ -29,9 +29,8 @@ export interface ProductFormValues {
   status: string;
   isBestSeller: boolean;
   isNewArrival: boolean;
-  isDeal: boolean;
   isFeatured: boolean;
-  isB2bVisible: boolean;
+  videoUrl: string;
   seoTitle: string;
   seoDescription: string;
 }
@@ -78,7 +77,7 @@ export function ProductForm({ productId, initial, categories, ageGroups, brands,
           />
           <div className={styles.grid2}>
             <TextField label="URL slug" name="slug" value={slug} onChange={(e) => { setSlug(e.target.value); setSlugTouched(true); }} error={f.slug} hint={`/product/${slug || "…"}`} />
-            <TextField label="SKU" name="sku" defaultValue={initial.sku} error={f.sku} />
+            <TextField label="SKU" name="sku" optional defaultValue={initial.sku} error={f.sku} hint="Leave empty and we'll create one." />
           </div>
           <TextAreaField label="Description" name="description" defaultValue={initial.description} error={f.description} hint="Write it in your own words, not copied from the brand." />
           <TextAreaField label="Highlights" name="highlights" optional defaultValue={initial.highlights} error={f.highlights} hint="One per line, up to 8." />
@@ -93,6 +92,15 @@ export function ProductForm({ productId, initial, categories, ageGroups, brands,
       <section className={styles.panel}>
         <h2>Photos</h2>
         <ImagePicker name="images" initial={initial.images} error={f.images} />
+        <TextField
+          label="Product video"
+          name="videoUrl"
+          optional
+          defaultValue={initial.videoUrl}
+          error={f.videoUrl}
+          placeholder="https://youtube.com/shorts/…"
+          hint="Paste a YouTube link (normal or Shorts). It shows as the last slide after the photos."
+        />
       </section>
 
       <section className={styles.panel}>
@@ -140,8 +148,6 @@ export function ProductForm({ productId, initial, categories, ageGroups, brands,
             <label><input type="checkbox" name="isFeatured" defaultChecked={initial.isFeatured} /> Featured (home page)</label>
             <label><input type="checkbox" name="isBestSeller" defaultChecked={initial.isBestSeller} /> Best seller</label>
             <label><input type="checkbox" name="isNewArrival" defaultChecked={initial.isNewArrival} /> New arrival</label>
-            <label><input type="checkbox" name="isDeal" defaultChecked={initial.isDeal} /> Deal</label>
-            <label><input type="checkbox" name="isB2bVisible" defaultChecked={initial.isB2bVisible} /> Available for B2B</label>
           </fieldset>
           <SelectField label="Status" name="status" defaultValue={initial.status}>
             <option value="active">Active (visible in store)</option>

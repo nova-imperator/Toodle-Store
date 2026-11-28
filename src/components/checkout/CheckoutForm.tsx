@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { TextField, SelectField } from "@/components/ui/Field";
+import { PhoneField } from "@/components/ui/PhoneField";
 import { Icon } from "@/components/ui/Icon";
 import { StudLoader } from "@/components/ui/StudLoader";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -146,7 +147,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved, name }:
           </h2>
           <div className={styles.grid2}>
             <TextField label="Email" value={email} readOnly />
-            <TextField label="Mobile number" type="tel" inputMode="numeric" autoComplete="tel-national" value={phone} onChange={(e) => setPhone(e.target.value)} error={errors.phone} hint="For delivery updates" maxLength={14} />
+            <PhoneField label="Mobile number" value={phone} onChange={setPhone} error={errors.phone} hint="For delivery updates" />
           </div>
         </section>
 
@@ -157,7 +158,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved, name }:
           <IndiaOnlyNote compact />
           <div className={styles.grid2}>
             <TextField label="Full name" autoComplete="name" value={address.name} onChange={set("name")} error={errors["address.name"]} />
-            <TextField label="Phone at this address" type="tel" inputMode="numeric" autoComplete="tel-national" value={address.phone} onChange={set("phone")} error={errors["address.phone"]} maxLength={14} />
+            <PhoneField label="Phone at this address" value={address.phone} onChange={(v) => setAddress((a) => ({ ...a, phone: v }))} error={errors["address.phone"]} />
             <TextField
               label="Pincode"
               inputMode="numeric"
@@ -251,7 +252,7 @@ export function CheckoutForm({ email, phone: savedPhone, address: saved, name }:
           {busy ? "Please wait…" : isCod ? `Pay ${formatPaise(COD_FEE)} & confirm order` : `Pay ${formatPaise(cart.totals.total)}`}
         </Button>
         <p className={styles.policy}>
-          We deliver only within India. By placing this order you agree to our <Link href="/terms">terms</Link>. No refunds; damaged or wrong items are exchanged.
+          We deliver only within India. By placing this order you agree to our <Link href="/terms">terms</Link>. Damaged, defective or wrong items are replaced, exchanged or refunded if reported within 48 hours.
         </p>
       </aside>
 

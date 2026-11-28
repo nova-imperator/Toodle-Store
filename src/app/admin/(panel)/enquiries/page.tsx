@@ -1,6 +1,9 @@
 import Link from "next/link";
 import type { EnquiryStatus } from "@prisma/client";
 import { requireAdmin } from "@/server/auth/admin";
+import { b2bPinEnabled, isB2bUnlocked } from "@/server/auth/b2bPin";
+import { B2bPinGate } from "@/components/admin/B2bPinGate";
+import { lockB2bAction } from "../actions";
 import { markSeen } from "@/server/services/admin/badges";
 import { listEnquiries } from "@/server/services/admin/enquiries";
 import { EnquiryPill, Pager, dateTime, listHref } from "@/components/admin/AdminBits";
@@ -13,6 +16,7 @@ const TABS = Object.keys(ENQUIRY_STATUS_LABEL) as EnquiryStatus[];
 
 export default async function EnquiriesPage({ searchParams }: { searchParams: Promise<{ status?: string; q?: string; page?: string }> }) {
   const admin = await requireAdmin("enquiries");
+  if (!(await isB2bUnlocked(admin.id))) return <B2bPinGate next="/admin/enquiries" />;
   await markSeen(admin.id, "enquiries"); // clears this list's sidebar badge
   const sp = await searchParams;
   const status = TABS.includes(sp.status as EnquiryStatus) ? (sp.status as EnquiryStatus) : undefined;
@@ -26,9 +30,16 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
           <h1>B2B enquiries</h1>
           <p className={styles.sub}>{total} enquiries</p>
         </div>
-        <a href={listHref("/admin/enquiries/export", { status, q: sp.q })} download>
-          Export to Excel (CSV)
-        </a>
+        <div className={styles.headLinks}>
+          <a href={listHref("/admin/enquiries/export", { status, q: sp.q })} download>
+            Export to Excel (CSV)
+          </a>
+          {b2bPinEnabled() && (
+            <form action={lockB2bAction}>
+              <button type="submit" className={styles.linkBtn}>Lock</button>
+            </form>
+          )}
+        </div>
       </div>
 
       <div className={styles.toolbar}>

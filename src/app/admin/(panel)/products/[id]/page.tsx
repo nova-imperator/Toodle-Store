@@ -10,7 +10,7 @@ export const metadata = { title: "Edit product" };
 const EMPTY: ProductFormValues = {
   name: "", slug: "", sku: "", description: "", highlights: "", images: "", material: "", dimensions: "", safetyInfo: "",
   mrp: "", salePrice: "", stockQty: "0", gstRate: "18", hsnCode: "9503", brandId: "", categoryIds: [], ageGroupIds: [],
-  status: "draft", isBestSeller: false, isNewArrival: true, isDeal: false, isFeatured: false, isB2bVisible: true, seoTitle: "", seoDescription: "",
+  status: "draft", isBestSeller: false, isNewArrival: true, isFeatured: false, videoUrl: "", seoTitle: "", seoDescription: "",
 };
 
 export default async function ProductEditPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string }> }) {
@@ -42,9 +42,8 @@ export default async function ProductEditPage({ params, searchParams }: { params
         status: product.status,
         isBestSeller: product.isBestSeller,
         isNewArrival: product.isNewArrival,
-        isDeal: product.isDeal,
         isFeatured: product.isFeatured,
-        isB2bVisible: product.isB2bVisible,
+        videoUrl: product.videoUrl ?? "",
         seoTitle: product.seoTitle ?? "",
         seoDescription: product.seoDescription ?? "",
       }

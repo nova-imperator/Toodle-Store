@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Drawer } from "@/components/ui/Drawer";
 import { Icon } from "@/components/ui/Icon";
-import { CATEGORY_LINKS } from "@/config/navigation";
-// Used by the hidden menu sections below; restore together with them.
-// import { AGE_LINKS, QUICK_LINKS } from "@/config/navigation";
+import { AGE_LINKS, CATEGORY_LINKS } from "@/config/navigation";
+// Used by the hidden quick links below; restore together with them.
+// import { QUICK_LINKS } from "@/config/navigation";
 import { SITE, WHATSAPP_RETAIL_HREF } from "@/config/site";
 import styles from "./MobileMenu.module.css";
 
@@ -31,7 +31,6 @@ export function MobileMenu({ userName, userAvatar = null }: { userName: string |
           </Link>
         </div>
 
-        {/* Shop by age hidden on owner's request, 14 Nov 2026.
         <div className={styles.section}>
           <h3 className={styles.label}>Shop by age</h3>
           <ul className={styles.ages}>
@@ -45,7 +44,6 @@ export function MobileMenu({ userName, userAvatar = null }: { userName: string |
             ))}
           </ul>
         </div>
-        */}
 
         <div className={styles.section}>
           <h3 className={styles.label}>Shop by category</h3>

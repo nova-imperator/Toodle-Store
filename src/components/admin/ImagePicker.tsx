@@ -128,7 +128,7 @@ export function ImagePicker({ name, initial, error }: { name: string; initial: s
       />
 
       <p className={styles.hint}>
-        Choose from your computer or phone (you can pick several). The first photo is the main one. Square photos with a plain background look best.
+        Choose from your computer or phone (you can pick several). The first photo is the main one. Each photo is fitted whole onto a white square, so nothing gets cut off.
       </p>
       {(problem || error) && (
         <p className={styles.error} role="alert">
