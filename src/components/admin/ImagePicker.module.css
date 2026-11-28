@@ -139,3 +139,30 @@
 @keyframes pulse {
   50% { opacity: 0.5; }
 }
+
+.optional { color: var(--ink-faint); font-weight: 600; }
+
+.videoSection {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.videoBox {
+  display: grid;
+  gap: 8px;
+  max-width: 360px;
+}
+
+.videoPreview {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  max-height: 420px;
+  border: 0;
+  border-radius: var(--radius);
+  background: #000;
+  object-fit: contain;
+}
+
+.add:disabled { opacity: 0.5; cursor: not-allowed; }
+

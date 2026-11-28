@@ -18,7 +18,7 @@ export const productFormSchema = z
       .string()
       .trim()
       .max(300)
-      .refine((v) => !v || parseVideo(v) !== null, "Paste a YouTube link, or an https:// link ending in .mp4")
+      .refine((v) => !v || parseVideo(v) !== null, "That video link isn't supported. Upload the video again.")
       .optional(),
     dimensions: z.string().trim().max(120).optional(),
     safetyInfo: z.string().trim().max(300).optional(),

@@ -43,6 +43,7 @@ Dev conveniences:
 
 ## Dependencies added beyond Rules.md list
 - `eslint`, `eslint-config-next`, `@eslint/eslintrc` (linting)
+- `@vercel/blob` (product video uploads, 28 Nov 2026); `sharp` moved to dependencies (photo uploads)
 
 ## Progress
 - [x] 1.1 Foundation
@@ -87,7 +88,7 @@ Dev conveniences:
 ## Owner requests (28 Nov 2026)
 - SKU optional: empty → generated `TS-XXXXXX` (kept on re-save). Admin badges no longer show Deal / Available for B2B (saving leaves those DB flags unchanged); home 'Deals of the week' row hidden because Deal can't be managed.
 - Uploaded photos are centred on a white 1600×1600 square; gallery, cards and admin thumbnails use object-fit: contain (no crop/zoom).
-- Optional product video: `products.video_url` (YouTube link incl. Shorts, or https .mp4) → last gallery slide (youtube-nocookie embed). `src/lib/video.ts`.
+- Optional product video: owner wants UPLOAD not links. `VideoPicker` uploads straight from the browser to **Vercel Blob** (`@vercel/blob` client upload; `/api/admin/video-upload` checks admin + issues token; MP4/MOV/WebM ≤100 MB; path product-videos/). Needs a Blob store connected in Vercel (sets `BLOB_READ_WRITE_TOKEN`); button disabled until then. URL saved in `products.video_url`; shown as last gallery slide (`<video>`; old YouTube links still play). `src/lib/video.ts`. Dependency added: `@vercel/blob`.
 - Age shown again: listing age filter, home 'Shop by age', footer column, phone menu (desktop menu bar still hidden).
 - 'Sold out for now' label on product photos (cards + product page).
 - Admin → B2B enquiries behind a PIN: env `B2B_PANEL_PIN` (owner's PIN, set in Vercel; never in repo). Unlock = signed cookie, 12 h; wrong tries rate-limited; export and edits also gated; 'Lock' link.

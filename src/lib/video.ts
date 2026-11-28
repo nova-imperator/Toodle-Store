@@ -1,6 +1,7 @@
-// Product videos (owner, 28 Nov 2026): a YouTube link (watch, youtu.be, shorts) or a direct https .mp4 link.
+// Product videos (owner, 28 Nov 2026): uploaded video files (Vercel Blob URLs: .mp4 / .webm / .mov),
+// or a YouTube link (watch, youtu.be, shorts) for products saved before uploads existed.
 
-export type ProductVideo = { kind: "youtube"; id: string } | { kind: "mp4"; src: string };
+export type ProductVideo = { kind: "youtube"; id: string } | { kind: "file"; src: string };
 
 export function parseVideo(url: string | null | undefined): ProductVideo | null {
   if (!url) return null;
@@ -18,6 +19,6 @@ export function parseVideo(url: string | null | undefined): ProductVideo | null 
     id = u.searchParams.get("v") ?? u.pathname.match(/^\/(?:shorts|embed|live)\/([^/?#]+)/)?.[1] ?? null;
   }
   if (id && /^[\w-]{6,20}$/.test(id)) return { kind: "youtube", id };
-  if (/\.mp4$/i.test(u.pathname)) return { kind: "mp4", src: u.toString() };
+  if (/\.(mp4|webm|mov)$/i.test(u.pathname)) return { kind: "file", src: u.toString() };
   return null;
 }

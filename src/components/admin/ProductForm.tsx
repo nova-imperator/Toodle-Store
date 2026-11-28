@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { SelectField, TextAreaField, TextField } from "@/components/ui/Field";
 import { slugify } from "@/lib/slug";
 import { ImagePicker } from "./ImagePicker";
+import { VideoPicker } from "./VideoPicker";
 import styles from "@/app/admin/admin.module.css";
 
 export interface ProductFormValues {
@@ -47,9 +48,11 @@ interface Props {
   ageGroups: Option[];
   brands: Option[];
   saved?: boolean;
+  /** Video upload needs a Vercel Blob store (BLOB_READ_WRITE_TOKEN). */
+  videoUploads?: boolean;
 }
 
-export function ProductForm({ productId, initial, categories, ageGroups, brands, saved }: Props) {
+export function ProductForm({ productId, initial, categories, ageGroups, brands, saved, videoUploads = false }: Props) {
   const [state, action, pending] = useActionState<ActionState, FormData>(saveProductAction.bind(null, productId), { error: null, ok: saved ? "Product created." : undefined });
   const [name, setName] = useState(initial.name);
   const [slug, setSlug] = useState(initial.slug);
@@ -92,15 +95,7 @@ export function ProductForm({ productId, initial, categories, ageGroups, brands,
       <section className={styles.panel}>
         <h2>Photos</h2>
         <ImagePicker name="images" initial={initial.images} error={f.images} />
-        <TextField
-          label="Product video"
-          name="videoUrl"
-          optional
-          defaultValue={initial.videoUrl}
-          error={f.videoUrl}
-          placeholder="https://youtube.com/shorts/…"
-          hint="Paste a YouTube link (normal or Shorts). It shows as the last slide after the photos."
-        />
+        <VideoPicker name="videoUrl" initial={initial.videoUrl} error={f.videoUrl} enabled={videoUploads} />
       </section>
 
       <section className={styles.panel}>

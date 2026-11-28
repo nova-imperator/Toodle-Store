@@ -63,6 +63,7 @@ export default async function ProductEditPage({ params, searchParams }: { params
         ageGroups={taxonomy.ageGroups}
         brands={taxonomy.brands}
         saved={(await searchParams).saved === "1"}
+        videoUploads={!!process.env.BLOB_READ_WRITE_TOKEN}
       />
     </>
   );
